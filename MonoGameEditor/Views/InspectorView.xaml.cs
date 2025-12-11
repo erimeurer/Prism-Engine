@@ -64,6 +64,21 @@ namespace MonoGameEditor.Views
                 }
             }
         }
+
+        private void PickColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is CameraComponent camera)
+            {
+                using (var dialog = new System.Windows.Forms.ColorDialog())
+                {
+                    dialog.Color = System.Drawing.Color.FromArgb(camera.BackgroundColor.A, camera.BackgroundColor.R, camera.BackgroundColor.G, camera.BackgroundColor.B);
+                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        camera.BackgroundColor = new Microsoft.Xna.Framework.Color(dialog.Color.R, dialog.Color.G, dialog.Color.B, dialog.Color.A);
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -77,6 +92,23 @@ namespace MonoGameEditor.Views
             bool invert = parameter?.ToString() == "Invert";
             if (invert) isNull = !isNull;
             return isNull ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class XnaColorToWpfColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Microsoft.Xna.Framework.Color xnaColor)
+            {
+                return System.Windows.Media.Color.FromRgb(xnaColor.R, xnaColor.G, xnaColor.B);
+            }
+            return System.Windows.Media.Colors.White;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

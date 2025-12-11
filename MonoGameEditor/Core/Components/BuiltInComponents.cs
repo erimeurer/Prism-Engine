@@ -12,8 +12,15 @@ namespace MonoGameEditor.Core.Components
         private float _farClip = 1000f;
         private bool _isMainCamera = true;
         private Color _backgroundColor = Color.CornflowerBlue;
+        private CameraClearFlags _clearFlags = CameraClearFlags.Skybox;
 
         public override string ComponentName => "Camera";
+
+        public CameraClearFlags ClearFlags
+        {
+             get => _clearFlags;
+             set { _clearFlags = value; OnPropertyChanged(nameof(ClearFlags)); }
+        }
 
         public float FieldOfView
         {
@@ -138,5 +145,11 @@ namespace MonoGameEditor.Core.Components
         Directional,
         Point,
         Spot
+    }
+
+    public enum CameraClearFlags
+    {
+        Skybox,
+        SolidColor
     }
 }

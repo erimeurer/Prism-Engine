@@ -19,6 +19,7 @@ namespace MonoGameEditor.Controls
         private GraphicsDeviceService? _graphicsService;
         private bool _initialized;
         private WinForms.Timer _renderTimer;
+        private ProceduralSkybox? _skybox;
 
         public GraphicsDevice? GraphicsDevice => _graphicsService?.GraphicsDevice;
 
@@ -151,9 +152,37 @@ namespace MonoGameEditor.Controls
                 }
     
                 // 2. Render
+                // 2. Render
                 if (mainCamera != null && mainCamera.GameObject != null)
                 {
                     GraphicsDevice.Clear(mainCamera.BackgroundColor);
+
+                    // Render Skybox if needed
+                    if (mainCamera.ClearFlags == CameraClearFlags.Skybox)
+                    {
+                        if (_skybox == null && GraphicsDevice != null) 
+                        {
+                            _skybox = new ProceduralSkybox();
+                            _skybox.Initialize(GraphicsDevice);
+                        }
+                        
+                        if (_skybox != null)
+                        {
+                            // Calculate Matrices
+                            var transform = mainCamera.GameObject.Transform;
+                            float aspectRatio = GraphicsDevice.Viewport.AspectRatio;
+                            
+                            Matrix view = Matrix.CreateLookAt(transform.Position, transform.Position + transform.Forward, Vector3.Up);
+                            Matrix projection = Matrix.CreatePerspectiveFieldOfView(
+                                MathHelper.ToRadians(mainCamera.FieldOfView), 
+                                aspectRatio, 
+                                mainCamera.NearClip, 
+                                mainCamera.FarClip);
+    
+                            // Draw Skybox (first, with Depth disabled internally)
+                            _skybox.Draw(view, projection, transform.Position, mainCamera.FarClip);
+                        }
+                    }
                 }
                 else
                 {

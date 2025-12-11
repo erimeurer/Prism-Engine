@@ -165,6 +165,11 @@ namespace MonoGameEditor.Controls
 
         public void Draw(EditorCamera camera)
         {
+            Draw(camera.View, camera.Projection, camera.Position, camera.FarPlane);
+        }
+
+        public void Draw(Matrix view, Matrix projection, Vector3 position, float farPlane)
+        {
             if (_effect == null) return;
 
             // Disable Depth Write so we draw behind everything 
@@ -183,11 +188,11 @@ namespace MonoGameEditor.Controls
             // Scale must be small enough to keep corners inside FarPlane. 
             // Cube diagonal is sqrt(3) * scale. So scale < FarPlane / sqrt(3) (~0.577).
             // We use 0.5f to be safe.
-            Matrix world = Matrix.CreateScale(camera.FarPlane * 0.5f) * Matrix.CreateTranslation(camera.Position);
+            Matrix world = Matrix.CreateScale(farPlane * 0.5f) * Matrix.CreateTranslation(position);
             
             _effect.World = world;
-            _effect.View = camera.View;
-            _effect.Projection = camera.Projection;
+            _effect.View = view;
+            _effect.Projection = projection;
 
             foreach (EffectPass pass in _effect.CurrentTechnique.Passes)
             {

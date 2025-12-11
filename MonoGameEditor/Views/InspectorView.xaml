@@ -10,6 +10,7 @@
              d:DesignHeight="600" d:DesignWidth="320">
     <UserControl.Resources>
         <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <local:XnaColorToWpfColorConverter x:Key="XnaColorToWpfColorConverter"/>
         
         <!-- TextBox Style -->
         <Style x:Key="NumericTextBox" TargetType="TextBox">
@@ -57,7 +58,26 @@
                     <StackPanel>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                            <TextBlock Text="Clear Flags" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" SelectedItem="{Binding ClearFlags}" 
+                                      ItemsSource="{Binding Source={local:EnumValues {x:Type components:CameraClearFlags}}}"
+                                      Background="#333337" Foreground="White" Width="100"/>
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Background" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" Height="20" Margin="0" BorderThickness="1" BorderBrush="#555555"
+                                    Click="PickColor_Click" Tag="{Binding}" ToolTip="Click to pick color">
+                                <Button.Background>
+                                    <SolidColorBrush Color="{Binding BackgroundColor, Mode=OneWay, Converter={StaticResource XnaColorToWpfColorConverter}}"/>
+                                </Button.Background>
+                            </Button>
                         </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>

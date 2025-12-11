@@ -175,6 +175,13 @@ namespace MonoGameEditor.Core
             }
         }
 
+        public Vector3 Forward => WorldMatrix.Forward;
+        public Vector3 Backward => WorldMatrix.Backward;
+        public Vector3 Up => WorldMatrix.Up;
+        public Vector3 Down => WorldMatrix.Down;
+        public Vector3 Right => WorldMatrix.Right;
+        public Vector3 Left => WorldMatrix.Left;
+
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
