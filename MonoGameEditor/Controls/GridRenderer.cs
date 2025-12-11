@@ -14,10 +14,10 @@ namespace MonoGameEditor.Controls
         private VertexPositionColor[] _vertices;
         
         // Grid settings
-        public float GridSize { get; set; } = 50f;     // Grid radius around camera
+        public float GridSize { get; set; } = 200f;     // Grid radius around camera
         public float CellSize { get; set; } = 1f;
-        public Color MajorLineColor { get; set; } = new Color(80, 80, 80);
-        public Color MinorLineColor { get; set; } = new Color(50, 50, 50);
+        public Color MajorLineColor { get; set; } = new Color(120, 120, 120);
+        public Color MinorLineColor { get; set; } = new Color(80, 80, 80);
         public Color AxisXColor { get; set; } = new Color(200, 60, 60);
         public Color AxisZColor { get; set; } = new Color(60, 60, 200);
         public int MajorLineInterval { get; set; } = 10;
