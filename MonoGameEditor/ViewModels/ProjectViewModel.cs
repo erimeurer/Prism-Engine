@@ -245,6 +245,7 @@ namespace MonoGameEditor.ViewModels
         }
 
         public ICommand RenameCommand => new RelayCommand(_ => ExecuteRename());
+        public ICommand StartRenameCommand => new RelayCommand(_ => IsRenaming = true);
         public ICommand CancelRenameCommand => new RelayCommand(_ => CancelRename());
 
         public FileSystemItemViewModel(string path, bool isDirectory)

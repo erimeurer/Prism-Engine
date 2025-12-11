@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:MonoGameEditor.ViewModels"
+             xmlns:local="clr-namespace:MonoGameEditor.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
@@ -41,7 +42,7 @@
                                  <Style.Triggers>
                                      <DataTrigger Binding="{Binding IsRenaming}" Value="True">
                                          <Setter Property="Visibility" Value="Visible"/>
-                                         <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                                         <Setter Property="local:FocusExtension.IsFocused" Value="True"/>
                                      </DataTrigger>
                                  </Style.Triggers>
                              </Style>
@@ -85,7 +86,7 @@
                                  <Style.Triggers>
                                      <DataTrigger Binding="{Binding IsRenaming}" Value="True">
                                          <Setter Property="Visibility" Value="Visible"/>
-                                         <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                                         <Setter Property="local:FocusExtension.IsFocused" Value="True"/>
                                      </DataTrigger>
                                  </Style.Triggers>
                              </Style>
@@ -105,7 +106,7 @@
                                   CommandParameter="{Binding}" />
                         <Separator/>
                         <MenuItem Header="Rename" 
-                                  Command="{Binding RenameCommand}" />
+                                  Command="{Binding StartRenameCommand}" />
                     </ContextMenu>
                 </StackPanel.ContextMenu>
                 <Viewbox Width="16" Height="16" Margin="0,0,5,0">
@@ -137,9 +138,9 @@
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsRenaming}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-                                    </DataTrigger>
+                                         <Setter Property="Visibility" Value="Visible"/>
+                                         <Setter Property="local:FocusExtension.IsFocused" Value="True"/>
+                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </TextBox.Style>
@@ -320,7 +321,7 @@
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu>
-                                    <MenuItem Header="Rename" Command="{Binding RenameCommand}"/>
+                                    <MenuItem Header="Rename" Command="{Binding StartRenameCommand}"/>
                                 </ContextMenu>
                             </Setter.Value>
                         </Setter>
