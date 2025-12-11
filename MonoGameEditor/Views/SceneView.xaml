@@ -1,0 +1,135 @@
+<UserControl x:Class="MonoGameEditor.Views.SceneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:MonoGameEditor.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        
+        <!-- Shared Toggle Button Style -->
+        <Style x:Key="ToolbarToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="3"
+                                Padding="6,3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3388AAFF"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#44FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Toolbar Row (above MonoGame) -->
+        <Border Grid.Row="0" 
+                Background="#2D2D2D" 
+                BorderBrush="#3F3F3F"
+                BorderThickness="0,0,0,1"
+                Padding="4,2">
+            <StackPanel Orientation="Horizontal">
+                <!-- Grid Toggle Button -->
+                <ToggleButton x:Name="GridToggle" 
+                              IsChecked="True"
+                              Width="24" Height="24"
+                              ToolTip="Toggle Grid (G)"
+                              Click="GridToggle_Click"
+                              Margin="2,0">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="border" 
+                                                Background="{TemplateBinding Background}" 
+                                                CornerRadius="3"
+                                                Padding="3">
+                                            <Grid>
+                                                <!-- Simple Grid Icon using shapes -->
+                                                <Canvas Width="16" Height="16">
+                                                    <!-- Horizontal lines -->
+                                                    <Line X1="0" Y1="4" X2="16" Y2="4" Stroke="#AAAAAA" StrokeThickness="1"/>
+                                                    <Line X1="0" Y1="8" X2="16" Y2="8" Stroke="#AAAAAA" StrokeThickness="1"/>
+                                                    <Line X1="0" Y1="12" X2="16" Y2="12" Stroke="#AAAAAA" StrokeThickness="1"/>
+                                                    <!-- Vertical lines -->
+                                                    <Line X1="4" Y1="0" X2="4" Y2="16" Stroke="#AAAAAA" StrokeThickness="1"/>
+                                                    <Line X1="8" Y1="0" X2="8" Y2="16" Stroke="#AAAAAA" StrokeThickness="1"/>
+                                                    <Line X1="12" Y1="0" X2="12" Y2="16" Stroke="#AAAAAA" StrokeThickness="1"/>
+                                                </Canvas>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#3388AAFF"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter TargetName="border" Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#44FFFFFF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+
+                <!-- Separator -->
+                <Rectangle Width="1" Height="20" Fill="#3F3F3F" Margin="4,0"/>
+
+                <!-- Pivot/Center Toggle -->
+                <ToggleButton IsChecked="{Binding DataContext.IsPivotMode, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                              ToolTip="Gizmo Position: Pivot or Center"
+                              Style="{StaticResource ToolbarToggleStyle}"
+                              Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⊡" FontSize="14" Foreground="#AAAAAA" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Pivot" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </ToggleButton>
+
+                <!-- Local/Global Toggle -->
+                <ToggleButton IsChecked="{Binding DataContext.IsLocalMode, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                              ToolTip="Gizmo Orientation: Local or Global"
+                              Style="{StaticResource ToolbarToggleStyle}"
+                              Margin="2,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⟲" FontSize="14" Foreground="#AAAAAA" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Local" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </ToggleButton>
+            </StackPanel>
+        </Border>
+        
+        <!-- MonoGame Rendering Surface -->
+        <controls:MonoGameHost x:Name="GameHost" Grid.Row="1"/>
+    </Grid>
+</UserControl>

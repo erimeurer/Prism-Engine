@@ -1,0 +1,34 @@
+﻿<Application x:Class="MonoGameEditor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MonoGameEditor"
+             xmlns:vm="clr-namespace:MonoGameEditor.ViewModels"
+             xmlns:views="clr-namespace:MonoGameEditor.Views"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type vm:HierarchyViewModel}">
+                <views:HierarchyView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:InspectorViewModel}">
+                <views:InspectorView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ProjectViewModel}">
+                <views:ProjectView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ConsoleViewModel}">
+                <views:ConsoleView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SceneViewModel}">
+                <views:SceneView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:GameViewModel}">
+                <views:GameView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
