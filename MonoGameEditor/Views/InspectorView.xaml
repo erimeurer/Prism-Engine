@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MonoGameEditor.Views"
              xmlns:core="clr-namespace:MonoGameEditor.Core"
              xmlns:components="clr-namespace:MonoGameEditor.Core.Components"
+             xmlns:vm="clr-namespace:MonoGameEditor.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="320">
     <UserControl.Resources>
@@ -39,6 +40,94 @@
             <Setter Property="Margin" Value="0,0,0,4"/>
         </Style>
         
+        <!-- File Inspector Template -->
+        <DataTemplate DataType="{x:Type vm:FileItemViewModel}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                 <StackPanel Margin="5">
+                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                         <!-- Big Icon / Thumbnail -->
+                         <Border Width="64" Height="64" Background="#333333" CornerRadius="4" Margin="0,0,10,0">
+                             <Image Source="{Binding Thumbnail}" Stretch="Uniform" /> 
+                             <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Thumbnail}" Value="{x:Null}">
+                                            <Setter Property="Background" Value="#444444"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                             </Border.Style>
+                         </Border>
+                         
+                         <StackPanel VerticalAlignment="Center">
+                             <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="White" TextTrimming="CharacterEllipsis"/>
+                             <TextBlock Text="{Binding InfoText}" Foreground="Gray" Margin="0,2,0,0"/>
+                         </StackPanel>
+                     </StackPanel>
+
+                     <Separator Background="#3E3E3E" Margin="0,5,0,10"/>
+
+                     <!-- File Properties -->
+                     <Grid Margin="0,5">
+                         <Grid.ColumnDefinitions>
+                             <ColumnDefinition Width="100"/>
+                             <ColumnDefinition Width="*"/>
+                         </Grid.ColumnDefinitions>
+                         <TextBlock Text="Full Path" Foreground="Gray"/>
+                         <TextBox Grid.Column="1" Text="{Binding FullPath, Mode=OneWay}" IsReadOnly="True" Background="Transparent" BorderThickness="0" Foreground="#CCCCCC" TextWrapping="Wrap"/>
+                     </Grid>
+
+                     <!-- 3D Metadata Section -->
+                     <StackPanel Visibility="{Binding Metadata, Converter={StaticResource NullToVisibilityConverter}}">
+                         <TextBlock Text="Model Statistics" FontWeight="Bold" Foreground="White" Margin="0,10,0,5"/>
+                         
+                         <Grid Margin="0,2">
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="100"/>
+                                 <ColumnDefinition Width="*"/>
+                             </Grid.ColumnDefinitions>
+                             <TextBlock Text="Vertices" Foreground="Gray"/>
+                             <TextBlock Grid.Column="1" Text="{Binding Metadata.VertexCount}" Foreground="White"/>
+                         </Grid>
+                         <Grid Margin="0,2">
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="100"/>
+                                 <ColumnDefinition Width="*"/>
+                             </Grid.ColumnDefinitions>
+                             <TextBlock Text="Triangles" Foreground="Gray"/>
+                             <TextBlock Grid.Column="1" Text="{Binding Metadata.TriangleCount}" Foreground="White"/>
+                         </Grid>
+                          <Grid Margin="0,2">
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="100"/>
+                                 <ColumnDefinition Width="*"/>
+                             </Grid.ColumnDefinitions>
+                             <TextBlock Text="Materials" Foreground="Gray"/>
+                             <TextBlock Grid.Column="1" Text="{Binding Metadata.MaterialCount}" Foreground="White"/>
+                         </Grid>
+                          <Grid Margin="0,2">
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="100"/>
+                                 <ColumnDefinition Width="*"/>
+                             </Grid.ColumnDefinitions>
+                             <TextBlock Text="Dimensions" Foreground="Gray"/>
+                             <TextBlock Grid.Column="1" Text="{Binding Metadata.Dimensions}" Foreground="White"/>
+                         </Grid>
+                         
+                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <Border Background="#2D2D30" Padding="5" CornerRadius="3" Margin="0,0,5,0" Visibility="{Binding Metadata.HasNormals, Converter={StaticResource NullToVisibilityConverter}}"> <!-- Assuming Bool converter works or NullToVis works if mapped -->
+                                <!-- Actually need Bool To Vis. I'll assume I have one or add one. Existing is NullToVisibilityConverter. -->
+                                <TextBlock Text="Normals" Foreground="#88CC88" FontSize="10"/>
+                            </Border>
+                             <Border Background="#2D2D30" Padding="5" CornerRadius="3" Visibility="{Binding Metadata.HasUVs, Converter={StaticResource NullToVisibilityConverter}}">
+                                <TextBlock Text="UVs" Foreground="#88CC88" FontSize="10"/>
+                            </Border>
+                         </StackPanel>
+                     </StackPanel>
+                 </StackPanel>
+            </ScrollViewer>
+        </DataTemplate>
+
         <!-- CameraComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:CameraComponent}">
             <Expander IsExpanded="True" Margin="0,0,0,4">
@@ -171,111 +260,117 @@
                 </Border>
             </Expander>
         </DataTemplate>
+
+        
+        <!-- GameObject Template -->
+        <DataTemplate DataType="{x:Type core:GameObject}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="8">
+                    <!-- Object Header -->
+                    <Border Background="#333337" CornerRadius="3" Padding="8,6" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsActive}" 
+                                      VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                                     Background="Transparent" BorderThickness="0"
+                                     Foreground="White" FontSize="14" FontWeight="SemiBold"
+                                     VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Transform Component -->
+                    <Expander IsExpanded="True" Margin="0,0,0,4">
+                        <Expander.Header>
+                            <TextBlock Text="Transform" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        </Expander.Header>
+                        <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                            <StackPanel>
+                                <!-- Position -->
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Position" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
+                                        <TextBox Text="{Binding Transform.PositionX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
+                                        <TextBox Text="{Binding Transform.PositionY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
+                                        <TextBox Text="{Binding Transform.PositionZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                    </StackPanel>
+                                </Grid>
+                                <!-- Rotation -->
+                                <Grid Margin="0,0,0,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Rotation" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
+                                        <TextBox Text="{Binding Transform.RotationX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
+                                        <TextBox Text="{Binding Transform.RotationY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
+                                        <TextBox Text="{Binding Transform.RotationZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                    </StackPanel>
+                                </Grid>
+                                <!-- Scale -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Scale" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
+                                        <TextBox Text="{Binding Transform.ScaleX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
+                                        <TextBox Text="{Binding Transform.ScaleY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
+                                        <TextBox Text="{Binding Transform.ScaleZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </Expander>
+                    
+                    <!-- Components List -->
+                    <ItemsControl ItemsSource="{Binding Components}"/>
+                    
+                    <!-- Add Component Button -->
+                    <Button Content="Add Component" Margin="0,8,0,0" Padding="8,6"
+                            Background="#333337" Foreground="#CCCCCC" BorderThickness="0"
+                            HorizontalAlignment="Stretch" Click="AddComponent_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="bd" Background="{TemplateBinding Background}" 
+                                        CornerRadius="3" Padding="{TemplateBinding Padding}">
+                                    <TextBlock Text="{TemplateBinding Content}" 
+                                               HorizontalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="bd" Property="Background" Value="#4E4E52"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </DataTemplate>
     </UserControl.Resources>
     
     <Grid Background="#252526">
-        <!-- Show when object selected -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                      Visibility="{Binding SelectedObject, Converter={StaticResource NullToVisibilityConverter}}">
-            <StackPanel Margin="8">
-                <!-- Object Header -->
-                <Border Background="#333337" CornerRadius="3" Padding="8,6" Margin="0,0,0,8">
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox IsChecked="{Binding SelectedObject.IsActive}" 
-                                  VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <TextBox Text="{Binding SelectedObject.Name, UpdateSourceTrigger=PropertyChanged}" 
-                                 Background="Transparent" BorderThickness="0"
-                                 Foreground="White" FontSize="14" FontWeight="SemiBold"
-                                 VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-                
-                <!-- Transform Component -->
-                <Expander IsExpanded="True" Margin="0,0,0,4">
-                    <Expander.Header>
-                        <TextBlock Text="Transform" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
-                    </Expander.Header>
-                    <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
-                        <StackPanel>
-                            <!-- Position -->
-                            <Grid Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Position" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.PositionX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                    <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.PositionY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                    <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.PositionZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                </StackPanel>
-                            </Grid>
-                            <!-- Rotation -->
-                            <Grid Margin="0,0,0,6">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Rotation" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.RotationX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                    <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.RotationY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                    <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.RotationZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                </StackPanel>
-                            </Grid>
-                            <!-- Scale -->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Scale" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.ScaleX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                    <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.ScaleY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                    <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                    <TextBox Text="{Binding SelectedObject.Transform.ScaleZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                </StackPanel>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
-                </Expander>
-                
-                <!-- Components List -->
-                <ItemsControl ItemsSource="{Binding SelectedObject.Components}"/>
-                
-                <!-- Add Component Button -->
-                <Button Content="Add Component" Margin="0,8,0,0" Padding="8,6"
-                        Background="#333337" Foreground="#CCCCCC" BorderThickness="0"
-                        HorizontalAlignment="Stretch" Click="AddComponent_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="bd" Background="{TemplateBinding Background}" 
-                                    CornerRadius="3" Padding="{TemplateBinding Padding}">
-                                <TextBlock Text="{TemplateBinding Content}" 
-                                           HorizontalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="bd" Property="Background" Value="#4E4E52"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </ScrollViewer>
+        <!-- Content Area -->
+        <ContentControl Content="{Binding SelectedObject}" 
+                        Visibility="{Binding SelectedObject, Converter={StaticResource NullToVisibilityConverter}}"/>
         
         <!-- Show when nothing selected -->
-        <TextBlock Text="Select an object to inspect" Foreground="#666666" 
+        <TextBlock Text="Select an object or asset to inspect" Foreground="#666666" 
                    HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic"
                    Visibility="{Binding SelectedObject, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}"/>
     </Grid>

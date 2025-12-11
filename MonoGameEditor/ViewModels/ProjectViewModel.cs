@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using MonoGameEditor.Core;
 
 namespace MonoGameEditor.ViewModels
@@ -122,6 +123,51 @@ namespace MonoGameEditor.ViewModels
             catch {}
         }
         
+        private object _selectedGridItem;
+        public object SelectedGridItem
+        {
+            get => _selectedGridItem;
+            set
+            {
+                if (_selectedGridItem != value)
+                {
+                    _selectedGridItem = value;
+                    OnPropertyChanged();
+
+                    if (_selectedGridItem is FileItemViewModel fileVm)
+                    {
+                        SelectedFile = fileVm;
+                    }
+                    else
+                    {
+                        SelectedFile = null;
+                    }
+                    
+                    if (_selectedGridItem is DirectoryItemViewModel dirVm)
+                    {
+                         // Optional: Sync tree selection? 
+                         // Usually identifying a folder in grid doesn't select it in tree until entered.
+                    }
+                }
+            }
+        }
+
+        private FileItemViewModel _selectedFile;
+        public FileItemViewModel SelectedFile
+        {
+            get => _selectedFile;
+            set
+            {
+                if (_selectedFile != value)
+                {
+                    _selectedFile = value;
+                    OnPropertyChanged();
+                    // Notify MainViewModel (via event or direct access if needed, 
+                    // but ideally MainViewModel subscribes to us)
+                }
+            }
+        }
+
         // Command to handle double click on Grid Item
         public ICommand OpenItemCommand => new RelayCommand(OpenItem);
         
@@ -132,9 +178,12 @@ namespace MonoGameEditor.ViewModels
                 SelectedDirectory = dirVm;
                 // We should also Expand the tree to show this selection if we bound it two-way
                 dirVm.IsExpanded = true;
+                SelectedFile = null; // Clear file selection
             }
             else if (param is FileItemViewModel fileVm)
             {
+                SelectedFile = fileVm;
+
                 // Handle opening file (e.g. if scene, load it)
                 if (fileVm.Name.EndsWith(".world"))
                 {
@@ -379,6 +428,76 @@ namespace MonoGameEditor.ViewModels
 
     public class FileItemViewModel : FileSystemItemViewModel
     {
-        public FileItemViewModel(string path) : base(path, false) { }
+        private MonoGameEditor.Core.Assets.AssetMetadata _metadata;
+        public MonoGameEditor.Core.Assets.AssetMetadata Metadata
+        {
+            get => _metadata;
+            private set { _metadata = value; OnPropertyChanged(); }
+        }
+
+        private string _infoText;
+        public string InfoText
+        {
+            get => _infoText;
+            set { _infoText = value; OnPropertyChanged(); }
+        }
+        
+        // Placeholder for thumbnail
+        private object _thumbnail; // Using object to be flexible (ImageSource or string path)
+        public object Thumbnail
+        {
+            get => _thumbnail;
+            set { _thumbnail = value; OnPropertyChanged(); }
+        }
+
+        public FileItemViewModel(string path) : base(path, false) 
+        {
+            UpdateInfo();
+            LoadMetadataAsync();
+        }
+
+        private void UpdateInfo()
+        {
+            try 
+            {
+               var fi = new FileInfo(FullPath);
+               long sizeVal = fi.Length;
+               string suffix = "B";
+               if (sizeVal > 1024) { sizeVal /= 1024; suffix = "KB"; }
+               if (sizeVal > 1024) { sizeVal /= 1024; suffix = "MB"; }
+               InfoText = $"{sizeVal} {suffix}";
+            }
+            catch { InfoText = "Unknown"; }
+        }
+
+        private byte[] _thumbnailPixels;
+
+        private async void LoadMetadataAsync()
+        {
+            var ext = Path.GetExtension(FullPath).ToLowerInvariant();
+            if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".glb" || ext == ".blend")
+            {
+                // Use robust Assimp importer
+                Metadata = await MonoGameEditor.Core.Assets.ModelImporter.LoadMetadataAsync(FullPath);
+                
+                if (Metadata != null && Metadata.PreviewVertices != null && Metadata.PreviewVertices.Count > 0)
+                {
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        // Render pixels in background
+                        _thumbnailPixels = MonoGameEditor.Core.Assets.ThumbnailRenderer.RenderPixels(Metadata, 128, 128);
+                    });
+
+                    // Create Bitmap on UI Thread
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        if (_thumbnailPixels != null)
+                        {
+                            Thumbnail = MonoGameEditor.Core.Assets.ThumbnailRenderer.CreateBitmap(_thumbnailPixels, 128, 128);
+                        }
+                    });
+                }
+            }
+        }
     }
 }

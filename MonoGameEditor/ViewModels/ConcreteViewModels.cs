@@ -45,12 +45,20 @@ namespace MonoGameEditor.ViewModels
 
     public class InspectorViewModel : ToolViewModel
     {
-        public GameObject? SelectedObject => SceneManager.Instance.SelectedObject;
+        private object? _selectedObject;
+        public object? SelectedObject
+        {
+            get => _selectedObject;
+            set { _selectedObject = value; OnPropertyChanged(); }
+        }
 
         public InspectorViewModel() : base("Inspector") 
         {
             // Subscribe to selection changes
-            SceneManager.Instance.SelectionChanged += () => OnPropertyChanged(nameof(SelectedObject));
+            SceneManager.Instance.SelectionChanged += () => 
+            {
+                SelectedObject = SceneManager.Instance.SelectedObject;
+            };
         }
     }
 

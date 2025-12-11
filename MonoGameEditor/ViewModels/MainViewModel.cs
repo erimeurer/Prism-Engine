@@ -214,6 +214,18 @@ namespace MonoGameEditor.ViewModels
             {
                 OpenProject(globalSettings.LastProjectPath);
             }
+
+            // Sync Project Selection to Inspector
+            Project.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ProjectViewModel.SelectedFile))
+                {
+                    if (Project.SelectedFile != null)
+                    {
+                        Inspector.SelectedObject = Project.SelectedFile;
+                    }
+                }
+            };
         }
 
         private void TogglePlay()

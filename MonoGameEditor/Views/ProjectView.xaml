@@ -8,6 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <UserControl.Resources>
+        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+
         <!-- Folder Icon Template -->
         <DataTemplate DataType="{x:Type vm:DirectoryItemViewModel}">
              <StackPanel Orientation="Vertical" Width="80" Margin="5">
@@ -56,11 +58,21 @@
         <DataTemplate DataType="{x:Type vm:FileItemViewModel}">
              <StackPanel Orientation="Vertical" Width="80" Margin="5">
                  <!-- File Icon Visual -->
-                 <Viewbox Width="48" Height="48">
-                     <Canvas Width="24" Height="24">
-                        <Path Fill="#AAAAAA" Data="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
-                     </Canvas>
-                 </Viewbox>
+                 <Grid Width="48" Height="48">
+                     <!-- Default Icon (Document) -->
+                     <Viewbox Visibility="{Binding Thumbnail, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}">
+                         <Canvas Width="24" Height="24">
+                              <!-- Path needs to be bound or switched based on file type. 
+                                   Since we can't easily bind Path Data in a simple template without a converter,
+                                   We can just assume a generic document for now, OR show a Cube if name ends with .obj. 
+                                   Let's just keep the generic doc for now but maybe lighter? 
+                                   actually, let's use a DataTrigger in the Viewbox Style to swap content? Too complex for inline.
+                                   Let's just use the Generic Document for fallback. -->
+                            <Path Fill="#AAAAAA" Data="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
+                         </Canvas>
+                     </Viewbox>
+                     <Image Source="{Binding Thumbnail}" Stretch="Uniform" Visibility="{Binding Thumbnail, Converter={StaticResource NullToVisibilityConverter}}"/>
+                 </Grid>
                  <Grid>
                      <TextBlock Text="{Binding Name}" TextAlignment="Center" Foreground="#CCCCCC" TextTrimming="CharacterEllipsis">
                          <TextBlock.Style>
@@ -269,6 +281,7 @@
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <ListBox ItemsSource="{Binding GridItems}" 
+                         SelectedItem="{Binding SelectedGridItem}"
                          Background="#1E1E1E" 
                          BorderThickness="0"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
