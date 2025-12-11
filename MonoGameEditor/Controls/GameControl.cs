@@ -20,6 +20,8 @@ namespace MonoGameEditor.Controls
         private bool _initialized;
         private WinForms.Timer _renderTimer;
         private ProceduralSkybox? _skybox;
+        private RenderTarget2D? _hdrRenderTarget;
+        private ToneMapRenderer? _toneMapRenderer;
 
         public GraphicsDevice? GraphicsDevice => _graphicsService?.GraphicsDevice;
 
@@ -50,6 +52,10 @@ namespace MonoGameEditor.Controls
 
             ConsoleViewModel.Log($"[GameControl] OnCreateControl: Handle={Handle}");
             _graphicsService = GraphicsDeviceService.AddRef(Handle, Width, Height);
+            
+            _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
+            ResizeHDRTarget(Width, Height);
+
             _initialized = true;
             _renderTimer.Start();
         }
@@ -147,33 +153,60 @@ namespace MonoGameEditor.Controls
                     mainCamera = FindMainCameraRecursive(scene.RootObjects);
                 }
     
-                // 2. Render
-                if (mainCamera != null && mainCamera.GameObject != null)
+                // Ensure HDR Target is valid
+                if (_hdrRenderTarget == null || _hdrRenderTarget.Width != safeWidth || _hdrRenderTarget.Height != safeHeight)
                 {
-                    GraphicsDevice.Clear(mainCamera.BackgroundColor);
+                    ResizeHDRTarget(safeWidth, safeHeight);
+                }
 
-                    // Calculate Matrices once
-                    var transform = mainCamera.GameObject.Transform;
+                // 2. Render to HDR Target
+
+                // Identify Main Camera
+                var cameraComp = FindMainCamera();
+                if (cameraComp != null && cameraComp.GameObject != null)
+                {
                     float aspectRatio = GraphicsDevice.Viewport.AspectRatio;
-
-                    // Update Viewport to match this control
-                    GraphicsDevice.Viewport = new Viewport(0, 0, Width, Height);
-
-                    // Debug log every 60 frames
-                    if (DateTime.Now.Millisecond < 20) 
-                    {
-                        ConsoleViewModel.Log($"[GameView] CamPos: {transform.Position} Dir: {transform.Forward} Viewport: {Width}x{Height}");
-                    }
+                    var view = Matrix.CreateLookAt(cameraComp.GameObject.Transform.Position, 
+                        cameraComp.GameObject.Transform.Position + cameraComp.GameObject.Transform.Forward, 
+                        cameraComp.GameObject.Transform.Up);
                     
-                    Matrix view = Matrix.CreateLookAt(transform.Position, transform.Position + transform.Forward, Vector3.Up);
-                    Matrix projection = Matrix.CreatePerspectiveFieldOfView(
-                        MathHelper.ToRadians(mainCamera.FieldOfView), 
+                    var projection = Matrix.CreatePerspectiveFieldOfView(
+                        MathHelper.ToRadians(cameraComp.FieldOfView), 
                         aspectRatio, 
-                        mainCamera.NearClip, 
-                        mainCamera.FarClip);
+                        cameraComp.NearClip, 
+                        cameraComp.FarClip);
+
+                    // --- Shadow Pass (DISABLED - Causing dark rendering) ---
+                    // TODO: Re-enable after shaders are compiled
+                    /*
+                    var mainLightObj = FindFirstLight(MonoGameEditor.Core.SceneManager.Instance.RootObjects);
+                     if (mainLightObj != null)
+                    {
+                        var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
+                        if (lightComp != null && lightComp.CastShadows && _shadowRenderer != null)
+                        {
+                            _shadowRenderer.UpdateMatrix(mainLightObj.Transform.Forward, cameraComp.GameObject.Transform.Position);
+                            _shadowRenderer.BeginPass();
+                            foreach (var obj in MonoGameEditor.Core.SceneManager.Instance.RootObjects)
+                            {
+                                RenderShadowsRecursive(obj);
+                            }
+                            _shadowRenderer.EndPass();
+                            shadowMap = _shadowRenderer.ShadowMap;
+                            lightViewProj = _shadowRenderer.LightViewProjection;
+                        }
+                    }
+                    */
+                    
+                    Texture2D? shadowMap = null;
+                    Matrix? lightViewProj = null;
+
+                    // --- Main Pass ---
+                    GraphicsDevice.SetRenderTarget(_hdrRenderTarget);
+                    GraphicsDevice.Clear(cameraComp.BackgroundColor);
 
                     // Render Skybox if needed
-                    if (mainCamera.ClearFlags == CameraClearFlags.Skybox)
+                    if (cameraComp.ClearFlags == CameraClearFlags.Skybox)
                     {
                         if (_skybox == null && GraphicsDevice != null) 
                         {
@@ -184,30 +217,65 @@ namespace MonoGameEditor.Controls
                         if (_skybox != null)
                         {
                             // Draw Skybox (first, with Depth disabled internally)
-                            _skybox.Draw(view, projection, transform.Position, mainCamera.FarClip);
+                            _skybox.Draw(view, projection, cameraComp.GameObject.Transform.Position, cameraComp.FarClip);
                         }
                     }
 
-                    // Reset Render States for 3D Models
+                    // Reset states
                     GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                     GraphicsDevice.BlendState = BlendState.Opaque;
+                    GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise; // Cull Back faces
                     GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-                    // Render 3D Models
-                    RenderModelsRecursive(scene.RootObjects, GraphicsDevice, view, projection);
+                    if (MonoGameEditor.Core.SceneManager.Instance != null)
+                    {
+                        RenderModelsRecursive(MonoGameEditor.Core.SceneManager.Instance.RootObjects, GraphicsDevice, view, projection, cameraComp.GameObject.Transform.Position);
+                    }
+                    
+                    // --- Tone Map ---
+                    GraphicsDevice.SetRenderTarget(null);
+                    if (_toneMapRenderer != null && _hdrRenderTarget != null)
+                        _toneMapRenderer.Draw(_hdrRenderTarget);
+                    else
+                    {
+                         // Fallback
+                         using (var batch = new SpriteBatch(GraphicsDevice))
+                         {
+                             batch.Begin();
+                             batch.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+                             batch.End();
+                         }
+                    }
                 }
                 else
                 {
-                    // CornflowerBlue = classic XNA color, proves GameControl is rendering independently
-                    GraphicsDevice.Clear(Color.CornflowerBlue);
+                    GraphicsDevice.Clear(Color.Black);
                 }
                 
-                // Implicit Present
                 GraphicsDevice.Present();
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 ConsoleViewModel.Log($"Paint Error: {ex.Message}");
+            }
+        }
+
+        private void ResizeHDRTarget(int width, int height)
+        {
+            _hdrRenderTarget?.Dispose();
+            
+            if (width <= 0 || height <= 0) return;
+
+            try 
+            {
+                _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
+                    SurfaceFormat.HalfVector4, DepthFormat.Depth24);
+            }
+            catch(Exception)
+            {
+                // Fallback
+                _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
+                    SurfaceFormat.Color, DepthFormat.Depth24);
             }
         }
 
@@ -221,7 +289,13 @@ namespace MonoGameEditor.Controls
             }
         }
 
-        private CameraComponent? FindMainCameraRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes)
+        private MonoGameEditor.Core.Components.CameraComponent? FindMainCamera()
+        {
+             if (MonoGameEditor.Core.SceneManager.Instance == null) return null;
+             return FindMainCameraRecursive(MonoGameEditor.Core.SceneManager.Instance.RootObjects);
+        }
+
+        private MonoGameEditor.Core.Components.CameraComponent? FindMainCameraRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes)
         {
              for(int i=0; i<nodes.Count; i++)
              {
@@ -241,7 +315,7 @@ namespace MonoGameEditor.Controls
         /// <summary>
         /// Recursively renders all ModelRendererComponents in the scene
         /// </summary>
-        private void RenderModelsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes, GraphicsDevice device, Matrix view, Matrix projection)
+        private void RenderModelsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes, GraphicsDevice device, Matrix view, Matrix projection, Vector3 camPos)
         {
             Vector3 cameraPosition = Matrix.Invert(view).Translation;
 
@@ -262,8 +336,22 @@ namespace MonoGameEditor.Controls
                 }
 
                 // Recurse to children
-                RenderModelsRecursive(node.Children, device, view, projection);
+                RenderModelsRecursive(node.Children, device, view, projection, cameraPosition);
             }
+        }
+        
+
+        private MonoGameEditor.Core.GameObject FindFirstLight(System.Collections.ObjectModel.ObservableCollection<MonoGameEditor.Core.GameObject> nodes)
+        {
+             foreach(var node in nodes)
+             {
+                 var light = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.LightComponent && ((MonoGameEditor.Core.Components.LightComponent)c).LightType == MonoGameEditor.Core.Components.LightType.Directional);
+                 if (light != null) return node;
+                 
+                 var childResult = FindFirstLight(node.Children);
+                 if (childResult != null) return childResult;
+             }
+             return null;
         }
         
         protected override void Dispose(bool disposing)
@@ -272,6 +360,9 @@ namespace MonoGameEditor.Controls
             {
                 _renderTimer?.Stop();
                 _renderTimer?.Dispose();
+                _hdrRenderTarget?.Dispose();
+                _toneMapRenderer?.Dispose();
+                _skybox?.Dispose();
                 _graphicsService?.Release(Handle);
             }
             base.Dispose(disposing);

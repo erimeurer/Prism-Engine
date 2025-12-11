@@ -20,6 +20,11 @@ float Metallic = 0.0;
 float Roughness = 0.5;
 float AO = 1.0;
 
+// Shadow Properties - REMOVED for stability
+// float4x4 LightViewProjection;
+// bool UseShadows;
+// texture ShadowMap;
+
 // Textures (optional)
 texture AlbedoTexture;
 sampler2D AlbedoSampler = sampler_state
@@ -163,11 +168,22 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
     float denominator = 4.0 * max(dot(N, V), 0.0) * NdotL;
     float3 specular = numerator / max(denominator, 0.001);
     
+    // Shadow Calculation (Disabled)
+    float shadow = 1.0;
+    
+    /*
+    if (UseShadows)
+    {
+        // ... Shadow Logic Removed ...
+    }
+    */
+
     // Add to outgoing radiance Lo
-    float3 radiance = LightColor * LightIntensity;
+    float3 radiance = LightColor * LightIntensity * shadow;
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     
     // Ambient lighting (simple approximation)
+    // Ambient is NOT shadowed (usually)
     float3 ambient = float3(0.03, 0.03, 0.03) * albedo * AO;
     float3 color = ambient + Lo;
     

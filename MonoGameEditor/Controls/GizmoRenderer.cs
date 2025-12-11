@@ -11,11 +11,13 @@ namespace MonoGameEditor.Controls
     {
         private GraphicsDevice _graphicsDevice;
         private BasicEffect _effect;
+        private Core.Gizmos.DirectionalLightGizmo _dirLightGizmo;
 
         public void Initialize(GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
             CreateEffect();
+            _dirLightGizmo = new Core.Gizmos.DirectionalLightGizmo(graphicsDevice);
         }
 
         private void CreateEffect()
@@ -33,6 +35,8 @@ namespace MonoGameEditor.Controls
             if (_effect == null || _effect.IsDisposed)
             {
                 CreateEffect();
+                // If effect was lost, gizmo might share device context, but it's safer to re-init if meaningful.
+                // For now assuming device persistence.
             }
 
             _effect.View = camera.View;
@@ -64,7 +68,7 @@ namespace MonoGameEditor.Controls
                     DrawCameraGizmo(graphicsDevice, go);
                     break;
                 case GameObjectType.Light:
-                    DrawLightGizmo(graphicsDevice, go);
+                    DrawLightGizmo(graphicsDevice, go, camera);
                     break;
             }
 
@@ -78,7 +82,6 @@ namespace MonoGameEditor.Controls
         private void DrawCameraGizmo(GraphicsDevice graphicsDevice, GameObject go)
         {
             var pos = go.Transform.Position;
-            var rotation = go.Transform.Rotation;
             var component = go.GetComponent<MonoGameEditor.Core.Components.CameraComponent>();
             var color = new Color(100, 149, 237); // Cornflower blue
 
@@ -150,7 +153,7 @@ namespace MonoGameEditor.Controls
                 new VertexPositionColor(new Vector3(0, 0.45f, 0) * iconScale, color), new VertexPositionColor(new Vector3(0, 0.25f, 0) * iconScale, color),
             };
 
-            // Billboard transform
+            // Billboard effect
             _effect.World = Matrix.CreateBillboard(pos, _effect.View.Translation, Vector3.Up, null);
             foreach (var pass in _effect.CurrentTechnique.Passes)
             {
@@ -159,65 +162,42 @@ namespace MonoGameEditor.Controls
             }
         }
 
-        private void DrawLightGizmo(GraphicsDevice graphicsDevice, GameObject go)
+        private void DrawLightGizmo(GraphicsDevice graphicsDevice, GameObject go, EditorCamera camera)
         {
-            var pos = go.Transform.Position;
-            var color = new Color(255, 200, 50); // Yellow/orange
-            
-            // Sun icon - circle with rays
-            int segments = 16;
-            float radius = 0.4f;
-            var vertices = new VertexPositionColor[segments * 2 + 16]; // Circle + 8 rays
-            
-            // Circle
-            for (int i = 0; i < segments; i++)
-            {
-                float angle1 = i * MathHelper.TwoPi / segments;
-                float angle2 = (i + 1) * MathHelper.TwoPi / segments;
-                
-                vertices[i * 2] = new VertexPositionColor(
-                    new Vector3((float)System.Math.Cos(angle1) * radius, (float)System.Math.Sin(angle1) * radius, 0), 
-                    color);
-                vertices[i * 2 + 1] = new VertexPositionColor(
-                    new Vector3((float)System.Math.Cos(angle2) * radius, (float)System.Math.Sin(angle2) * radius, 0), 
-                    color);
-            }
-            
-            // Rays
-            float rayInner = radius * 1.3f;
-            float rayOuter = radius * 2f;
-            for (int i = 0; i < 8; i++)
-            {
-                float angle = i * MathHelper.TwoPi / 8;
-                int idx = segments * 2 + i * 2;
-                vertices[idx] = new VertexPositionColor(
-                    new Vector3((float)System.Math.Cos(angle) * rayInner, (float)System.Math.Sin(angle) * rayInner, 0),
-                    color);
-                vertices[idx + 1] = new VertexPositionColor(
-                    new Vector3((float)System.Math.Cos(angle) * rayOuter, (float)System.Math.Sin(angle) * rayOuter, 0),
-                    color);
-            }
+            var lightComp = go.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
+            if (lightComp == null) return;
 
-            // Billboard effect - face camera
-            Vector3 forward = Vector3.Normalize(pos - _effect.View.Translation);
-            Vector3 right = Vector3.Normalize(Vector3.Cross(Vector3.Up, forward));
-            Vector3 up = Vector3.Cross(forward, right);
-            
-            _effect.World = Matrix.CreateBillboard(pos, _effect.View.Translation, Vector3.Up, null);
-            foreach (var pass in _effect.CurrentTechnique.Passes)
+            if (lightComp.LightType == MonoGameEditor.Core.Components.LightType.Directional && _dirLightGizmo != null)
             {
-                pass.Apply();
-                graphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, vertices.Length / 2);
+                // Use the dedicated Directional Gizmo
+                _dirLightGizmo.Draw(camera, go.Transform, lightComp.Intensity);
+            }
+            else
+            {
+                // Fallback / Point Light Simple Gizmo
+                var pos = go.Transform.Position;
+                var color = new Color(255, 200, 50);
+
+                var vertices = new VertexPositionColor[]
+                {
+                    new VertexPositionColor(pos + Vector3.UnitX * 0.5f, color), new VertexPositionColor(pos - Vector3.UnitX * 0.5f, color),
+                    new VertexPositionColor(pos + Vector3.UnitY * 0.5f, color), new VertexPositionColor(pos - Vector3.UnitY * 0.5f, color),
+                    new VertexPositionColor(pos + Vector3.UnitZ * 0.5f, color), new VertexPositionColor(pos - Vector3.UnitZ * 0.5f, color),
+                };
+
+                 _effect.World = Matrix.Identity; // Simplify
+                foreach (var pass in _effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    graphicsDevice.DrawUserPrimitives(PrimitiveType.LineList, vertices, 0, vertices.Length / 2);
+                }
             }
         }
 
         private void DrawSelectionGizmo(GraphicsDevice graphicsDevice, GameObject go)
         {
             var pos = go.Transform.Position;
-            var color = new Color(255, 165, 0); // Orange selection
-            
-            // Simple axis lines from position
-            float size = 1f;
+            var size = 1f;
             var vertices = new VertexPositionColor[]
             {
                 // X axis (red)
@@ -242,6 +222,7 @@ namespace MonoGameEditor.Controls
         public void Dispose()
         {
             _effect?.Dispose();
+            _dirLightGizmo?.Dispose();
         }
     }
 }

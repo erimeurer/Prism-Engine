@@ -135,7 +135,8 @@ namespace MonoGameEditor.Core.Components
             }
         }
 
-        public void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition, 
+            Texture2D shadowMap = null, Matrix? lightViewProjection = null)
         {
             // Check for disposed device
             if (device == null || device.IsDisposed) return;
@@ -174,30 +175,58 @@ namespace MonoGameEditor.Core.Components
                 var sceneLight = FindSceneLight();
                 if (sceneLight != null)
                 {
+                    if (DateTime.Now.Millisecond < 10)
+                        ConsoleViewModel.Log($"[ModelRenderer] Scene light found: {sceneLight.Name}");
+                    
                     var lightComp = sceneLight.GetComponent<LightComponent>();
                     basicEffect.DirectionalLight0.Enabled = true;
-                    basicEffect.DirectionalLight0.DiffuseColor = lightComp.Color.ToVector3() * lightComp.Intensity;
-                    basicEffect.DirectionalLight0.SpecularColor = lightComp.Color.ToVector3() * (lightComp.Intensity * 0.5f);
+
+                    // Calculate Light Color: BaseColor * Kelvin * Intensity
+                    var baseColor = lightComp.Color.ToVector3(); // 0-1 (sRGB approx)
+                    // Linearize manually
+                    baseColor = new Vector3(
+                        (float)Math.Pow(baseColor.X, 2.2),
+                        (float)Math.Pow(baseColor.Y, 2.2),
+                        (float)Math.Pow(baseColor.Z, 2.2));
                     
-                    // Get light direction from Transform forward vector
+                    var tempColor = KelvinToRGB(lightComp.Temperature);
+                    var finalColor = baseColor * tempColor * lightComp.Intensity;
+                    
+                    if (DateTime.Now.Millisecond < 10)
+                        ConsoleViewModel.Log($"[ModelRenderer] Light intensity={lightComp.Intensity}, finalColor=({finalColor.X:F2},{finalColor.Y:F2},{finalColor.Z:F2})");
+                    
+                    basicEffect.DirectionalLight0.DiffuseColor = finalColor; // Can exceed 1.0 in HDR
+                    
+                    // Specular usually follows light color but can be styled
+                    basicEffect.DirectionalLight0.SpecularColor = finalColor; 
+
+                    // Indirect/Ambient
+                    var ambientM = lightComp.IndirectMultiplier;
+                    basicEffect.AmbientLightColor = new Vector3(lightComp.AmbientIntensity) * ambientM; // User controlled ambient
+
+                    // Direction
                     var lightDir = sceneLight.Transform.Forward;
                     basicEffect.DirectionalLight0.Direction = Vector3.Normalize(lightDir);
-                    
-                    // Softer ambient
-                    basicEffect.AmbientLightColor = new Vector3(0.15f, 0.15f, 0.15f);
                 }
                 else
                 {
                     // Fallback if no light found
+                    if (DateTime.Now.Millisecond < 10)
+                        ConsoleViewModel.Log("[ModelRenderer] No scene light found, using fallback lighting");
                     basicEffect.DirectionalLight0.Enabled = true;
-                    basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.8f, 0.8f, 0.8f);
+                    basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.8f);
                     basicEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-0.5f, -1f, -0.5f));
-                    basicEffect.DirectionalLight0.SpecularColor = new Vector3(0.3f, 0.3f, 0.3f);
-                    basicEffect.AmbientLightColor = new Vector3(0.2f, 0.2f, 0.2f);
+                    basicEffect.AmbientLightColor = new Vector3(0.15f); // Fallback ambient increased
                 }
                 
-                // Apply material color
+                // Apply material color (Linearize albedo)
                 var albedo = Material.AlbedoColor.ToVector3();
+                albedo = new Vector3(
+                    (float)Math.Pow(albedo.X, 2.2),
+                    (float)Math.Pow(albedo.Y, 2.2),
+                    (float)Math.Pow(albedo.Z, 2.2));
+                
+                
                 basicEffect.DiffuseColor = albedo;
                 
                 // For metallic simulation with BasicEffect, adjust specular
@@ -208,7 +237,7 @@ namespace MonoGameEditor.Core.Components
                 }
                 else
                 {
-                    basicEffect.SpecularColor = Vector3.One * 0.2f;
+                    basicEffect.SpecularColor = Vector3.One * 0.04f; // Dielectric F0
                     basicEffect.SpecularPower = (1.0f - Material.Roughness) * 32f;
                 }
             }
@@ -220,6 +249,25 @@ namespace MonoGameEditor.Core.Components
                 resources.Effect.Parameters["Projection"]?.SetValue(projection);
                 resources.Effect.Parameters["CameraPosition"]?.SetValue(cameraPosition);
                 
+                // Handle Light Params if PBR shader supports them
+                var sceneLight = FindSceneLight();
+                if (sceneLight != null) 
+                {
+                     var lightComp = sceneLight.GetComponent<LightComponent>();
+                     var baseColor = lightComp.Color.ToVector3();
+                     baseColor = new Vector3(
+                        (float)Math.Pow(baseColor.X, 2.2),
+                        (float)Math.Pow(baseColor.Y, 2.2),
+                        (float)Math.Pow(baseColor.Z, 2.2));
+                        
+                     var tempColor = KelvinToRGB(lightComp.Temperature);
+                     var finalColor = baseColor * tempColor * lightComp.Intensity;
+                     
+                     resources.Effect.Parameters["LightDirection"]?.SetValue(sceneLight.Transform.Forward);
+                     resources.Effect.Parameters["LightColor"]?.SetValue(finalColor);
+                     resources.Effect.Parameters["IndirectMultiplier"]?.SetValue(lightComp.IndirectMultiplier);
+                }
+
                 // Apply material
                 Material.Apply(resources.Effect);
             }
@@ -238,6 +286,49 @@ namespace MonoGameEditor.Core.Components
 
             // Restore previous state
             device.RasterizerState = previousRasterizerState;
+        }
+
+        private Vector3 KelvinToRGB(float k)
+        {
+            // Simple approximation for ~1000K to ~40000K
+            // Algorithm based on Tanner Helland's method
+            var color = new Vector3();
+            k = MathHelper.Clamp(k, 1000, 40000) / 100f;
+            
+            // Red
+            if (k <= 66) color.X = 1f;
+            else
+            {
+                var t = k - 60f;
+                color.X = 329.698727446f * (float)Math.Pow(t, -0.1332047592f);
+                color.X /= 255f;
+            }
+            
+            // Green
+            if (k <= 66)
+            {
+                var t = k;
+                color.Y = 99.4708025861f * (float)Math.Log(t) - 161.1195681661f;
+                color.Y /= 255f;
+            }
+            else
+            {
+                var t = k - 60f;
+                color.Y = 288.1221695283f * (float)Math.Pow(t, -0.0755148492f);
+                color.Y /= 255f;
+            }
+            
+            // Blue
+            if (k >= 66) color.Z = 1f;
+            else if (k <= 19) color.Z = 0f;
+            else
+            {
+                var t = k - 10f;
+                color.Z = 138.5177312231f * (float)Math.Log(t) - 305.0447927307f;
+                color.Z /= 255f;
+            }
+            
+            return Vector3.Clamp(color, Vector3.Zero, Vector3.One);
         }
 
         private DeviceResources CreateResourcesForDevice(GraphicsDevice device)
@@ -268,7 +359,7 @@ namespace MonoGameEditor.Core.Components
                 var n = normals[i];
                 uniqueVerts[i] = new VertexPositionNormalTexture(
                     new Vector3(v.X, v.Y, v.Z),
-                    new Vector3(-n.X, -n.Y, -n.Z), // Invert normals to fix orientation
+                    new Vector3(n.X, n.Y, n.Z), // Standard normals
                     Vector2.Zero
                 );
             }
@@ -292,6 +383,7 @@ namespace MonoGameEditor.Core.Components
                 else
                 {
                     // Fallback to BasicEffect
+                    ConsoleViewModel.Log("[ModelRenderer] Using BasicEffect fallback (PBR shader not available)");
                     var initialEffect = new BasicEffect(device);
                     
                     // Configure lighting manually

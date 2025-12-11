@@ -100,6 +100,8 @@ namespace MonoGameEditor.Core.Components
         private float _range = 10f;
         private float _spotAngle = 30f;
         private bool _castShadows = true;
+        private float _temperature = 6500f; // Kelvin
+        private float _indirectMultiplier = 1f;
 
         public override string ComponentName => "Light";
 
@@ -120,6 +122,27 @@ namespace MonoGameEditor.Core.Components
             get => _intensity;
             set { _intensity = MathHelper.Max(0f, value); OnPropertyChanged(nameof(Intensity)); }
         }
+        
+        /// <summary>
+        /// Color temperature in Kelvin (default 6500K).
+        /// Used to tint the light color physically.
+        /// </summary>
+        public float Temperature
+        {
+            get => _temperature;
+            set { _temperature = MathHelper.Clamp(value, 1000f, 20000f); OnPropertyChanged(nameof(Temperature)); }
+        }
+
+        /// <summary>
+        /// Multiplier for ambient/indirect contribution of this light.
+        /// </summary>
+        public float IndirectMultiplier
+        {
+            get => _indirectMultiplier;
+            set { _indirectMultiplier = MathHelper.Max(0f, value); OnPropertyChanged(nameof(IndirectMultiplier)); }
+        }
+
+        public float AmbientIntensity { get; set; } = 0.5f;
 
         public float Range
         {

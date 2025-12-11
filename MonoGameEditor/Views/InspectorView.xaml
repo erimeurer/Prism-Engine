@@ -248,6 +248,33 @@
                             <TextBlock Text="Range" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                             <TextBox Grid.Column="1" Text="{Binding Range, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
                         </Grid>
+                        
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Temperature (K)" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding Temperature, StringFormat={}{0:F0}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
+
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Indirect Mult" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding IndirectMultiplier, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
+
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Ambient Int" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Text="{Binding AmbientIntensity, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>

@@ -25,6 +25,8 @@ namespace MonoGameEditor.Controls
         private MonoGameEditor.Core.Gizmos.TranslationGizmo? _translationGizmo;
         private MonoGameEditor.Core.Gizmos.RotationGizmo? _rotationGizmo;
         private ProceduralSkybox? _skybox;
+        private RenderTarget2D? _hdrRenderTarget;
+        private ToneMapRenderer? _toneMapRenderer;
         
         // Floating Toolbar
         private WinForms.Panel? _toolPanel;
@@ -109,6 +111,9 @@ namespace MonoGameEditor.Controls
 
             _skybox = new ProceduralSkybox();
             _skybox.Initialize(GraphicsDevice!);
+
+            _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
+            ResizeHDRTarget(Width, Height);
 
             InitializeToolbar();
             if (MainViewModel.Instance != null)
@@ -439,28 +444,86 @@ namespace MonoGameEditor.Controls
                     return;
                 }
 
-                GraphicsDevice.Clear(new Color(56, 56, 56));
 
-                if (ShowSkybox && _camera != null && _skybox != null)
+                // --- Shadow Pass (DISABLED - Causing dark rendering) ---
+                // TODO: Re-enable after shaders are compiled
+                /*
+                bool shadowsEnabled = false;
+                Texture2D shadowMap = null;
+                Matrix? lightViewProj = null;
+                
+                MonoGameEditor.Core.GameObject mainLightObj = null;
+                if (Core.SceneManager.Instance != null && Core.SceneManager.Instance.RootObjects.Any())
                 {
-                    _skybox.Draw(_camera);
+                    mainLightObj = FindFirstLight(Core.SceneManager.Instance.RootObjects);
+                }
+                
+                if (mainLightObj != null)
+                {
+                    var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
+                    if (lightComp != null && lightComp.CastShadows && _shadowRenderer != null)
+                    {
+                        _shadowRenderer.UpdateMatrix(mainLightObj.Transform.Forward, _camera.Position);
+                        _shadowRenderer.BeginPass();
+                        
+                        if (Core.SceneManager.Instance != null)
+                        {
+                            foreach (var obj in Core.SceneManager.Instance.RootObjects)
+                            {
+                                RenderShadowsRecursive(obj);
+                            }
+                        }
+                        
+                        shadowsEnabled = true;
+                        shadowMap = _shadowRenderer.ShadowMap;
+                        lightViewProj = _shadowRenderer.LightViewProjection;
+                    }
+                }
+                */
+                
+                Texture2D shadowMap = null;
+                Matrix? lightViewProj = null;
+
+
+
+            // --- Main Pass (HDR) ---
+            GraphicsDevice.SetRenderTarget(_hdrRenderTarget);
+            GraphicsDevice.Clear(Color.CornflowerBlue); // Scene background
+            
+            // Draw Skybox first
+            if (ShowSkybox && _skybox != null)
+            {
+                _skybox.Draw(_camera.View, _camera.Projection, _camera.Position, _camera.FarPlane);
+            }
+            
+            GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
+            // Draw Scene
+            if (Core.SceneManager.Instance != null)
+            {
+                foreach (var obj in Core.SceneManager.Instance.RootObjects)
+                {
+                    RenderRecursively(obj);
+                }
+            }
+                // Ensure HDR Target is valid
+                if (_hdrRenderTarget == null || _hdrRenderTarget.Width != safeWidth || _hdrRenderTarget.Height != safeHeight)
+                {
+                    ResizeHDRTarget(safeWidth, safeHeight);
                 }
 
+                // Grid Drawing
                 if (ShowGrid && _camera != null && _gridRenderer != null)
                 {
                     _camera.UpdateAspectRatio(Width, Height);
                     _gridRenderer.Draw(GraphicsDevice, _camera);
                 }
                 
-                // Render Models FIRST (so gizmos appear on top)
-                var scene = Core.SceneManager.Instance;
-                if (scene != null && _camera != null)
-                {
-                    foreach (var root in scene.RootObjects)
-                    {
-                        RenderRecursively(root, GraphicsDevice, _camera);
-                    }
-                }
+                // Models are rendered in HDR pass above.
+                // Gizmos are rendered here on top of ToneMapped output.
                 
                 // THEN render gizmos on top (disable depth test for on-top rendering)
                 var previousDepthState = GraphicsDevice.DepthStencilState;
@@ -498,6 +561,26 @@ namespace MonoGameEditor.Controls
                 
                 // Restore depth state
                 GraphicsDevice.DepthStencilState = previousDepthState;
+                
+                // 2. Tone Mapping Pass (HDR -> Backbuffer)
+                GraphicsDevice.SetRenderTarget(null); // Back to screen
+                // GraphicsDevice.Clear is usually not needed as we draw full screen quad, but good practice if letterboxing
+                
+                if (_toneMapRenderer != null && _hdrRenderTarget != null)
+                {
+                    _toneMapRenderer.Draw(_hdrRenderTarget);
+                }
+                else
+                {
+                     // Fallback
+                     using (var batch = new SpriteBatch(GraphicsDevice))
+                     {
+                         batch.Begin();
+                         batch.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+                         batch.End();
+                     }
+                }
+
 
                 // Implicit Present
                 GraphicsDevice.Present();
@@ -508,14 +591,28 @@ namespace MonoGameEditor.Controls
             }
         }
 
-        private void RenderRecursively(MonoGameEditor.Core.GameObject node, GraphicsDevice device, EditorCamera camera)
+
+        private MonoGameEditor.Core.GameObject FindFirstLight(System.Collections.ObjectModel.ObservableCollection<MonoGameEditor.Core.GameObject> nodes)
+        {
+             foreach(var node in nodes)
+             {
+                 var light = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.LightComponent && ((MonoGameEditor.Core.Components.LightComponent)c).LightType == MonoGameEditor.Core.Components.LightType.Directional);
+                 if (light != null) return node;
+                 
+                 var childResult = FindFirstLight(node.Children);
+                 if (childResult != null) return childResult;
+             }
+             return null;
+        }
+
+        private void RenderRecursively(MonoGameEditor.Core.GameObject node)
         {
             var modelRenderer = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.ModelRendererComponent) as MonoGameEditor.Core.Components.ModelRendererComponent;
-            modelRenderer?.Draw(device, camera.View, camera.Projection, camera.Position);
+            modelRenderer?.Draw(GraphicsDevice, _camera.View, _camera.Projection, _camera.Position);
 
             foreach (var child in node.Children)
             {
-                RenderRecursively(child, device, camera);
+                RenderRecursively(child);
             }
         }
 
@@ -593,6 +690,30 @@ namespace MonoGameEditor.Controls
             }
         }
 
+        private void ResizeHDRTarget(int width, int height)
+        {
+            _hdrRenderTarget?.Dispose();
+            
+            if (width <= 0 || height <= 0) return;
+
+            try 
+            {
+                 // Use HalfVector4 for HDR precision (16-bit float per channel)
+                 // Preserves values > 1.0 for Tone Mapping
+                _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
+                    SurfaceFormat.HalfVector4, DepthFormat.Depth24);
+                
+                ConsoleViewModel.Log($"[MonoGameControl] Created HDR Target {width}x{height} (HalfVector4)");
+            }
+            catch(Exception ex)
+            {
+                ConsoleViewModel.Log($"[MonoGameControl] Failed to create HDR target: {ex.Message}. Fallback to Color.");
+                // Fallback to standard Color if HalfVector4 not supported
+                _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
+                    SurfaceFormat.Color, DepthFormat.Depth24);
+            }
+        }
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -623,6 +744,9 @@ namespace MonoGameEditor.Controls
                     _orientationGizmo?.Dispose();
                     _skybox?.Dispose();
                     _gridRenderer?.Dispose();
+                    _gridRenderer?.Dispose();
+                    _hdrRenderTarget?.Dispose();
+                    _toneMapRenderer?.Dispose();
                     _spriteBatch?.Dispose();
                     _graphicsService?.Release(Handle);
                 }
