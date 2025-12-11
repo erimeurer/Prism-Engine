@@ -50,11 +50,37 @@ namespace MonoGameEditor.IO
 
             foreach (var component in go.Components)
             {
-                // Basic component serialization (Type name only for now, properties later)
-                goData.Components.Add(new ComponentData
+                var compData = new ComponentData
                 {
                     TypeName = component.GetType().FullName ?? "Unknown"
-                });
+                };
+
+                // Serialize public properties
+                var props = component.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                foreach (var prop in props)
+                {
+                    // Skip properties we can't read or that are complex types we can't serialize easily
+                    if (!prop.CanRead || !prop.CanWrite) continue;
+                    
+                    // Skip ComponentName and GameObject (runtime-only properties)
+                    if (prop.Name == "ComponentName" || prop.Name == "GameObject") continue;
+
+                    try
+                    {
+                        var value = prop.GetValue(component);
+                        if (value != null)
+                        {
+                            // Convert to string for JSON serialization
+                            compData.Properties[prop.Name] = JsonSerializer.Serialize(value, _options);
+                        }
+                    }
+                    catch
+                    {
+                        // Skip properties that fail to serialize
+                    }
+                }
+
+                goData.Components.Add(compData);
             }
 
             data.Objects.Add(goData);
@@ -125,7 +151,31 @@ namespace MonoGameEditor.IO
                     Type? type = Type.GetType(compData.TypeName);
                     if (type != null && Activator.CreateInstance(type) is Component comp)
                     {
+                        // Restore properties
+                        foreach (var kvp in compData.Properties)
+                        {
+                            var propInfo = type.GetProperty(kvp.Key);
+                            if (propInfo != null && propInfo.CanWrite)
+                            {
+                                try
+                                {
+                                    // Deserialize value from JSON
+                                    var value = JsonSerializer.Deserialize(kvp.Value, propInfo.PropertyType, _options);
+                                    propInfo.SetValue(comp, value);
+                                    System.Diagnostics.Debug.WriteLine($"Restored {type.Name}.{kvp.Key} = {value}");
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"Failed to restore property {kvp.Key}: {ex.Message}");
+                                }
+                            }
+                        }
+
                         go.AddComponent(comp);
+                        
+                        // Call OnComponentAdded if it exists (for re-initialization after deserialization)
+                        var onAddedMethod = type.GetMethod("OnComponentAdded");
+                        onAddedMethod?.Invoke(comp, null);
                     }
                 }
 

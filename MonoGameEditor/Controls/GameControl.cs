@@ -91,28 +91,24 @@ namespace MonoGameEditor.Controls
 
             try 
             {
-                // Ensure BackBuffer matches control size
                 if (GraphicsDevice.PresentationParameters.BackBufferWidth != Width ||
                     GraphicsDevice.PresentationParameters.BackBufferHeight != Height)
                 {
                      if (Visible && Width > 0 && Height > 0)
                      {
                          try {
+                            // Only reset if dimensions changed to avoid loops
                             GraphicsDevice.PresentationParameters.BackBufferWidth = Width;
                             GraphicsDevice.PresentationParameters.BackBufferHeight = Height;
                             GraphicsDevice.Reset();
+                            ConsoleViewModel.Log($"[GameControl] Device Reset to {Width}x{Height}");
                          } catch (Exception ex) {
                             ConsoleViewModel.Log($"Reset failed: {ex.Message}");
-                            return;
                          }
-                     }
-                     else
-                     {
-                         return;
                      }
                 }
                 
-                // Set Viewport - Clamp to BackBuffer to prevent crash
+                // Set Viewport
                 int safeWidth = Math.Min(Width, GraphicsDevice.PresentationParameters.BackBufferWidth);
                 int safeHeight = Math.Min(Height, GraphicsDevice.PresentationParameters.BackBufferHeight);
 
@@ -152,10 +148,29 @@ namespace MonoGameEditor.Controls
                 }
     
                 // 2. Render
-                // 2. Render
                 if (mainCamera != null && mainCamera.GameObject != null)
                 {
                     GraphicsDevice.Clear(mainCamera.BackgroundColor);
+
+                    // Calculate Matrices once
+                    var transform = mainCamera.GameObject.Transform;
+                    float aspectRatio = GraphicsDevice.Viewport.AspectRatio;
+
+                    // Update Viewport to match this control
+                    GraphicsDevice.Viewport = new Viewport(0, 0, Width, Height);
+
+                    // Debug log every 60 frames
+                    if (DateTime.Now.Millisecond < 20) 
+                    {
+                        ConsoleViewModel.Log($"[GameView] CamPos: {transform.Position} Dir: {transform.Forward} Viewport: {Width}x{Height}");
+                    }
+                    
+                    Matrix view = Matrix.CreateLookAt(transform.Position, transform.Position + transform.Forward, Vector3.Up);
+                    Matrix projection = Matrix.CreatePerspectiveFieldOfView(
+                        MathHelper.ToRadians(mainCamera.FieldOfView), 
+                        aspectRatio, 
+                        mainCamera.NearClip, 
+                        mainCamera.FarClip);
 
                     // Render Skybox if needed
                     if (mainCamera.ClearFlags == CameraClearFlags.Skybox)
@@ -168,21 +183,18 @@ namespace MonoGameEditor.Controls
                         
                         if (_skybox != null)
                         {
-                            // Calculate Matrices
-                            var transform = mainCamera.GameObject.Transform;
-                            float aspectRatio = GraphicsDevice.Viewport.AspectRatio;
-                            
-                            Matrix view = Matrix.CreateLookAt(transform.Position, transform.Position + transform.Forward, Vector3.Up);
-                            Matrix projection = Matrix.CreatePerspectiveFieldOfView(
-                                MathHelper.ToRadians(mainCamera.FieldOfView), 
-                                aspectRatio, 
-                                mainCamera.NearClip, 
-                                mainCamera.FarClip);
-    
                             // Draw Skybox (first, with Depth disabled internally)
                             _skybox.Draw(view, projection, transform.Position, mainCamera.FarClip);
                         }
                     }
+
+                    // Reset Render States for 3D Models
+                    GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                    GraphicsDevice.BlendState = BlendState.Opaque;
+                    GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
+                    // Render 3D Models
+                    RenderModelsRecursive(scene.RootObjects, GraphicsDevice, view, projection);
                 }
                 else
                 {
@@ -190,6 +202,7 @@ namespace MonoGameEditor.Controls
                     GraphicsDevice.Clear(Color.CornflowerBlue);
                 }
                 
+                // Implicit Present
                 GraphicsDevice.Present();
             }
             catch (Exception ex)
@@ -222,7 +235,35 @@ namespace MonoGameEditor.Controls
                  var found = FindMainCameraRecursive(node.Children);
                  if(found != null) return found;
              }
-             return null;
+              return null;
+         }
+
+        /// <summary>
+        /// Recursively renders all ModelRendererComponents in the scene
+        /// </summary>
+        private void RenderModelsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes, GraphicsDevice device, Matrix view, Matrix projection)
+        {
+            Vector3 cameraPosition = Matrix.Invert(view).Translation;
+
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var node = nodes[i];
+                if (!node.IsActive) continue;
+
+                // Render ModelRendererComponent if exists
+                var modelRenderer = node.GetComponent<ModelRendererComponent>();
+                if (modelRenderer != null)
+                {
+                    // Debug log (throttled)
+                    if (DateTime.Now.Millisecond < 5)
+                        ConsoleViewModel.Log($"[GameView] Drawing {node.Name}");
+                        
+                    modelRenderer.Draw(device, view, projection, cameraPosition);
+                }
+
+                // Recurse to children
+                RenderModelsRecursive(node.Children, device, view, projection);
+            }
         }
         
         protected override void Dispose(bool disposing)

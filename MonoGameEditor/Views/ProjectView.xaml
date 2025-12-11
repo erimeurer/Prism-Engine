@@ -284,7 +284,9 @@
                          SelectedItem="{Binding SelectedGridItem}"
                          Background="#1E1E1E" 
                          BorderThickness="0"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                         PreviewMouseMove="ListBox_PreviewMouseMove">
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Create New Folder" 

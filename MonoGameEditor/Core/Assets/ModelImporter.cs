@@ -93,5 +93,95 @@ namespace MonoGameEditor.Core.Assets
                 }
             });
         }
+
+        /// <summary>
+        /// Loads a 3D model with hierarchical mesh structure (separate meshes)
+        /// </summary>
+        public static Task<ModelData> LoadModelDataAsync(string path)
+        {
+            return Task.Run(() =>
+            {
+                if (!File.Exists(path)) return null;
+
+                try
+                {
+                    using (var context = new AssimpContext())
+                    {
+                        var scene = context.ImportFile(path, PostProcessSteps.Triangulate | PostProcessSteps.GenerateNormals);
+
+                        if (scene == null || !scene.HasMeshes) return null;
+
+                        var modelData = new ModelData
+                        {
+                            Name = Path.GetFileNameWithoutExtension(path)
+                        };
+
+                        int totalVertices = 0;
+                        int totalTriangles = 0;
+
+                        // Extract each mesh separately
+                        for (int i = 0; i < scene.MeshCount; i++)
+                        {
+                            var assimpMesh = scene.Meshes[i];
+                            
+                            var meshData = new MeshData
+                            {
+                                Name = string.IsNullOrEmpty(assimpMesh.Name) ? $"Mesh_{i}" : assimpMesh.Name,
+                                MaterialIndex = assimpMesh.MaterialIndex
+                            };
+
+                            // Copy vertices
+                            foreach (var v in assimpMesh.Vertices)
+                            {
+                                meshData.Vertices.Add(new System.Numerics.Vector3(v.X, v.Y, v.Z));
+                            }
+
+                            // Copy normals
+                            if (assimpMesh.HasNormals)
+                            {
+                                foreach (var n in assimpMesh.Normals)
+                                {
+                                    meshData.Normals.Add(new System.Numerics.Vector3(n.X, n.Y, n.Z));
+                                }
+                            }
+                            else
+                            {
+                                // If no normals, fill with default (up)
+                                for (int j = 0; j < assimpMesh.VertexCount; j++)
+                                {
+                                    meshData.Normals.Add(new System.Numerics.Vector3(0, 1, 0));
+                                }
+                            }
+
+                            // Copy indices
+                            foreach (var face in assimpMesh.Faces)
+                            {
+                                if (face.IndexCount == 3)
+                                {
+                                    meshData.Indices.Add(face.Indices[0]);
+                                    meshData.Indices.Add(face.Indices[1]);
+                                    meshData.Indices.Add(face.Indices[2]);
+                                }
+                            }
+
+                            totalVertices += meshData.Vertices.Count;
+                            totalTriangles += meshData.Indices.Count / 3;
+
+                            modelData.Meshes.Add(meshData);
+                        }
+
+                        modelData.TotalVertexCount = totalVertices;
+                        modelData.TotalTriangleCount = totalTriangles;
+
+                        return modelData;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error importing model {path}: {ex.Message}");
+                    return null;
+                }
+            });
+        }
     }
 }

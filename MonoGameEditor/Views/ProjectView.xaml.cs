@@ -10,11 +10,38 @@ namespace MonoGameEditor.Views
             InitializeComponent();
         }
 
+        private System.Windows.Point _startPoint = new System.Windows.Point();
+
         private void TreeView_SelectedItemChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
         {
             if (DataContext is MonoGameEditor.ViewModels.ProjectViewModel vm && e.NewValue is MonoGameEditor.ViewModels.DirectoryItemViewModel dir)
             {
                 vm.SelectedDirectory = dir;
+            }
+        }
+
+        private void ListBox_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            _startPoint = e.GetPosition(null);
+        }
+
+        private void ListBox_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                System.Windows.Point mousePos = e.GetPosition(null);
+                System.Windows.Vector diff = _startPoint - mousePos;
+
+                if (System.Math.Abs(diff.X) > System.Windows.SystemParameters.MinimumHorizontalDragDistance ||
+                    System.Math.Abs(diff.Y) > System.Windows.SystemParameters.MinimumVerticalDragDistance)
+                {
+                    System.Windows.Controls.ListBox listBox = sender as System.Windows.Controls.ListBox;
+                    if (listBox != null && listBox.SelectedItem is MonoGameEditor.ViewModels.FileItemViewModel fileItem)
+                    {
+                        var data = new System.Windows.DataObject(System.Windows.DataFormats.FileDrop, new string[] { fileItem.FullPath });
+                        System.Windows.DragDrop.DoDragDrop(listBox, data, System.Windows.DragDropEffects.Copy);
+                    }
+                }
             }
         }
     }

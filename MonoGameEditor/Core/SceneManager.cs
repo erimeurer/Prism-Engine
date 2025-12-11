@@ -53,14 +53,23 @@ namespace MonoGameEditor.Core
             SelectedObject = null;
 
             var mainCamera = new GameObject("Main Camera") { ObjectType = GameObjectType.Camera };
-            mainCamera.Transform.Position = new Microsoft.Xna.Framework.Vector3(0, 5, -10);
-            mainCamera.Transform.Rotation = new Microsoft.Xna.Framework.Vector3(15, 0, 0);
+            mainCamera.Transform.Position = new Microsoft.Xna.Framework.Vector3(0, 5, 12);
+            mainCamera.Transform.Rotation = new Microsoft.Xna.Framework.Vector3(-15, 0, 0); // Look down towards origin
             mainCamera.AddComponent(new Components.CameraComponent());
             
+            // Sun (Directional Light)
             var directionalLight = new GameObject("Directional Light") { ObjectType = GameObjectType.Light };
-            directionalLight.Transform.Position = new Microsoft.Xna.Framework.Vector3(5, 10, 5);
-            directionalLight.Transform.Rotation = new Microsoft.Xna.Framework.Vector3(50, -30, 0);
-            directionalLight.AddComponent(new Components.LightComponent());
+            directionalLight.Transform.Position = new Microsoft.Xna.Framework.Vector3(0, 50, 0); // High up like the sun
+            directionalLight.Transform.Rotation = new Microsoft.Xna.Framework.Vector3(50, -30, 0); // Angled down
+            
+            var lightComponent = new Components.LightComponent
+            {
+                LightType = Components.LightType.Directional,
+                Color = new Color(255, 244, 214), // Warm sunlight (slightly yellow/orange)
+                Intensity = 1.2f, // Bright like the sun
+                CastShadows = true
+            };
+            directionalLight.AddComponent(lightComponent);
             
             RootObjects.Add(mainCamera);
             RootObjects.Add(directionalLight);

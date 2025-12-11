@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using WinForms = System.Windows.Forms;
 using MonoGameEditor.ViewModels;
-
 
 namespace MonoGameEditor.Controls
 {
@@ -67,6 +67,8 @@ namespace MonoGameEditor.Controls
                 WinForms.ControlStyles.Opaque |
                 WinForms.ControlStyles.Selectable,
                 true);
+            
+            AllowDrop = true; // Enable Drag & Drop
             
             // Use Timer for render loop (works better in WPF host)
             _renderTimer = new WinForms.Timer();
@@ -178,7 +180,6 @@ namespace MonoGameEditor.Controls
         {
             if (e.PropertyName == nameof(MainViewModel.ActiveTool))
             {
-                // Must invoke on UI thread if property change comes from background (though usually ViewModel is UI thread)
                 if (IsHandleCreated) Invoke(new Action(UpdateToolbarState));
             }
             else if (e.PropertyName == nameof(MainViewModel.IsSkyboxVisible))
@@ -209,17 +210,14 @@ namespace MonoGameEditor.Controls
         {
             if (!_initialized || !Visible) return;
             
-            // Calculate delta time
             var currentTime = _stopwatch.Elapsed;
             float deltaTime = (float)(currentTime - _lastFrameTime).TotalSeconds;
             _lastFrameTime = currentTime;
             deltaTime = Math.Min(deltaTime, 0.1f);
             
-            // Process input
             ProcessKeyboardInput(deltaTime);
             
-            // Trigger repaint
-            Invalidate();
+            Invalidate(); // Triggers OnPaint
         }
 
         #region Mouse Input
@@ -246,7 +244,7 @@ namespace MonoGameEditor.Controls
             {
                 _isLeftMouseDown = true;
                 UpdateGizmo(e.Location);
-                if (_translationGizmo != null) Focus(); // Focus to receive keys or keep capture?
+                if (_translationGizmo != null) Focus();
             }
         }
 
@@ -411,7 +409,6 @@ namespace MonoGameEditor.Controls
 
             try
             {
-                // Ensure BackBuffer matches control size
                 if (GraphicsDevice.PresentationParameters.BackBufferWidth != Width ||
                     GraphicsDevice.PresentationParameters.BackBufferHeight != Height)
                 {
@@ -422,18 +419,14 @@ namespace MonoGameEditor.Controls
                             GraphicsDevice.PresentationParameters.BackBufferHeight = Height;
                             GraphicsDevice.Reset();
                             _camera?.UpdateAspectRatio(Width, Height);
+                            ConsoleViewModel.Log($"[MonoGameControl] Device Reset to {Width}x{Height}");
                         } catch (Exception ex) {
                             ConsoleViewModel.Log($"Reset failed: {ex.Message}");
-                            return;
                         }
-                    }
-                    else
-                    {
-                         return;
                     }
                 }
                 
-                // Set Viewport - Clamp to BackBuffer to prevent crash
+                // Set Viewport
                 int safeWidth = Math.Min(Width, GraphicsDevice.PresentationParameters.BackBufferWidth);
                 int safeHeight = Math.Min(Height, GraphicsDevice.PresentationParameters.BackBufferHeight);
 
@@ -459,6 +452,20 @@ namespace MonoGameEditor.Controls
                     _gridRenderer.Draw(GraphicsDevice, _camera);
                 }
                 
+                // Render Models FIRST (so gizmos appear on top)
+                var scene = Core.SceneManager.Instance;
+                if (scene != null && _camera != null)
+                {
+                    foreach (var root in scene.RootObjects)
+                    {
+                        RenderRecursively(root, GraphicsDevice, _camera);
+                    }
+                }
+                
+                // THEN render gizmos on top (disable depth test for on-top rendering)
+                var previousDepthState = GraphicsDevice.DepthStencilState;
+                GraphicsDevice.DepthStencilState = DepthStencilState.None; // Disable depth test
+                
                 if (_camera != null && _gizmoRenderer != null)
                 {
                     _gizmoRenderer.Draw(GraphicsDevice, _camera);
@@ -477,7 +484,6 @@ namespace MonoGameEditor.Controls
                      {
                          bool useLocal = vm.GizmoOrientationMode == ViewModels.GizmoOrientationMode.Local;
                          
-                         // Convert Euler to Quaternion for gizmo orientation
                          float yaw = MathHelper.ToRadians(selectedObj.Transform.Rotation.Y);
                          float pitch = MathHelper.ToRadians(selectedObj.Transform.Rotation.X);
                          float roll = MathHelper.ToRadians(selectedObj.Transform.Rotation.Z);
@@ -489,12 +495,101 @@ namespace MonoGameEditor.Controls
                              _rotationGizmo?.Draw(_camera, selectedObj.Transform.Position);
                      }
                 }
+                
+                // Restore depth state
+                GraphicsDevice.DepthStencilState = previousDepthState;
 
+                // Implicit Present
                 GraphicsDevice.Present();
             }
             catch (Exception ex)
             {
                 ConsoleViewModel.Log($"Render error: {ex.Message}");
+            }
+        }
+
+        private void RenderRecursively(MonoGameEditor.Core.GameObject node, GraphicsDevice device, EditorCamera camera)
+        {
+            var modelRenderer = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.ModelRendererComponent) as MonoGameEditor.Core.Components.ModelRendererComponent;
+            modelRenderer?.Draw(device, camera.View, camera.Projection, camera.Position);
+
+            foreach (var child in node.Children)
+            {
+                RenderRecursively(child, device, camera);
+            }
+        }
+
+        protected override void OnDragEnter(WinForms.DragEventArgs drgevent)
+        {
+            base.OnDragEnter(drgevent);
+            if (drgevent.Data.GetDataPresent(WinForms.DataFormats.FileDrop))
+                drgevent.Effect = WinForms.DragDropEffects.Copy;
+            else
+                drgevent.Effect = WinForms.DragDropEffects.None;
+        }
+
+        protected override async void OnDragDrop(WinForms.DragEventArgs drgevent)
+        {
+            base.OnDragDrop(drgevent);
+            string[] files = (string[])drgevent.Data.GetData(WinForms.DataFormats.FileDrop);
+            if (files != null && files.Length > 0)
+            {
+                string file = files[0];
+                string ext = System.IO.Path.GetExtension(file).ToLower();
+                if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".blend")
+                {
+                    ConsoleViewModel.Log($"[MonoGameControl] DragDrop received file: {file}");
+                    
+                    // Load model data with mesh hierarchy
+                    var modelData = await MonoGameEditor.Core.Assets.ModelImporter.LoadModelDataAsync(file);
+                    
+                    if (modelData == null || modelData.Meshes.Count == 0)
+                    {
+                        ConsoleViewModel.Log($"[MonoGameControl] Failed to load model: {file} (Data is null or empty)");
+                        return;
+                    }
+
+                    // Create root GameObject
+                    var rootGO = new MonoGameEditor.Core.GameObject 
+                    { 
+                        Name = modelData.Name 
+                    };
+                    
+                    // Position in front of camera
+                    if (_camera != null)
+                    {
+                        var targetPos = _camera.Position + _camera.Forward * 5f;
+                        rootGO.Transform.Position = targetPos;
+                    }
+
+                    // Create child GameObject for each mesh
+                    foreach (var meshData in modelData.Meshes)
+                    {
+                        var childGO = new MonoGameEditor.Core.GameObject
+                        {
+                            Name = meshData.Name
+                        };
+
+                        // Add ModelRendererComponent with mesh-specific data
+                        var renderer = new MonoGameEditor.Core.Components.ModelRendererComponent();
+                        renderer.SetMeshData(meshData, file); // Pass original file path
+                        childGO.AddComponent(renderer);
+
+                        // Add as child
+                        rootGO.AddChild(childGO);
+                    }
+
+                    Core.SceneManager.Instance.RootObjects.Add(rootGO);
+                    
+                    ConsoleViewModel.Log($"[MonoGameControl] Successfully created '{rootGO.Name}' with {modelData.Meshes.Count} mesh(es)");
+                    
+                    if (MainViewModel.Instance != null)
+                        MainViewModel.Instance.Inspector.SelectedObject = rootGO;
+                }
+                else
+                {
+                    ConsoleViewModel.Log($"[MonoGameControl] Ignored dropped file with extension: {ext}");
+                }
             }
         }
 
@@ -511,25 +606,29 @@ namespace MonoGameEditor.Controls
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            try
             {
-                if (MainViewModel.Instance != null)
+                if (disposing)
                 {
-                    MainViewModel.Instance.PropertyChanged -= OnViewModelPropertyChanged;
+                    if (MainViewModel.Instance != null)
+                    {
+                        MainViewModel.Instance.PropertyChanged -= OnViewModelPropertyChanged;
+                    }
+                    _btnMove?.Dispose();
+                    _btnRotate?.Dispose();
+                    _toolPanel?.Dispose();
+
+                    _renderTimer?.Stop();
+                    _renderTimer?.Dispose();
+                    _orientationGizmo?.Dispose();
+                    _skybox?.Dispose();
+                    _gridRenderer?.Dispose();
+                    _spriteBatch?.Dispose();
+                    _graphicsService?.Release(Handle);
                 }
-                _btnMove?.Dispose();
-                _btnRotate?.Dispose();
-                _toolPanel?.Dispose();
-                
-                _renderTimer?.Stop();
-                _renderTimer?.Dispose();
-                _orientationGizmo?.Dispose();
-                _skybox?.Dispose();
-                _gridRenderer?.Dispose();
-                _spriteBatch?.Dispose();
-                _graphicsService?.Release(Handle);
+                base.Dispose(disposing);
             }
-            base.Dispose(disposing);
+            catch { }
         }
     }
 }

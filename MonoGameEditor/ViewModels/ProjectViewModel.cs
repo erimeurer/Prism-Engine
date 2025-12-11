@@ -12,8 +12,8 @@ namespace MonoGameEditor.ViewModels
     {
         public ObservableCollection<DirectoryItemViewModel> Roots { get; } = new ObservableCollection<DirectoryItemViewModel>();
 
-        private DirectoryItemViewModel _rootDirectory;
-        public DirectoryItemViewModel RootDirectory
+        private DirectoryItemViewModel? _rootDirectory;
+        public DirectoryItemViewModel? RootDirectory
         {
             get => _rootDirectory;
             set 
@@ -152,8 +152,8 @@ namespace MonoGameEditor.ViewModels
             }
         }
 
-        private FileItemViewModel _selectedFile;
-        public FileItemViewModel SelectedFile
+        private FileItemViewModel? _selectedFile;
+        public FileItemViewModel? SelectedFile
         {
             get => _selectedFile;
             set
@@ -359,7 +359,7 @@ namespace MonoGameEditor.ViewModels
 
     public class DirectoryItemViewModel : FileSystemItemViewModel
     {
-        public ObservableCollection<DirectoryItemViewModel> Children { get; } = new ObservableCollection<DirectoryItemViewModel>();
+        public ObservableCollection<DirectoryItemViewModel?> Children { get; } = new ObservableCollection<DirectoryItemViewModel?>();
         public DirectoryItemViewModel Parent { get; }
         
         private bool _isExpanded;
