@@ -126,6 +126,20 @@ namespace MonoGameEditor.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private bool _isSkyboxVisible = true;
+        public bool IsSkyboxVisible
+        {
+            get => _isSkyboxVisible;
+            set
+            {
+                if (_isSkyboxVisible != value)
+                {
+                    _isSkyboxVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         
         public ICommand SelectToolCommand { get; }
 

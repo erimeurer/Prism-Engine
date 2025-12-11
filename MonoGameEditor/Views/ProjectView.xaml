@@ -16,7 +16,38 @@
                         <Path Fill="#FFD659" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                      </Canvas>
                  </Viewbox>
-                 <TextBlock Text="{Binding Name}" TextAlignment="Center" Foreground="#CCCCCC" TextTrimming="CharacterEllipsis"/>
+                 <Grid>
+                     <TextBlock Text="{Binding Name}" TextAlignment="Center" Foreground="#CCCCCC" TextTrimming="CharacterEllipsis">
+                         <TextBlock.Style>
+                             <Style TargetType="TextBlock">
+                                 <Setter Property="Visibility" Value="Visible"/>
+                                 <Style.Triggers>
+                                     <DataTrigger Binding="{Binding IsRenaming}" Value="True">
+                                         <Setter Property="Visibility" Value="Collapsed"/>
+                                     </DataTrigger>
+                                 </Style.Triggers>
+                             </Style>
+                         </TextBlock.Style>
+                     </TextBlock>
+                     <TextBox Text="{Binding RenameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              TextAlignment="Center">
+                          <TextBox.InputBindings>
+                              <KeyBinding Key="Enter" Command="{Binding RenameCommand}"/>
+                              <KeyBinding Key="Esc" Command="{Binding CancelRenameCommand}"/>
+                          </TextBox.InputBindings>
+                         <TextBox.Style>
+                             <Style TargetType="TextBox">
+                                 <Setter Property="Visibility" Value="Collapsed"/>
+                                 <Style.Triggers>
+                                     <DataTrigger Binding="{Binding IsRenaming}" Value="True">
+                                         <Setter Property="Visibility" Value="Visible"/>
+                                         <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                                     </DataTrigger>
+                                 </Style.Triggers>
+                             </Style>
+                         </TextBox.Style>
+                     </TextBox>
+                 </Grid>
              </StackPanel>
         </DataTemplate>
 
@@ -29,19 +60,91 @@
                         <Path Fill="#AAAAAA" Data="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" />
                      </Canvas>
                  </Viewbox>
-                 <TextBlock Text="{Binding Name}" TextAlignment="Center" Foreground="#CCCCCC" TextTrimming="CharacterEllipsis"/>
+                 <Grid>
+                     <TextBlock Text="{Binding Name}" TextAlignment="Center" Foreground="#CCCCCC" TextTrimming="CharacterEllipsis">
+                         <TextBlock.Style>
+                             <Style TargetType="TextBlock">
+                                 <Setter Property="Visibility" Value="Visible"/>
+                                 <Style.Triggers>
+                                     <DataTrigger Binding="{Binding IsRenaming}" Value="True">
+                                         <Setter Property="Visibility" Value="Collapsed"/>
+                                     </DataTrigger>
+                                 </Style.Triggers>
+                             </Style>
+                         </TextBlock.Style>
+                     </TextBlock>
+                     <TextBox Text="{Binding RenameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              TextAlignment="Center">
+                          <TextBox.InputBindings>
+                              <KeyBinding Key="Enter" Command="{Binding RenameCommand}"/>
+                              <KeyBinding Key="Esc" Command="{Binding CancelRenameCommand}"/>
+                          </TextBox.InputBindings>
+                         <TextBox.Style>
+                             <Style TargetType="TextBox">
+                                 <Setter Property="Visibility" Value="Collapsed"/>
+                                 <Style.Triggers>
+                                     <DataTrigger Binding="{Binding IsRenaming}" Value="True">
+                                         <Setter Property="Visibility" Value="Visible"/>
+                                         <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                                     </DataTrigger>
+                                 </Style.Triggers>
+                             </Style>
+                         </TextBox.Style>
+                     </TextBox>
+                 </Grid>
              </StackPanel>
         </DataTemplate>
 
         <!-- TreeView Item Style (Folder Tree) -->
         <HierarchicalDataTemplate x:Key="TreeFolderTemplate" DataType="{x:Type vm:DirectoryItemViewModel}" ItemsSource="{Binding Children}">
             <StackPanel Orientation="Horizontal" Margin="2">
+                <StackPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Create New Folder" 
+                                  Command="{Binding DataContext.CreateFolderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                  CommandParameter="{Binding}" />
+                        <Separator/>
+                        <MenuItem Header="Rename" 
+                                  Command="{Binding RenameCommand}" />
+                    </ContextMenu>
+                </StackPanel.ContextMenu>
                 <Viewbox Width="16" Height="16" Margin="0,0,5,0">
                     <Canvas Width="24" Height="24">
                         <Path Fill="#FFD659" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" />
                     </Canvas>
                 </Viewbox>
-                <TextBlock Text="{Binding Name}" Foreground="#E0E0E0"/>
+                <Grid>
+                    <TextBlock Text="{Binding Name}" Foreground="#E0E0E0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRenaming}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox Text="{Binding RenameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Background="#333333" Foreground="White" BorderThickness="0">
+                         <TextBox.InputBindings>
+                             <KeyBinding Key="Enter" Command="{Binding RenameCommand}"/>
+                             <KeyBinding Key="Esc" Command="{Binding CancelRenameCommand}"/>
+                         </TextBox.InputBindings>
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsRenaming}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </Grid>
             </StackPanel>
         </HierarchicalDataTemplate>
 
@@ -168,6 +271,17 @@
                          Background="#1E1E1E" 
                          BorderThickness="0"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Create New Folder" 
+                                      Command="{Binding CreateFolderCommand}" />
+                            <Separator/>
+                             <!-- Context menu for empty space doesn't make sense to have Rename, unless we bind to SelectedDirectory? 
+                                  Actually, usually you rename a specific item. 
+                                  The ListBox ItemContextMenu is usually what we want for renaming files/folders in the grid.
+                                  Let's check if the ListBoxItem has a context menu. -->
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
@@ -203,6 +317,13 @@
                             </Setter.Value>
                         </Setter>
                         <!-- Double Click to Open -->
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename" Command="{Binding RenameCommand}"/>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
 
                     </Style>
                 </ListBox.ItemContainerStyle>

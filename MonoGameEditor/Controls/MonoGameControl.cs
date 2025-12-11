@@ -24,6 +24,7 @@ namespace MonoGameEditor.Controls
         private GizmoRenderer? _gizmoRenderer;
         private MonoGameEditor.Core.Gizmos.TranslationGizmo? _translationGizmo;
         private MonoGameEditor.Core.Gizmos.RotationGizmo? _rotationGizmo;
+        private ProceduralSkybox? _skybox;
         
         // Floating Toolbar
         private WinForms.Panel? _toolPanel;
@@ -44,6 +45,19 @@ namespace MonoGameEditor.Controls
         public GraphicsDevice? GraphicsDevice => _graphicsService?.GraphicsDevice;
         public EditorCamera? Camera => _camera;
         public bool ShowGrid { get; set; } = true;
+        private bool _showSkybox = true;
+        public bool ShowSkybox 
+        { 
+            get => _showSkybox; 
+            set 
+            { 
+                if (_showSkybox != value)
+                {
+                    _showSkybox = value;
+                    Invalidate();
+                }
+            } 
+        }
 
         public MonoGameControl()
         {
@@ -91,11 +105,15 @@ namespace MonoGameEditor.Controls
             _translationGizmo = new MonoGameEditor.Core.Gizmos.TranslationGizmo(GraphicsDevice!);
             _rotationGizmo = new MonoGameEditor.Core.Gizmos.RotationGizmo(GraphicsDevice!);
 
+            _skybox = new ProceduralSkybox();
+            _skybox.Initialize(GraphicsDevice!);
+
             InitializeToolbar();
             if (MainViewModel.Instance != null)
             {
                 MainViewModel.Instance.PropertyChanged += OnViewModelPropertyChanged;
                 MainViewModel.Instance.FocusRequested += (s, e) => FocusSelection(); // Subscribe to focus requests
+                ShowSkybox = MainViewModel.Instance.IsSkyboxVisible;
                 UpdateToolbarState();
             }
             
@@ -124,7 +142,7 @@ namespace MonoGameEditor.Controls
             this.Controls.Add(_toolPanel);
         }
 
-        private WinForms.Button CreateToolbarButton(string text, int x, TransformTool tool)
+        private WinForms.Button CreateToolbarButton(string text, int x, object? tag)
         {
             var btn = new WinForms.Button
             {
@@ -135,11 +153,13 @@ namespace MonoGameEditor.Controls
                 ForeColor = System.Drawing.Color.White,
                 Font = new System.Drawing.Font("Segoe UI", 12f),
                 Cursor = WinForms.Cursors.Hand,
-                Tag = tool
+                Tag = tag
             };
             btn.FlatAppearance.BorderSize = 0;
             btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(62, 62, 66);
-            btn.Click += OnToolbarButtonClick;
+            if (tag is TransformTool) 
+                btn.Click += OnToolbarButtonClick;
+                
             return btn;
         }
 
@@ -160,6 +180,13 @@ namespace MonoGameEditor.Controls
             {
                 // Must invoke on UI thread if property change comes from background (though usually ViewModel is UI thread)
                 if (IsHandleCreated) Invoke(new Action(UpdateToolbarState));
+            }
+            else if (e.PropertyName == nameof(MainViewModel.IsSkyboxVisible))
+            {
+                 if (MainViewModel.Instance != null && IsHandleCreated)
+                 {
+                     ShowSkybox = MainViewModel.Instance.IsSkyboxVisible;
+                 }
             }
         }
 
@@ -421,6 +448,11 @@ namespace MonoGameEditor.Controls
 
                 GraphicsDevice.Clear(new Color(56, 56, 56));
 
+                if (ShowSkybox && _camera != null && _skybox != null)
+                {
+                    _skybox.Draw(_camera);
+                }
+
                 if (ShowGrid && _camera != null && _gridRenderer != null)
                 {
                     _camera.UpdateAspectRatio(Width, Height);
@@ -492,6 +524,7 @@ namespace MonoGameEditor.Controls
                 _renderTimer?.Stop();
                 _renderTimer?.Dispose();
                 _orientationGizmo?.Dispose();
+                _skybox?.Dispose();
                 _gridRenderer?.Dispose();
                 _spriteBatch?.Dispose();
                 _graphicsService?.Release(Handle);

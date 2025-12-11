@@ -142,19 +142,168 @@ namespace MonoGameEditor.ViewModels
                 }
             }
         }
+
+        public ICommand CreateFolderCommand => new RelayCommand(CreateNewFolder);
+
+        private void CreateNewFolder(object param)
+        {
+            try
+            {
+                string parentPath = null;
+                DirectoryItemViewModel targetVm = null;
+
+                if (param is DirectoryItemViewModel dirVm)
+                {
+                    targetVm = dirVm;
+                    parentPath = dirVm.FullPath;
+                }
+                else if (SelectedDirectory != null)
+                {
+                    targetVm = SelectedDirectory;
+                    parentPath = SelectedDirectory.FullPath;
+                }
+
+                if (string.IsNullOrEmpty(parentPath)) return;
+
+                // Generate unique name
+                string baseName = "New Folder";
+                string newPath = Path.Combine(parentPath, baseName);
+                int counter = 1;
+                while (Directory.Exists(newPath))
+                {
+                    newPath = Path.Combine(parentPath, $"{baseName} {counter}");
+                    counter++;
+                }
+
+                Directory.CreateDirectory(newPath);
+
+                // Refresh logic
+                // If we created it in the currently viewed directory, refresh the grid
+                if (SelectedDirectory != null && SelectedDirectory.FullPath == parentPath)
+                {
+                    // Force reload of children for the selected directory to update tree + grid
+                    SelectedDirectory.Children.Clear(); // Force reload
+                    SelectedDirectory.LoadChildren();
+                    LoadCurrentDirectory();
+
+                    // Find the new item and put it in rename mode
+                    var newItem = GridItems.FirstOrDefault(x => x.FullPath == newPath);
+                    if (newItem != null)
+                    {
+                        newItem.IsRenaming = true;
+                    }
+                }
+                else if (targetVm != null)
+                {
+                    // We created it in a tree node that might be expanded but not selected
+                    targetVm.Children.Clear(); // Force reload
+                    targetVm.LoadChildren();
+                    
+                    var newItem = targetVm.Children.FirstOrDefault(x => x.FullPath == newPath);
+                    if (newItem != null)
+                    {
+                        newItem.IsRenaming = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating folder: {ex.Message}");
+            }
+        }
     }
 
     public abstract class FileSystemItemViewModel : ViewModelBase
     {
-        public string FullPath { get; }
-        public string Name { get; }
+        public string FullPath { get; set; } // Settable for rename
+        public string Name { get; set; } // Settable for rename
         public bool IsDirectory { get; }
         
+        private bool _isRenaming;
+        public bool IsRenaming
+        {
+            get => _isRenaming;
+            set
+            {
+                if (_isRenaming != value)
+                {
+                    _isRenaming = value;
+                    OnPropertyChanged();
+                    if (_isRenaming)
+                    {
+                        RenameText = Name;
+                    }
+                }
+            }
+        }
+
+        private string _renameText;
+        public string RenameText
+        {
+            get => _renameText;
+            set { _renameText = value; OnPropertyChanged(); }
+        }
+
+        public ICommand RenameCommand => new RelayCommand(_ => ExecuteRename());
+        public ICommand CancelRenameCommand => new RelayCommand(_ => CancelRename());
+
         public FileSystemItemViewModel(string path, bool isDirectory)
         {
             FullPath = path;
             Name = Path.GetFileName(path);
             IsDirectory = isDirectory;
+        }
+
+        private void ExecuteRename()
+        {
+            if (string.IsNullOrWhiteSpace(RenameText) || RenameText == Name)
+            {
+                IsRenaming = false;
+                return;
+            }
+
+            try
+            {
+                string parentDir = Path.GetDirectoryName(FullPath);
+                string newPath = Path.Combine(parentDir, RenameText);
+
+                if (IsDirectory)
+                {
+                    if (Directory.Exists(newPath)) 
+                    {
+                        // Handle collision or warn? For now just cancel
+                        IsRenaming = false;
+                        return;
+                    }
+                    Directory.Move(FullPath, newPath);
+                }
+                else
+                {
+                    if (File.Exists(newPath))
+                    {
+                        IsRenaming = false;
+                        return;
+                    }
+                    File.Move(FullPath, newPath);
+                }
+
+                FullPath = newPath;
+                Name = RenameText;
+                OnPropertyChanged(nameof(FullPath));
+                OnPropertyChanged(nameof(Name));
+                IsRenaming = false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error renaming: {ex.Message}");
+                IsRenaming = false;
+            }
+        }
+
+        private void CancelRename()
+        {
+            IsRenaming = false;
+            RenameText = Name;
         }
     }
 

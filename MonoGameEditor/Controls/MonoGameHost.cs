@@ -17,6 +17,12 @@ namespace MonoGameEditor.Controls
             set { if (_gameControl != null) _gameControl.ShowGrid = value; }
         }
 
+        public bool ShowSkybox
+        {
+            get => _gameControl?.ShowSkybox ?? true;
+            set { if (_gameControl != null) _gameControl.ShowSkybox = value; }
+        }
+
         public MonoGameHost()
         {
             Loaded += OnLoaded;
