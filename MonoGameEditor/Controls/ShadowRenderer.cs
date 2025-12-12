@@ -15,7 +15,7 @@ namespace MonoGameEditor.Controls
         private GraphicsDevice _graphicsDevice;
         private RenderTarget2D _shadowMap;
         private Effect _shadowDepthEffect;
-        private int _resolution = 2048; // Reduced for better stability (was 4096)
+        private int _resolution = 4096; // High resolution for Unity-quality shadows
 
         public RenderTarget2D ShadowMap => _shadowMap;
         public Matrix LightViewProjection { get; private set; }
@@ -64,11 +64,24 @@ namespace MonoGameEditor.Controls
             
             Vector3 lightDir = Vector3.Normalize(light.GameObject.Transform.Forward);
             
-            // Use WORLD origin instead of camera position for stable shadows
-            Vector3 worldCenter = Vector3.Zero;
-            Vector3 lightPos = worldCenter - (lightDir * 100f); // Fixed distance from world origin
+            // CENTER ON CAMERA: Shadows follow your view (like Unity's cascaded shadows)
+            // Offset forward so shadows appear where you're looking
+            Vector3 worldCenter = cameraPosition + (cameraForward * 20f);
             
-            float viewSize = 200f;
+            // CRITICAL: Snap worldCenter to a coarse grid to prevent shadow swimming
+            // When camera moves/rotates, shadows only update in discrete 10-unit steps
+            // This makes the movement invisible while keeping shadows near the player
+            float gridSize = 10f;
+            worldCenter.X = (float)Math.Round(worldCenter.X / gridSize) * gridSize;
+            worldCenter.Y = (float)Math.Round(worldCenter.Y / gridSize) * gridSize;
+            worldCenter.Z = (float)Math.Round(worldCenter.Z / gridSize) * gridSize;
+            
+            // Position light far from center to avoid near-plane clipping
+            Vector3 lightPos = worldCenter - (lightDir * 200f);
+            
+            // Optimized view size: 100 units covers typical scene well
+            // 4096 / 100 = 40.96 texels/unit = 2.4cm precision (excellent!)
+            float viewSize = 100f;
             
             // Robust Up vector selection
             Vector3 up = Vector3.Up;
@@ -116,7 +129,7 @@ namespace MonoGameEditor.Controls
             // 3. Set States strictly
             _graphicsDevice.BlendState = BlendState.Opaque;
             _graphicsDevice.DepthStencilState = DepthStencilState.Default;
-            _graphicsDevice.RasterizerState = RasterizerState.CullNone; // Draw double sided for shadows
+            _graphicsDevice.RasterizerState = RasterizerState.CullClockwise; // Backface culling = minimal bias!
             
             // 3. Setup Effect
             if (_shadowDepthEffect != null)

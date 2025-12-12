@@ -109,7 +109,7 @@ namespace MonoGameEditor.Core.Components
         // Shadow Properties
         private bool _castShadows = true;
         private float _shadowStrength = 1.0f;
-        private float _shadowBias = 0.0005f; // Decreased from 0.005f to match scene scale
+        private float _shadowBias = 0.0002f; // Ultra-low bias with backface culling
         private float _shadowNormalBias = 0.4f;
         private int _shadowResolution = 2048; // 1024, 2048, 4096
 

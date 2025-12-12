@@ -200,40 +200,30 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
         {
             float currentDepth = lightScreenPos.z;
             
-            // Simple bias
-            float3 L = normalize(-LightDirection);
-            float bias = 0.003;
+            // Ultra-low bias thanks to backface culling
+            float bias = 0.0002;
             
-            float texelSize = 1.0 / 2048.0; // Match shadow map resolution
+            float texelSize = 1.0 / 4096.0; // Match 4096 resolution
             
-            // Simple 2x2 bilinear PCF (what Unity actually uses for "simple" quality)
+            // 4-TAP BILINEAR PCF - Simulates hardware bilinear filtering for smooth edges
+            // Sample at half-texel offsets for best anti-aliasing
             float shadowSum = 0.0;
             
-            for(int x = 0; x <= 1; ++x)
-            {
-                for(int y = 0; y <= 1; ++y)
-                {
-                    float2 offset = float2(x, y) * texelSize;
-                    float pcfDepth = tex2D(ShadowMapSampler, shadowTexCoord + offset).r;
-                    
-                    if (currentDepth - bias > pcfDepth)
-                    {
-                        shadowSum += 1.0;
-                    }
-                }
-            }
+            float pcfDepth1 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, -0.5) * texelSize).r;
+            if (currentDepth - bias > pcfDepth1) shadowSum += 1.0;
             
-            // Average
+            float pcfDepth2 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, -0.5) * texelSize).r;
+            if (currentDepth - bias > pcfDepth2) shadowSum += 1.0;
+            
+            float pcfDepth3 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, 0.5) * texelSize).r;
+            if (currentDepth - bias > pcfDepth3) shadowSum += 1.0;
+            
+            float pcfDepth4 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, 0.5) * texelSize).r;
+            if (currentDepth - bias > pcfDepth4) shadowSum += 1.0;
+            
+            // Average and apply shadow strength
             float shadowFactor = shadowSum / 4.0;
-            
-            // Apply shadow strength
-            shadowFactor *= ShadowStrength;
-            
-            // Invert
-            shadow = 1.0 - shadowFactor;
-            
-            // Apply shadow strength
-            shadow = lerp(1.0, shadow, ShadowStrength);
+            shadow = lerp(1.0, 1.0 - shadowFactor, ShadowStrength);
         }
     }
 
