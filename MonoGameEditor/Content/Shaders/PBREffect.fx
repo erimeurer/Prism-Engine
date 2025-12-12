@@ -23,6 +23,7 @@ float AO = 1.0;
 // Shadow Properties
 float4x4 LightViewProjection;
 bool UseShadows;
+int ShadowQuality; // 0=None, 1=Hard, 2=Soft
 float ShadowStrength;
 float ShadowBias;
 
@@ -199,30 +200,37 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
             shadowTexCoord.y >= 0.0 && shadowTexCoord.y <= 1.0)
         {
             float currentDepth = lightScreenPos.z;
+            float bias = 0.0002; // Ultra-low bias thanks to backface culling
+            float texelSize = 1.0 / 4096.0;
             
-            // Ultra-low bias thanks to backface culling
-            float bias = 0.0002;
+            float shadowFactor = 0.0;
             
-            float texelSize = 1.0 / 4096.0; // Match 4096 resolution
+            if (ShadowQuality == 1) // Hard Shadows - single sample
+            {
+                float shadowDepth = tex2D(ShadowMapSampler, shadowTexCoord).r;
+                shadowFactor = (currentDepth - bias > shadowDepth) ? 1.0 : 0.0;
+            }
+            else // Soft Shadows (Quality == 2) - 4-tap PCF
+            {
+                // 4-TAP BILINEAR PCF - Smooth edges
+                float shadowSum = 0.0;
+                
+                float pcfDepth1 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, -0.5) * texelSize).r;
+                if (currentDepth - bias > pcfDepth1) shadowSum += 1.0;
+                
+                float pcfDepth2 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, -0.5) * texelSize).r;
+                if (currentDepth - bias > pcfDepth2) shadowSum += 1.0;
+                
+                float pcfDepth3 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, 0.5) * texelSize).r;
+                if (currentDepth - bias > pcfDepth3) shadowSum += 1.0;
+                
+                float pcfDepth4 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, 0.5) * texelSize).r;
+                if (currentDepth - bias > pcfDepth4) shadowSum += 1.0;
+                
+                shadowFactor = shadowSum / 4.0;
+            }
             
-            // 4-TAP BILINEAR PCF - Simulates hardware bilinear filtering for smooth edges
-            // Sample at half-texel offsets for best anti-aliasing
-            float shadowSum = 0.0;
-            
-            float pcfDepth1 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, -0.5) * texelSize).r;
-            if (currentDepth - bias > pcfDepth1) shadowSum += 1.0;
-            
-            float pcfDepth2 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, -0.5) * texelSize).r;
-            if (currentDepth - bias > pcfDepth2) shadowSum += 1.0;
-            
-            float pcfDepth3 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, 0.5) * texelSize).r;
-            if (currentDepth - bias > pcfDepth3) shadowSum += 1.0;
-            
-            float pcfDepth4 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, 0.5) * texelSize).r;
-            if (currentDepth - bias > pcfDepth4) shadowSum += 1.0;
-            
-            // Average and apply shadow strength
-            float shadowFactor = shadowSum / 4.0;
+            // Apply strength and invert
             shadow = lerp(1.0, 1.0 - shadowFactor, ShadowStrength);
         }
     }

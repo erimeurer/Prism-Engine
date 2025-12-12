@@ -7,11 +7,18 @@
              xmlns:core="clr-namespace:MonoGameEditor.Core"
              xmlns:components="clr-namespace:MonoGameEditor.Core.Components"
              xmlns:vm="clr-namespace:MonoGameEditor.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="320">
     <UserControl.Resources>
         <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <local:XnaColorToWpfColorConverter x:Key="XnaColorToWpfColorConverter"/>
+        
+        <ObjectDataProvider x:Key="ShadowQualityEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="components:ShadowQuality"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
         
         <!-- TextBox Style -->
         <Style x:Key="NumericTextBox" TargetType="TextBox">
@@ -282,6 +289,15 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Cast Shadows" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                             <CheckBox Grid.Column="1" IsChecked="{Binding CastShadows}" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Quality" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource ShadowQualityEnum}}" SelectedItem="{Binding Quality}" VerticalAlignment="Center"/>
                         </Grid>
                         
                         <!-- Extra Shadow Props -->

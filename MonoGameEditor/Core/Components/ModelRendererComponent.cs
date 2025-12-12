@@ -321,6 +321,7 @@ namespace MonoGameEditor.Core.Components
                                 resources.Effect.Parameters["UseShadows"]?.SetValue(true);
                                 resources.Effect.Parameters["ShadowMap"]?.SetValue(shadowMap);
                                 resources.Effect.Parameters["LightViewProjection"]?.SetValue(lightViewProj.Value);
+                                resources.Effect.Parameters["ShadowQuality"]?.SetValue((int)lightComp.Quality);
                                 resources.Effect.Parameters["ShadowStrength"]?.SetValue(lightComp.ShadowStrength);
                                 resources.Effect.Parameters["ShadowBias"]?.SetValue(lightComp.ShadowBias);
                             }

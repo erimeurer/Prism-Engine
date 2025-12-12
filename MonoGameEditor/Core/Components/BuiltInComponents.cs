@@ -91,6 +91,16 @@ namespace MonoGameEditor.Core.Components
     }
 
     /// <summary>
+    /// Shadow quality modes (Unity-style)
+    /// </summary>
+    public enum ShadowQuality
+    {
+        NoShadows,
+        HardShadows,    // Single sample - pixelated edges
+        SoftShadows     // 4-tap PCF - smooth edges
+    }
+
+    /// <summary>
     /// Light component - makes this GameObject act as a light source
     /// </summary>
     public class LightComponent : Component
@@ -108,6 +118,7 @@ namespace MonoGameEditor.Core.Components
 
         // Shadow Properties
         private bool _castShadows = true;
+        private ShadowQuality _shadowQuality = ShadowQuality.SoftShadows;
         private float _shadowStrength = 1.0f;
         private float _shadowBias = 0.0002f; // Ultra-low bias with backface culling
         private float _shadowNormalBias = 0.4f;
@@ -163,6 +174,12 @@ namespace MonoGameEditor.Core.Components
         {
             get => _castShadows;
             set { _castShadows = value; OnPropertyChanged(nameof(CastShadows)); }
+        }
+
+        public ShadowQuality Quality
+        {
+            get => _shadowQuality;
+            set { _shadowQuality = value; OnPropertyChanged(nameof(Quality)); }
         }
 
         public float ShadowStrength
