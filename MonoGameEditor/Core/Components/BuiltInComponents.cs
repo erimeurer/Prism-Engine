@@ -96,8 +96,10 @@ namespace MonoGameEditor.Core.Components
     public enum ShadowQuality
     {
         NoShadows,
-        HardShadows,    // Single sample - pixelated edges
-        SoftShadows     // 4-tap PCF - smooth edges
+        Low,            // 4 samples - fast, visible aliasing
+        Medium,         // 8 samples - balanced
+        High,           // 16 samples - smooth
+        VeryHigh        // 32 samples - ultra smooth (Unity quality)
     }
 
     /// <summary>
@@ -118,7 +120,7 @@ namespace MonoGameEditor.Core.Components
 
         // Shadow Properties
         private bool _castShadows = true;
-        private ShadowQuality _shadowQuality = ShadowQuality.SoftShadows;
+        private ShadowQuality _shadowQuality = ShadowQuality.High;
         private float _shadowStrength = 1.0f;
         private float _shadowBias = 0.0002f; // Ultra-low bias with backface culling
         private float _shadowNormalBias = 0.4f;

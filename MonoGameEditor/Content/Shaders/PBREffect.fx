@@ -203,31 +203,120 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
             float bias = 0.0002; // Ultra-low bias thanks to backface culling
             float texelSize = 1.0 / 4096.0;
             
+            // RANDOM ROTATION per pixel to eliminate banding (Unity technique)
+            // Creates smooth gradient by rotating sample pattern
+            float2 seed = shadowTexCoord * 100.0; // Use shadow texture coords as seed
+            float randomAngle = frac(sin(dot(seed, float2(12.9898, 78.233))) * 43758.5453) * 6.28318; // 0 to 2*PI
+            float cosAngle = cos(randomAngle);
+            float sinAngle = sin(randomAngle);
+            float2x2 rotationMatrix = float2x2(cosAngle, -sinAngle, sinAngle, cosAngle);
+            
             float shadowFactor = 0.0;
             
-            if (ShadowQuality == 1) // Hard Shadows - single sample
+            // PROFESSIONAL MULTI-QUALITY SHADOW SYSTEM (Unity-style)
+            // Quality 1=Low (4), 2=Medium (8), 3=High (16), 4=VeryHigh (32)
+            
+            if (ShadowQuality == 1) // Low Quality - 4 samples, fast
             {
-                float shadowDepth = tex2D(ShadowMapSampler, shadowTexCoord).r;
-                shadowFactor = (currentDepth - bias > shadowDepth) ? 1.0 : 0.0;
-            }
-            else // Soft Shadows (Quality == 2) - 4-tap PCF
-            {
-                // 4-TAP BILINEAR PCF - Smooth edges
+                // 4-tap bilinear PCF with rotation
                 float shadowSum = 0.0;
+                float filterRadius = 1.5;
                 
-                float pcfDepth1 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, -0.5) * texelSize).r;
-                if (currentDepth - bias > pcfDepth1) shadowSum += 1.0;
+                float2 offsets[4] = {
+                    float2(-0.5, -0.5), float2(0.5, -0.5),
+                    float2(-0.5, 0.5), float2(0.5, 0.5)
+                };
                 
-                float pcfDepth2 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, -0.5) * texelSize).r;
-                if (currentDepth - bias > pcfDepth2) shadowSum += 1.0;
-                
-                float pcfDepth3 = tex2D(ShadowMapSampler, shadowTexCoord + float2(-0.5, 0.5) * texelSize).r;
-                if (currentDepth - bias > pcfDepth3) shadowSum += 1.0;
-                
-                float pcfDepth4 = tex2D(ShadowMapSampler, shadowTexCoord + float2(0.5, 0.5) * texelSize).r;
-                if (currentDepth - bias > pcfDepth4) shadowSum += 1.0;
+                for(int i = 0; i < 4; i++)
+                {
+                    float2 rotatedOffset = mul(offsets[i], rotationMatrix) * filterRadius * texelSize;
+                    float pcfDepth = tex2D(ShadowMapSampler, shadowTexCoord + rotatedOffset).r;
+                    if (currentDepth - bias > pcfDepth) shadowSum += 1.0;
+                }
                 
                 shadowFactor = shadowSum / 4.0;
+            }
+            else if (ShadowQuality == 2) // Medium Quality - 8 samples, balanced
+            {
+                // 8-sample Poisson disk
+                static const float2 poisson8[8] = {
+                    float2(-0.7071, 0.7071), float2(-0.0000, -0.8750),
+                    float2(0.5303, 0.5303), float2(-0.6250, -0.0000),
+                    float2(0.3536, -0.3536), float2(0.0000, 0.6250),
+                    float2(-0.3536, -0.3536), float2(0.7071, 0.0000)
+                };
+                
+                float shadowSum = 0.0;
+                float filterRadius = 2.5;
+                
+                for(int i = 0; i < 8; i++)
+                {
+                    float2 rotatedOffset = mul(poisson8[i], rotationMatrix) * filterRadius * texelSize;
+                    float pcfDepth = tex2D(ShadowMapSampler, shadowTexCoord + rotatedOffset).r;
+                    if (currentDepth - bias > pcfDepth) shadowSum += 1.0;
+                }
+                
+                shadowFactor = shadowSum / 8.0;
+            }
+            else if (ShadowQuality == 3) // High Quality - 16 samples, smooth
+            {
+                // 16-sample Poisson disk
+                static const float2 poisson16[16] = {
+                    float2(-0.94201624, -0.39906216), float2(0.94558609, -0.76890725),
+                    float2(-0.094184101, -0.92938870), float2(0.34495938, 0.29387760),
+                    float2(-0.91588581, 0.45771432), float2(-0.81544232, -0.87912464),
+                    float2(-0.38277543, 0.27676845), float2(0.97484398, 0.75648379),
+                    float2(0.44323325, -0.97511554), float2(0.53742981, -0.47373420),
+                    float2(-0.26496911, -0.41893023), float2(0.79197514, 0.19090188),
+                    float2(-0.24188840, 0.99706507), float2(-0.81409955, 0.91437590),
+                    float2(0.19984126, 0.78641367), float2(0.14383161, -0.14100790)
+                };
+                
+                float shadowSum = 0.0;
+                float filterRadius = 3.5;
+                
+                for(int i = 0; i < 16; i++)
+                {
+                    float2 rotatedOffset = mul(poisson16[i], rotationMatrix) * filterRadius * texelSize;
+                    float pcfDepth = tex2D(ShadowMapSampler, shadowTexCoord + rotatedOffset).r;
+                    if (currentDepth - bias > pcfDepth) shadowSum += 1.0;
+                }
+                
+                shadowFactor = shadowSum / 16.0;
+            }
+            else if (ShadowQuality == 4) // Very High Quality - 32 samples, ultra smooth (UNITY QUALITY!)
+            {
+                // 32-sample Poisson disk - MAXIMUM QUALITY
+                static const float2 poisson32[32] = {
+                    float2(-0.975402, -0.0711386), float2(-0.920505, -0.41125),
+                    float2(-0.883908, -0.699843), float2(-0.771388, -0.890433),
+                    float2(-0.571019, 0.744969), float2(-0.555064, 0.559374),
+                    float2(-0.541534, 0.201836), float2(-0.515174, -0.186982),
+                    float2(-0.506475, -0.554764), float2(-0.397458, -0.894557),
+                    float2(-0.320911, 0.917206), float2(-0.279415, 0.411033),
+                    float2(-0.234813, -0.395923), float2(-0.187043, 0.651528),
+                    float2(-0.113087, -0.684156), float2(0.0116578, -0.934071),
+                    float2(0.126116, 0.455607), float2(0.182669, -0.239951),
+                    float2(0.339112, 0.914424), float2(0.342948, -0.533424),
+                    float2(0.423332, 0.317099), float2(0.487635, -0.868818),
+                    float2(0.505348, 0.655838), float2(0.540464, -0.126364),
+                    float2(0.580653, -0.700114), float2(0.685879, 0.661535),
+                    float2(0.695726, 0.327731), float2(0.736117, -0.464652),
+                    float2(0.858321, 0.543018), float2(0.863971, -0.164021),
+                    float2(0.952487, -0.569365), float2(0.988071, 0.224193)
+                };
+                
+                float shadowSum = 0.0;
+                float filterRadius = 4.5; // Maximum softness
+                
+                for(int i = 0; i < 32; i++)
+                {
+                    float2 rotatedOffset = mul(poisson32[i], rotationMatrix) * filterRadius * texelSize;
+                    float pcfDepth = tex2D(ShadowMapSampler, shadowTexCoord + rotatedOffset).r;
+                    if (currentDepth - bias > pcfDepth) shadowSum += 1.0;
+                }
+                
+                shadowFactor = shadowSum / 32.0;
             }
             
             // Apply strength and invert
