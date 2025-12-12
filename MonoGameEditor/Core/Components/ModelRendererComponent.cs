@@ -10,6 +10,8 @@ using MonoGameEditor.ViewModels;
 
 namespace MonoGameEditor.Core.Components
 {
+
+
     public class ModelRendererComponent : Component
     {
         private class DeviceResources
@@ -32,6 +34,7 @@ namespace MonoGameEditor.Core.Components
             set => _material = value;
         }
 
+        
         public override string ComponentName => "Model Renderer";
 
         public string ModelPath
@@ -47,6 +50,22 @@ namespace MonoGameEditor.Core.Components
                     LoadModel();
                 }
             }
+        }
+
+        // Shadow Properties
+        private ShadowMode _castShadows = ShadowMode.On;
+        private bool _receiveShadows = true;
+
+        public ShadowMode CastShadows
+        {
+            get => _castShadows;
+            set { _castShadows = value; OnPropertyChanged(nameof(CastShadows)); }
+        }
+
+        public bool ReceiveShadows
+        {
+            get => _receiveShadows;
+            set { _receiveShadows = value; OnPropertyChanged(nameof(ReceiveShadows)); }
         }
 
         // For hierarchical meshes - stores the original model file path
@@ -136,7 +155,7 @@ namespace MonoGameEditor.Core.Components
         }
 
         public void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition, 
-            Texture2D shadowMap = null, Matrix? lightViewProjection = null)
+            Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
             // Check for disposed device
             if (device == null || device.IsDisposed) return;
@@ -153,6 +172,34 @@ namespace MonoGameEditor.Core.Components
                 _deviceResources[device] = resources;
             }
             
+            // RETRY LOGIC: If we have BasicEffect, try to upgrade to PBR
+            var sharedContent = MonoGameEditor.Controls.GameControl.SharedContent;
+            var ownContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
+            var isBasicEffect = resources.Effect is BasicEffect;
+            
+            // Determine which ContentManager to use
+            var contentToUse = sharedContent ?? ownContent;
+            
+            if (isBasicEffect && contentToUse != null)
+            {
+                
+                try
+                {
+                    // Use PBREffectLoader with the ContentManager
+                    var pbrEffect = PBREffectLoader.Load(device, contentToUse);
+                    if (pbrEffect != null)
+                    {
+                        // Upgrade to PBR Effect!
+                        resources.Effect = pbrEffect;
+                        ConsoleViewModel.Log($"[ModelRenderer] ✅ Upgraded {GameObject?.Name} from BasicEffect to PBR Effect!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ConsoleViewModel.Log($"[ModelRenderer] PBR upgrade failed: {ex.Message}");
+                }
+            }
+            
             // Double check validity (in case of device loss/reset handling if manual)
             if (resources.VertexBuffer == null || resources.VertexBuffer.IsDisposed ||
                 resources.Effect == null || resources.Effect.IsDisposed)
@@ -167,6 +214,7 @@ namespace MonoGameEditor.Core.Components
             // Check if it's a BasicEffect (easier API) or generic Effect (parameter-based)
             if (resources.Effect is BasicEffect basicEffect)
             {
+                
                 basicEffect.World = world;
                 basicEffect.View = view;
                 basicEffect.Projection = projection;
@@ -263,10 +311,33 @@ namespace MonoGameEditor.Core.Components
                      var tempColor = KelvinToRGB(lightComp.Temperature);
                      var finalColor = baseColor * tempColor * lightComp.Intensity;
                      
+                            // 4. Shadow Parameters
+                            bool castShadowsGlobal = lightComp.CastShadows;
+                            bool receiveShadowsLocal = ReceiveShadows;
+                            
+                            // Enable shadows ONLY if: Light casts them, Object receives them, and ShadowMap is provided
+                            if (castShadowsGlobal && receiveShadowsLocal && shadowMap != null && lightViewProj.HasValue)
+                            {
+                                resources.Effect.Parameters["UseShadows"]?.SetValue(true);
+                                resources.Effect.Parameters["ShadowMap"]?.SetValue(shadowMap);
+                                resources.Effect.Parameters["LightViewProjection"]?.SetValue(lightViewProj.Value);
+                                resources.Effect.Parameters["ShadowStrength"]?.SetValue(lightComp.ShadowStrength);
+                                resources.Effect.Parameters["ShadowBias"]?.SetValue(lightComp.ShadowBias);
+                            }
+                            else
+                            {
+                                resources.Effect.Parameters["UseShadows"]?.SetValue(false);
+                            }
+
+
                      resources.Effect.Parameters["LightDirection"]?.SetValue(sceneLight.Transform.Forward);
                      resources.Effect.Parameters["LightColor"]?.SetValue(finalColor);
                      resources.Effect.Parameters["IndirectMultiplier"]?.SetValue(lightComp.IndirectMultiplier);
                 }
+                
+                // Set these if not set by light block (safeguard)
+                if (sceneLight == null)
+                    resources.Effect.Parameters["UseShadows"]?.SetValue(false);
 
                 // Apply material
                 Material.Apply(resources.Effect);
@@ -333,6 +404,13 @@ namespace MonoGameEditor.Core.Components
 
         private DeviceResources CreateResourcesForDevice(GraphicsDevice device)
         {
+            // Guard: If data isn't loaded yet, we can't create resources
+            if (_meshData == null && _metadata == null)
+            {
+                // ConsoleViewModel.Log($"[ModelRenderer] Skip Resource Creation: No data for {GameObject?.Name}");
+                return null;
+            }
+
             List<System.Numerics.Vector3> vertices;
             List<System.Numerics.Vector3> normals;
             List<int> indices;
@@ -383,7 +461,6 @@ namespace MonoGameEditor.Core.Components
                 else
                 {
                     // Fallback to BasicEffect
-                    ConsoleViewModel.Log("[ModelRenderer] Using BasicEffect fallback (PBR shader not available)");
                     var initialEffect = new BasicEffect(device);
                     
                     // Configure lighting manually
@@ -402,6 +479,51 @@ namespace MonoGameEditor.Core.Components
             }
 
             return resources;
+        }
+
+        /// <summary>
+        /// Draws the model using a custom effect (e.g. Shadow Depth shader)
+        /// overrideWorld: Optional custom matrix
+        /// </summary>
+        public void DrawWithCustomEffect(Effect customEffect, Matrix lightViewProj)
+        {
+            // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] Request Draw {GameObject.Name}");
+
+            var device = customEffect.GraphicsDevice;
+            
+            // Re-add resource creation in case this pass runs first!
+            if (!_deviceResources.ContainsKey(device))
+            {
+                // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] Creating resources for {GameObject.Name}");
+                CreateResourcesForDevice(device);
+            }
+
+            if (!_deviceResources.TryGetValue(device, out var resources)) 
+            {
+                 // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] {GameObject.Name} No Resources Found!");
+                 return;
+            }
+            
+            if (resources.VertexBuffer == null || resources.IndexBuffer == null)
+            {
+                 // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] {GameObject.Name} Buffers are null!");
+                 return;
+            }
+
+            Matrix world = GameObject != null ? GameObject.Transform.WorldMatrix : Matrix.Identity;
+
+            // Apply global params
+            customEffect.Parameters["World"]?.SetValue(world);
+            customEffect.Parameters["LightViewProjection"]?.SetValue(lightViewProj);
+            
+            // Draw
+            foreach (var pass in customEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                device.SetVertexBuffer(resources.VertexBuffer);
+                device.Indices = resources.IndexBuffer;
+                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, resources.IndexBuffer.IndexCount / 3);
+            }
         }
 
         /// <summary>

@@ -21,7 +21,13 @@ namespace MonoGameEditor.Controls
         private WinForms.Timer _renderTimer;
         private ProceduralSkybox? _skybox;
         private RenderTarget2D? _hdrRenderTarget;
-        private ToneMapRenderer? _toneMapRenderer;
+
+        private ToneMapRenderer _toneMapRenderer;
+        private ShadowRenderer _shadowRenderer;
+
+        // Static ContentManager shared across components
+        private static Microsoft.Xna.Framework.Content.ContentManager? _sharedContent;
+        public static Microsoft.Xna.Framework.Content.ContentManager? SharedContent => _sharedContent;
 
         public GraphicsDevice? GraphicsDevice => _graphicsService?.GraphicsDevice;
 
@@ -53,7 +59,15 @@ namespace MonoGameEditor.Controls
             ConsoleViewModel.Log($"[GameControl] OnCreateControl: Handle={Handle}");
             _graphicsService = GraphicsDeviceService.AddRef(Handle, Width, Height);
             
+            // Setup Services for ContentManager
+            var services = new Microsoft.Xna.Framework.GameServiceContainer();
+            services.AddService(typeof(IGraphicsDeviceService), _graphicsService);
+            
+            var content = new Microsoft.Xna.Framework.Content.ContentManager(services, "Content");
+            _sharedContent = content; // Store for use by PBREffectLoader
+
             _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
+            _shadowRenderer = new ShadowRenderer(GraphicsDevice!, content);
             ResizeHDRTarget(Width, Height);
 
             _initialized = true;
@@ -176,30 +190,34 @@ namespace MonoGameEditor.Controls
                         cameraComp.NearClip, 
                         cameraComp.FarClip);
 
-                    // --- Shadow Pass (DISABLED - Causing dark rendering) ---
-                    // TODO: Re-enable after shaders are compiled
-                    /*
+                    // --- Shadow Pass ---
+                    Texture2D shadowMap = null;
+                    Matrix? lightViewProj = null;
+
                     var mainLightObj = FindFirstLight(MonoGameEditor.Core.SceneManager.Instance.RootObjects);
                      if (mainLightObj != null)
                     {
                         var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
                         if (lightComp != null && lightComp.CastShadows && _shadowRenderer != null)
                         {
-                            _shadowRenderer.UpdateMatrix(mainLightObj.Transform.Forward, cameraComp.GameObject.Transform.Position);
-                            _shadowRenderer.BeginPass();
+                            // Update resolution if changed
+                            _shadowRenderer.UpdateResolution(lightComp.ShadowResolution);
+                            
+                            // Render Shadows
+                            _shadowRenderer.BeginPass(lightComp, cameraComp.GameObject.Transform.Position, cameraComp.GameObject.Transform.Forward);
+                            
+                            // Draw all objects to shadow map
                             foreach (var obj in MonoGameEditor.Core.SceneManager.Instance.RootObjects)
                             {
-                                RenderShadowsRecursive(obj);
+                                RenderShadowsRecursive(obj); // Helper needed
                             }
+                            
                             _shadowRenderer.EndPass();
+                            
                             shadowMap = _shadowRenderer.ShadowMap;
                             lightViewProj = _shadowRenderer.LightViewProjection;
                         }
                     }
-                    */
-                    
-                    Texture2D? shadowMap = null;
-                    Matrix? lightViewProj = null;
 
                     // --- Main Pass ---
                     GraphicsDevice.SetRenderTarget(_hdrRenderTarget);
@@ -229,7 +247,7 @@ namespace MonoGameEditor.Controls
 
                     if (MonoGameEditor.Core.SceneManager.Instance != null)
                     {
-                        RenderModelsRecursive(MonoGameEditor.Core.SceneManager.Instance.RootObjects, GraphicsDevice, view, projection, cameraComp.GameObject.Transform.Position);
+                        RenderModelsRecursive(MonoGameEditor.Core.SceneManager.Instance.RootObjects, GraphicsDevice, view, projection, cameraComp.GameObject.Transform.Position, shadowMap, lightViewProj);
                     }
                     
                     // --- Tone Map ---
@@ -246,6 +264,21 @@ namespace MonoGameEditor.Controls
                              batch.End();
                          }
                     }
+
+                    // --- DEBUG SHADOW MAP (commented out) ---
+                    /*
+                    if (_shadowRenderer != null && _shadowRenderer.ShadowMap != null)
+                    {
+                        using (var batch = new SpriteBatch(GraphicsDevice))
+                        {
+                            batch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                            // Draw mini-map in top-left
+                            batch.Draw(_shadowRenderer.ShadowMap, new Microsoft.Xna.Framework.Rectangle(10, 10, 256, 256), Color.White);
+                            batch.End();
+                        }
+                    }
+                    */
+                    // ------------------------
                 }
                 else
                 {
@@ -315,7 +348,7 @@ namespace MonoGameEditor.Controls
         /// <summary>
         /// Recursively renders all ModelRendererComponents in the scene
         /// </summary>
-        private void RenderModelsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes, GraphicsDevice device, Matrix view, Matrix projection, Vector3 camPos)
+        private void RenderModelsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes, GraphicsDevice device, Matrix view, Matrix projection, Vector3 camPos, Texture2D shadowMap, Matrix? lightViewProj)
         {
             Vector3 cameraPosition = Matrix.Invert(view).Translation;
 
@@ -328,18 +361,40 @@ namespace MonoGameEditor.Controls
                 var modelRenderer = node.GetComponent<ModelRendererComponent>();
                 if (modelRenderer != null)
                 {
+                    // SKIP if ShadowsOnly (invisible to main cam)
+                    if (modelRenderer.CastShadows == ShadowMode.ShadowsOnly) continue;
+
                     // Debug log (throttled)
                     if (DateTime.Now.Millisecond < 5)
                         ConsoleViewModel.Log($"[GameView] Drawing {node.Name}");
                         
-                    modelRenderer.Draw(device, view, projection, cameraPosition);
+                    modelRenderer.Draw(device, view, projection, cameraPosition, shadowMap, lightViewProj);
                 }
 
                 // Recurse to children
-                RenderModelsRecursive(node.Children, device, view, projection, cameraPosition);
+                RenderModelsRecursive(node.Children, device, view, projection, cameraPosition, shadowMap, lightViewProj);
             }
         }
         
+
+        private void RenderShadowsRecursive(GameObject node)
+        {
+            if (!node.IsActive) return;
+
+             var modelRenderer = node.GetComponent<ModelRendererComponent>();
+             if (modelRenderer != null && _shadowRenderer != null)
+             {
+                 _shadowRenderer.DrawObject(node, modelRenderer);
+             }
+
+             if (node.Children != null)
+             {
+                 foreach(var child in node.Children)
+                 {
+                     RenderShadowsRecursive(child);
+                 }
+             }
+        }
 
         private MonoGameEditor.Core.GameObject FindFirstLight(System.Collections.ObjectModel.ObservableCollection<MonoGameEditor.Core.GameObject> nodes)
         {

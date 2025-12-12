@@ -20,10 +20,22 @@ float Metallic = 0.0;
 float Roughness = 0.5;
 float AO = 1.0;
 
-// Shadow Properties - REMOVED for stability
-// float4x4 LightViewProjection;
-// bool UseShadows;
-// texture ShadowMap;
+// Shadow Properties
+float4x4 LightViewProjection;
+bool UseShadows;
+float ShadowStrength;
+float ShadowBias;
+
+texture ShadowMap;
+sampler2D ShadowMapSampler = sampler_state
+{
+    Texture = <ShadowMap>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = Point;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
 
 // Textures (optional)
 texture AlbedoTexture;
@@ -168,26 +180,72 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
     float denominator = 4.0 * max(dot(N, V), 0.0) * NdotL;
     float3 specular = numerator / max(denominator, 0.001);
     
-    // Shadow Calculation (Disabled)
+    // Shadow Calculation
     float shadow = 1.0;
     
-    /*
+    // Only calculate if shadows are enabled AND the map is bound
     if (UseShadows)
     {
-        // ... Shadow Logic Removed ...
+        // Transform WorldPos to Light Projection Space
+        float4 lightScreenPos = mul(float4(input.WorldPos, 1.0), LightViewProjection);
+        lightScreenPos /= lightScreenPos.w; // Perspective divide
+        
+        // Map from (-1, 1) to (0, 1) space
+        float2 shadowTexCoord = 0.5 * lightScreenPos.xy + float2(0.5, 0.5);
+        shadowTexCoord.y = 1.0 - shadowTexCoord.y; // Flip Y for Texture coords
+        
+        // Check bounds (0 to 1) - if outside, no shadow (clamped to 1.0)
+        if (shadowTexCoord.x >= 0.0 && shadowTexCoord.x <= 1.0 &&
+            shadowTexCoord.y >= 0.0 && shadowTexCoord.y <= 1.0)
+        {
+            float currentDepth = lightScreenPos.z;
+            
+            // Simple bias
+            float3 L = normalize(-LightDirection);
+            float bias = 0.003;
+            
+            float texelSize = 1.0 / 2048.0; // Match shadow map resolution
+            
+            // Simple 2x2 bilinear PCF (what Unity actually uses for "simple" quality)
+            float shadowSum = 0.0;
+            
+            for(int x = 0; x <= 1; ++x)
+            {
+                for(int y = 0; y <= 1; ++y)
+                {
+                    float2 offset = float2(x, y) * texelSize;
+                    float pcfDepth = tex2D(ShadowMapSampler, shadowTexCoord + offset).r;
+                    
+                    if (currentDepth - bias > pcfDepth)
+                    {
+                        shadowSum += 1.0;
+                    }
+                }
+            }
+            
+            // Average
+            float shadowFactor = shadowSum / 4.0;
+            
+            // Apply shadow strength
+            shadowFactor *= ShadowStrength;
+            
+            // Invert
+            shadow = 1.0 - shadowFactor;
+            
+            // Apply shadow strength
+            shadow = lerp(1.0, shadow, ShadowStrength);
+        }
     }
-    */
 
     // Add to outgoing radiance Lo
     float3 radiance = LightColor * LightIntensity * shadow;
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     
-    // Ambient lighting (simple approximation)
-    // Ambient is NOT shadowed (usually)
-    float3 ambient = float3(0.03, 0.03, 0.03) * albedo * AO;
+    // Ambient lighting (increased for better visibility)
+    float3 ambient = float3(0.15, 0.15, 0.15) * albedo * AO;
     float3 color = ambient + Lo;
     
-    // Tone mapping (simple Reinhard)
+    // Tone mapping (Reinhard)
     color = color / (color + float3(1.0, 1.0, 1.0));
     
     // Gamma correction
@@ -201,7 +259,7 @@ technique PBRTechnique
 {
     pass P0
     {
-        VertexShader = compile vs_3_0 MainVS();
-        PixelShader = compile ps_3_0 MainPS();
+        VertexShader = compile vs_4_0 MainVS();
+        PixelShader = compile ps_4_0 MainPS();
     }
 }

@@ -27,6 +27,16 @@ namespace MonoGameEditor.Controls
         private ProceduralSkybox? _skybox;
         private RenderTarget2D? _hdrRenderTarget;
         private ToneMapRenderer? _toneMapRenderer;
+        private ShadowRenderer? _shadowRenderer;
+        private Microsoft.Xna.Framework.Content.ContentManager? _ownContentManager;
+        
+        // Static property to access MonoGameControl's ContentManager
+        public static Microsoft.Xna.Framework.Content.ContentManager? OwnContentManager { get; private set; }
+        
+        // Debug flags (one-time logging)
+        private static bool _loggedShadowInit = false;
+        private static bool _loggedShadowPass = false;
+        private static bool _loggedMainRender = false;
         
         // Floating Toolbar
         private WinForms.Panel? _toolPanel;
@@ -113,6 +123,43 @@ namespace MonoGameEditor.Controls
             _skybox.Initialize(GraphicsDevice!);
 
             _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
+            
+            // Initialize Shadow Renderer
+            // Try to use SharedContent first, otherwise create our own
+            var sharedContent = GameControl.SharedContent;
+            Microsoft.Xna.Framework.Content.ContentManager contentToUse = null;
+            
+            if (sharedContent != null)
+            {
+                contentToUse = sharedContent;
+                ConsoleViewModel.Log("[MonoGameControl] Using shared ContentManager for shadows");
+            }
+            else
+            {
+                // Create our own ContentManager
+                var services = new Microsoft.Xna.Framework.GameServiceContainer();
+                services.AddService(typeof(IGraphicsDeviceService), _graphicsService);
+                contentToUse = new Microsoft.Xna.Framework.Content.ContentManager(services, "Content");
+                ConsoleViewModel.Log("[MonoGameControl] Created own ContentManager for shadows");
+            }
+            
+            try
+            {
+                _shadowRenderer = new ShadowRenderer(GraphicsDevice!, contentToUse);
+                _ownContentManager = contentToUse; // Store for later use
+                OwnContentManager = contentToUse; // Make it accessible statically
+                
+                if (!_loggedShadowInit)
+                {
+                    ConsoleViewModel.Log("[MonoGameControl] ✅ Shadow renderer initialized!");
+                    _loggedShadowInit = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleViewModel.Log($"[MonoGameControl] ❌ Shadow renderer failed: {ex.Message}");
+            }
+            
             ResizeHDRTarget(Width, Height);
 
             InitializeToolbar();
@@ -445,44 +492,42 @@ namespace MonoGameEditor.Controls
                 }
 
 
-                // --- Shadow Pass (DISABLED - Causing dark rendering) ---
-                // TODO: Re-enable after shaders are compiled
-                /*
-                bool shadowsEnabled = false;
-                Texture2D shadowMap = null;
-                Matrix? lightViewProj = null;
-                
-                MonoGameEditor.Core.GameObject mainLightObj = null;
-                if (Core.SceneManager.Instance != null && Core.SceneManager.Instance.RootObjects.Any())
+
+
+        // --- Shadow Pass ---
+        Texture2D shadowMap = null;
+        Matrix? lightViewProj = null;
+        
+        var mainLightObj = FindFirstLight(Core.SceneManager.Instance?.RootObjects);
+        if (mainLightObj != null)
+        {
+            var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
+            if (lightComp != null && lightComp.CastShadows && _shadowRenderer != null)
+            {
+                if (!_loggedShadowPass)
                 {
-                    mainLightObj = FindFirstLight(Core.SceneManager.Instance.RootObjects);
+                    ConsoleViewModel.Log("[MonoGameControl] 🌑 Shadow pass executing!");
+                    _loggedShadowPass = true;
                 }
                 
-                if (mainLightObj != null)
-                {
-                    var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
-                    if (lightComp != null && lightComp.CastShadows && _shadowRenderer != null)
-                    {
-                        _shadowRenderer.UpdateMatrix(mainLightObj.Transform.Forward, _camera.Position);
-                        _shadowRenderer.BeginPass();
-                        
-                        if (Core.SceneManager.Instance != null)
-                        {
-                            foreach (var obj in Core.SceneManager.Instance.RootObjects)
-                            {
-                                RenderShadowsRecursive(obj);
-                            }
-                        }
-                        
-                        shadowsEnabled = true;
-                        shadowMap = _shadowRenderer.ShadowMap;
-                        lightViewProj = _shadowRenderer.LightViewProjection;
-                    }
-                }
-                */
+                // Update resolution if changed
+                _shadowRenderer.UpdateResolution(lightComp.ShadowResolution);
                 
-                Texture2D shadowMap = null;
-                Matrix? lightViewProj = null;
+                // Render Shadows
+                _shadowRenderer.BeginPass(lightComp, _camera.Position, _camera.Forward);
+                
+                // Draw all objects to shadow map
+                foreach (var obj in Core.SceneManager.Instance.RootObjects)
+                {
+                    RenderShadowsRecursive(obj);
+                }
+                
+                _shadowRenderer.EndPass();
+                
+                shadowMap = _shadowRenderer.ShadowMap;
+                lightViewProj = _shadowRenderer.LightViewProjection;
+            }
+        }
 
 
 
@@ -506,7 +551,7 @@ namespace MonoGameEditor.Controls
             {
                 foreach (var obj in Core.SceneManager.Instance.RootObjects)
                 {
-                    RenderRecursively(obj);
+                    RenderRecursively(obj, shadowMap, lightViewProj);
                 }
             }
                 // Ensure HDR Target is valid
@@ -605,14 +650,31 @@ namespace MonoGameEditor.Controls
              return null;
         }
 
-        private void RenderRecursively(MonoGameEditor.Core.GameObject node)
+        private void RenderRecursively(MonoGameEditor.Core.GameObject node, Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
             var modelRenderer = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.ModelRendererComponent) as MonoGameEditor.Core.Components.ModelRendererComponent;
-            modelRenderer?.Draw(GraphicsDevice, _camera.View, _camera.Projection, _camera.Position);
+            modelRenderer?.Draw(GraphicsDevice, _camera.View, _camera.Projection, _camera.Position, shadowMap, lightViewProj);
 
             foreach (var child in node.Children)
             {
-                RenderRecursively(child);
+                RenderRecursively(child, shadowMap, lightViewProj);
+            }
+        }
+
+        private void RenderShadowsRecursive(MonoGameEditor.Core.GameObject node)
+        {
+            if (!node.IsActive) return;
+
+            var modelRenderer = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.ModelRendererComponent) as MonoGameEditor.Core.Components.ModelRendererComponent;
+            
+            if (modelRenderer != null && _shadowRenderer != null)
+            {
+                _shadowRenderer.DrawObject(node, modelRenderer);
+            }
+
+            foreach (var child in node.Children)
+            {
+                RenderShadowsRecursive(child);
             }
         }
 
