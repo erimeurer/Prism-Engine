@@ -604,7 +604,8 @@
                     </Button>
                     
                     <!-- Dynamic Shader Properties -->
-                    <ItemsControl ItemsSource="{Binding ShaderProperties}" Margin="0,10">
+                    <ItemsControl x:Name="ShaderPropsControl" ItemsSource="{Binding ShaderProperties}" 
+                                  Tag="{Binding DataContext, RelativeSource={RelativeSource Self}}" Margin="0,10">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,5">
@@ -674,16 +675,9 @@
                                         </Grid.Resources>
 
                                         <!-- FLOAT CONTROL -->
-                                        <DockPanel Style="{StaticResource VisibleIfFloat}" LastChildFill="True" MinHeight="25">
-                                            <TextBox DockPanel.Dock="Right" Width="50" Margin="5,0,0,0"
-                                                     Text="{Binding FloatValue, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}" 
-                                                     Background="#333337" Foreground="#DDDDDD" 
-                                                     BorderBrush="#555555" BorderThickness="1" Padding="2"
-                                                     VerticalContentAlignment="Center"/>
-                                            <Slider Minimum="0" Maximum="10" 
-                                                    Value="{Binding FloatValue, UpdateSourceTrigger=PropertyChanged}"
-                                                    TickFrequency="0.1" VerticalAlignment="Center"/>
-                                        </DockPanel>
+                                        <Slider Style="{StaticResource VisibleIfFloat}"
+                                                Value="{Binding FloatValue}" Minimum="0" Maximum="1" 
+                                                ToolTip="{Binding FloatValue}"/>
 
                                         <!-- VECTOR2 CONTROL -->
                                         <TextBox Style="{StaticResource VisibleIfVector2}"
@@ -724,11 +718,22 @@
                                                   IsChecked="{Binding BoolValue}" VerticalAlignment="Center"/>
 
                                         <!-- TEXTURE CONTROL -->
-                                        <TextBox Style="{StaticResource VisibleIfTexture}"
-                                                 Text="{Binding TextureValue, UpdateSourceTrigger=PropertyChanged}" 
-                                                 Background="#333337" Foreground="#DDDDDD" 
-                                                 BorderBrush="#555555" BorderThickness="1" Padding="5"
-                                                 ToolTip="Path to texture"/>
+                                        <Grid Style="{StaticResource VisibleIfTexture}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Text="{Binding TextureValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                     Background="#333337" Foreground="#DDDDDD" 
+                                                     BorderBrush="#555555" BorderThickness="1" Padding="5"
+                                                     ToolTip="Path to texture" IsReadOnly="True"/>
+                                            <Button Grid.Column="1" Content="..." Width="30" 
+                                                    Command="{Binding Tag.SelectTextureCommand, ElementName=ShaderPropsControl}"
+                                                    CommandParameter="{Binding Name}"
+                                                    Background="#0E639C" Foreground="White" 
+                                                    Padding="5,4" Margin="2,0,0,0" BorderThickness="0" Cursor="Hand"
+                                                    ToolTip="Browse for texture"/>
+                                        </Grid>
                                                  
                                         <!-- DEBUG FALLBACK FOR UNKNOWN -->
                                         <!-- Optional: You can add a textblock that is visible only if NONE of the above match, 

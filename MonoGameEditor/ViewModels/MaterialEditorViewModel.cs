@@ -31,6 +31,9 @@ public class MaterialEditorViewModel : ViewModelBase
     public ICommand SaveMaterialCommand => new RelayCommand(_ => SaveMaterial());
     public ICommand CompileShaderCommand => new RelayCommand(_ => CompileShader());
     
+    private ICommand? _selectTextureCommand;
+    public ICommand SelectTextureCommand => _selectTextureCommand ??= new RelayCommand(param => SelectTexture(param as string));
+    
     public MaterialEditorViewModel(string materialPath)
     {
         _filePath = materialPath;
@@ -428,28 +431,33 @@ public class MaterialEditorViewModel : ViewModelBase
             }
             
             ConsoleViewModel.Log($"[Material] Loaded shader: {_shaderPath} with {_currentShader.Properties.Count} properties");
-            
-            // Clean up customProperties that are now discovered from shader
-            // This prevents conflict between old JSON properties and new shader properties
-            var discoveredPropertyNames = _currentShader.Properties.Select(p => p.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-            var keysToRemove = _customProperties.Keys.Where(k => discoveredPropertyNames.Contains(k)).ToList();
-            
-            foreach (var key in keysToRemove)
+        
+        // DON'T clean up texture properties from customProperties!
+        // Textures are saved in customProperties and need to be loaded as initialValue
+        // Only remove non-texture properties that are re-discovered from shader
+        var discoveredPropertyNames = _currentShader.Properties
+            .Where(p => p.Type != Core.Shaders.ShaderPropertyType.Texture2D) // Keep textures in customProperties
+            .Select(p => p.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        
+        var keysToRemove = _customProperties.Keys.Where(k => discoveredPropertyNames.Contains(k)).ToList();
+        
+        foreach (var key in keysToRemove)
+        {
+            ConsoleViewModel.Log($"[Material] Removing customProperty '{key}' (now comes from shader)");
+            _customProperties.Remove(key);
+        }
+        
+        // Create ViewModels for each property
+        foreach (var prop in _currentShader.Properties)
+        {
+            // Check if we have a saved value for this property
+            object? initialValue = null;
+            if (_customProperties.TryGetValue(prop.Name, out var savedValue))
             {
-                ConsoleViewModel.Log($"[Material] Removing customProperty '{key}' (now comes from shader)");
-                _customProperties.Remove(key);
-            }
-            
-            // Create ViewModels for each property
-            foreach (var prop in _currentShader.Properties)
-            {
-                // Check if we have a saved value for this property
-                object? initialValue = null;
-                if (_customProperties.TryGetValue(prop.Name, out var savedValue))
-                {
-                    initialValue = savedValue;
-                }
-                
+                initialValue = savedValue;
+                ConsoleViewModel.Log($"[Material] Loading saved value for '{prop.Name}': {savedValue}");
+            }    
                 var propVM = new ShaderPropertyViewModel(prop, initialValue);
                 
                 // Listen for changes to auto-save
@@ -464,6 +472,9 @@ public class MaterialEditorViewModel : ViewModelBase
                 
                 ShaderProperties.Add(propVM);
             }
+            
+            // CRITICAL: Populate ShaderProperties with legacy texture values
+            PopulateLegacyTextureValues();
         }
         catch (Exception ex)
         {
@@ -650,11 +661,26 @@ public class MaterialEditorViewModel : ViewModelBase
     {
         var result = new Dictionary<string, JsonElement>();
         
+        // Serialize ONLY texture properties (string values) from ShaderProperties
+        // Other properties (floats, vectors, colors) are re-discovered from shader on load
+        foreach (var prop in ShaderProperties)
+        {
+            if (prop.Type == Core.Shaders.ShaderPropertyType.Texture2D && !string.IsNullOrEmpty(prop.TextureValue))
+            {
+                var jsonValue = JsonSerializer.SerializeToElement(prop.TextureValue);
+                result[prop.Name] = jsonValue;
+                ConsoleViewModel.Log($"[MaterialEditor] Serializing texture: {prop.Name} = {prop.TextureValue}");
+            }
+        }
+        
+        // Legacy: merge any old _customProperties that aren't in ShaderProperties
         foreach (var kvp in _customProperties)
         {
-            // Serialize value to JsonElement
-            var jsonValue = JsonSerializer.SerializeToElement(kvp.Value);
-            result[kvp.Key] = jsonValue;
+            if (!result.ContainsKey(kvp.Key))
+            {
+                var jsonValue = JsonSerializer.SerializeToElement(kvp.Value);
+                result[kvp.Key] = jsonValue;
+            }
         }
         
         return result;
@@ -716,6 +742,136 @@ public class MaterialEditorViewModel : ViewModelBase
         
         // Custom shader properties
         public Dictionary<string, JsonElement>? customProperties { get; set; }
+    }
+    
+    private void SelectTexture(string? propertyName)
+    {
+        ConsoleViewModel.Log($"[MaterialEditor] SelectTexture called with: '{propertyName}'");
+        
+        if (string.IsNullOrEmpty(propertyName))
+        {
+            ConsoleViewModel.Log($"[MaterialEditor] ❌ Property name is null or empty");
+            return;
+        }
+            
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = $"Select {propertyName} Texture",
+            Filter = "Image Files|*.png;*.jpg;*.jpeg;*.bmp;*.dds;*.tga|All Files|*.*",
+            InitialDirectory = Core.ProjectManager.Instance.ProjectPath
+        };
+        
+        ConsoleViewModel.Log($"[MaterialEditor] Opening file dialog...");
+        
+        if (dialog.ShowDialog() == true)
+        {
+            ConsoleViewModel.Log($"[MaterialEditor] File selected: {dialog.FileName}");
+            
+            // Store relative path if possible
+            string projectPath = Core.ProjectManager.Instance.ProjectPath ?? "";
+            string texturePath = dialog.FileName;
+            
+            if (texturePath.StartsWith(projectPath, StringComparison.OrdinalIgnoreCase))
+            {
+                texturePath = System.IO.Path.GetRelativePath(projectPath, texturePath).Replace("\\", "/");
+                ConsoleViewModel.Log($"[MaterialEditor] Converted to relative path: {texturePath}");
+            }
+            
+            ConsoleViewModel.Log($"[MaterialEditor] Current ShaderProperties count: {ShaderProperties.Count}");
+            
+            // Find shader property and update its value
+            var property = ShaderProperties.FirstOrDefault(p => 
+                p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
+            
+            if (property != null)
+            {
+                ConsoleViewModel.Log($"[MaterialEditor] ✅ Found property '{propertyName}', Type: {property.Type}");
+                ConsoleViewModel.Log($"[MaterialEditor] Old value: '{property.TextureValue}'");
+                
+                property.TextureValue = texturePath;
+                
+                ConsoleViewModel.Log($"[MaterialEditor] New value: '{property.TextureValue}'");
+                
+                // ALSO update legacy fixed properties for backward compatibility
+                UpdateLegacyTextureProperty(propertyName, texturePath);
+                
+                ConsoleViewModel.Log($"[MaterialEditor] Calling SaveMaterial()...");
+                SaveMaterial();
+            }
+            else
+            {
+                ConsoleViewModel.Log($"[MaterialEditor] ❌ Property '{propertyName}' not found in ShaderProperties");
+                ConsoleViewModel.Log($"[MaterialEditor] Available properties:");
+                foreach (var p in ShaderProperties)
+                {
+                    ConsoleViewModel.Log($"[MaterialEditor]   - {p.Name} ({p.Type})");
+                }
+            }
+        }
+        else
+        {
+            ConsoleViewModel.Log($"[MaterialEditor] File dialog cancelled");
+        }
+    }
+    
+    private void UpdateLegacyTextureProperty(string propertyName, string texturePath)
+    {
+        // Map shader property names to legacy fixed properties
+        switch (propertyName)
+        {
+            case "AlbedoTexture":
+                AlbedoMapPath = texturePath;
+                ConsoleViewModel.Log($"[MaterialEditor] Updated AlbedoMapPath = {texturePath}");
+                break;
+            case "NormalTexture":
+                NormalMapPath = texturePath;
+                ConsoleViewModel.Log($"[MaterialEditor] Updated NormalMapPath = {texturePath}");
+                break;
+            case "MetallicTexture":
+                MetallicMapPath = texturePath;
+                ConsoleViewModel.Log($"[MaterialEditor] Updated MetallicMapPath = {texturePath}");
+                break;
+            case "RoughnessTexture":
+                RoughnessMapPath = texturePath;
+                ConsoleViewModel.Log($"[MaterialEditor] Updated RoughnessMapPath = {texturePath}");
+                break;
+            case "AOTexture":
+                AOMapPath = texturePath;
+                ConsoleViewModel.Log($"[MaterialEditor] Updated AOMapPath = {texturePath}");
+                break;
+            default:
+                // For custom shader textures with different names, save in customProperties
+                ConsoleViewModel.Log($"[MaterialEditor] Property '{propertyName}' doesn't match legacy names, will save in customProperties");
+                break;
+        }
+    }
+    
+    private void PopulateLegacyTextureValues()
+    {
+        // Map legacy texture paths to ShaderProperties
+        var mappings = new Dictionary<string, string?>
+        {
+            { "AlbedoTexture", _albedoMapPath },
+            { "NormalTexture", _normalMapPath },
+            { "MetallicTexture", _metallicMapPath },
+            { "RoughnessTexture", _roughnessMapPath },
+            { "AOTexture", _aoMapPath }
+        };
+        
+        foreach (var mapping in mappings)
+        {
+            if (!string.IsNullOrEmpty(mapping.Value))
+            {
+                var prop = ShaderProperties.FirstOrDefault(p => 
+                    p.Name.Equals(mapping.Key, StringComparison.OrdinalIgnoreCase));
+                    
+                if (prop != null)
+                {
+                    prop.TextureValue = mapping.Value;
+                    ConsoleViewModel.Log($"[MaterialEditor] Loaded legacy texture: {mapping.Key} = {mapping.Value}");
+                }
+            }
+        }
     }
     
     private void UpdateCompilationStatus()

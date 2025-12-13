@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using MonoGameEditor.Core.Shaders;
 
 namespace MonoGameEditor.Core
 {
@@ -15,6 +16,9 @@ namespace MonoGameEditor.Core
         public event Action? ProjectLoaded;
 
         public ProjectSettings CurrentSettings { get; private set; } = new ProjectSettings();
+        
+        // Unity-style automatic shader compilation
+        private ShaderCompilationService? _shaderCompiler;
 
         public void OpenProject(string path)
         {
@@ -26,6 +30,12 @@ namespace MonoGameEditor.Core
             ProjectPath = path;
             EnsureStructure();
             LoadSettings();
+            
+            // Start automatic shader compilation
+            _shaderCompiler?.StopMonitoring();
+            _shaderCompiler = new ShaderCompilationService(ProjectPath);
+            _shaderCompiler.StartMonitoring();
+            
             ProjectLoaded?.Invoke();
         }
 

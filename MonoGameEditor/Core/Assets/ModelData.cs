@@ -11,6 +11,7 @@ namespace MonoGameEditor.Core.Assets
         public List<System.Numerics.Vector3> Vertices { get; set; } = new List<System.Numerics.Vector3>();
         public List<System.Numerics.Vector3> Normals { get; set; } = new List<System.Numerics.Vector3>();
         public List<int> Indices { get; set; } = new List<int>();
+        public List<System.Numerics.Vector2> TexCoords { get; set; } = new List<System.Numerics.Vector2>();
         public int MaterialIndex { get; set; } = -1;
     }
 

@@ -61,6 +61,46 @@ sampler2D NormalSampler = sampler_state
     AddressV = Wrap;
 };
 
+texture MetallicTexture;
+sampler2D MetallicSampler = sampler_state
+{
+    Texture = <MetallicTexture>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = Linear;
+    AddressU = Wrap;
+    AddressV = Wrap;
+};
+
+texture RoughnessTexture;
+sampler2D RoughnessSampler = sampler_state
+{
+    Texture = <RoughnessTexture>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = Linear;
+    AddressU = Wrap;
+    AddressV = Wrap;
+};
+
+texture AOTexture;
+sampler2D AOSampler = sampler_state
+{
+    Texture = <AOTexture>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = Linear;
+    AddressU = Wrap;
+    AddressV = Wrap;
+};
+
+// Texture usage flags
+bool UseAlbedoMap = false;
+bool UseNormalMap = false;
+bool UseMetallicMap = false;
+bool UseRoughnessMap = false;
+bool UseAOMap = false;
+
 // Vertex Shader Input
 struct VertexShaderInput
 {
@@ -146,17 +186,54 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
 // Pixel Shader
 float4 MainPS(VertexShaderOutput input) : COLOR0
 {
-    // Sample textures
+    // Sample Albedo texture if enabled, otherwise use color
     float3 albedo = AlbedoColor.rgb;
+    if (UseAlbedoMap)
+    {
+        albedo = tex2D(AlbedoSampler, input.TexCoord).rgb;
+    }
     
-    // Normal (from mesh, could be from normal map)
+    // Sample Normal map if enabled
     float3 N = normalize(input.Normal);
+    if (UseNormalMap)
+    {
+        // Sample normal map (assume it's in tangent space, stored as RGB [0,1])
+        float3 normalMap = tex2D(NormalSampler, input.TexCoord).rgb;
+        // Convert from [0,1] to [-1,1]
+        normalMap = normalMap * 2.0 - 1.0;
+        
+        // For now, just use the normal map directly (proper tangent-space transformation would require tangent/bitangent)
+        // This is a simplified version - for full PBR you'd want proper tangent space
+        N = normalize(normalMap);
+    }
+    
     float3 V = normalize(CameraPosition - input.WorldPos);
+    
+    // Sample Metallic texture if enabled, otherwise use parameter
+    float metallic = Metallic;
+    if (UseMetallicMap)
+    {
+        metallic = tex2D(MetallicSampler, input.TexCoord).r; // Metallic stored in R channel
+    }
+    
+    // Sample Roughness texture if enabled, otherwise use parameter
+    float roughness = Roughness;
+    if (UseRoughnessMap)
+    {
+        roughness = tex2D(RoughnessSampler, input.TexCoord).r; // Roughness stored in R channel
+    }
+    
+    // Sample AO texture if enabled, otherwise use parameter
+    float ao = AO;
+    if (UseAOMap)
+    {
+        ao = tex2D(AOSampler, input.TexCoord).r; // AO stored in R channel
+    }
     
     // Calculate reflectance at normal incidence
     // For dielectrics (non-metals) F0 is 0.04, for metals it's the albedo color
     float3 F0 = float3(0.04, 0.04, 0.04);
-    F0 = lerp(F0, albedo, Metallic);
+    F0 = lerp(F0, albedo, metallic);
     
     // Reflectance equation
     float3 Lo = float3(0.0, 0.0, 0.0);
@@ -166,13 +243,13 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
     float3 H = normalize(V + L);
     
     // Cook-Torrance BRDF
-    float NDF = DistributionGGX(N, H, Roughness);
-    float G = GeometrySmith(N, V, L, Roughness);
+    float NDF = DistributionGGX(N, H, roughness);
+    float G = GeometrySmith(N, V, L, roughness);
     float3 F = FresnelSchlick(max(dot(H, V), 0.0), F0);
     
     float3 kS = F; // Specular reflection coefficient
     float3 kD = float3(1.0, 1.0, 1.0) - kS; // Diffuse reflection coefficient
-    kD *= 1.0 - Metallic; // Metals don't have diffuse reflection
+    kD *= 1.0 - metallic; // Metals don't have diffuse reflection
     
     float NdotL = max(dot(N, L), 0.0);
     
@@ -329,7 +406,7 @@ float4 MainPS(VertexShaderOutput input) : COLOR0
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;
     
     // Ambient lighting (increased for better visibility)
-    float3 ambient = float3(0.15, 0.15, 0.15) * albedo * AO;
+    float3 ambient = float3(0.15, 0.15, 0.15) * albedo * ao;
     float3 color = ambient + Lo;
     
     // Tone mapping (Reinhard)

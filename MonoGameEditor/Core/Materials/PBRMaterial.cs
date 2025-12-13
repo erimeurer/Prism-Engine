@@ -176,12 +176,56 @@ namespace MonoGameEditor.Core.Materials
                 aoParam.SetValue(AmbientOcclusion);
             }
             
-            // Set texture maps if available
-            if (AlbedoMap != null) effect.Parameters["AlbedoTexture"]?.SetValue(AlbedoMap);
-            if (MetallicMap != null) effect.Parameters["MetallicTexture"]?.SetValue(MetallicMap);
-            if (RoughnessMap != null) effect.Parameters["RoughnessTexture"]?.SetValue(RoughnessMap);
-            if (NormalMap != null) effect.Parameters["NormalTexture"]?.SetValue(NormalMap);
-            if (AOMap != null) effect.Parameters["AOTexture"]?.SetValue(AOMap);
+            // Set texture maps if available AND set usage flags
+            if (AlbedoMap != null)
+            {
+                effect.Parameters["AlbedoTexture"]?.SetValue(AlbedoMap);
+                effect.Parameters["UseAlbedoMap"]?.SetValue(true);
+            }
+            else
+            {
+                effect.Parameters["UseAlbedoMap"]?.SetValue(false);
+            }
+            
+            if (MetallicMap != null)
+            {
+                effect.Parameters["MetallicTexture"]?.SetValue(MetallicMap);
+                effect.Parameters["UseMetallicMap"]?.SetValue(true);
+            }
+            else
+            {
+                effect.Parameters["UseMetallicMap"]?.SetValue(false);
+            }
+            
+            if (RoughnessMap != null)
+            {
+                effect.Parameters["RoughnessTexture"]?.SetValue(RoughnessMap);
+                effect.Parameters["UseRoughnessMap"]?.SetValue(true);
+            }
+            else
+            {
+                effect.Parameters["UseRoughnessMap"]?.SetValue(false);
+            }
+            
+            if (NormalMap != null)
+            {
+                effect.Parameters["NormalTexture"]?.SetValue(NormalMap);
+                effect.Parameters["UseNormalMap"]?.SetValue(true);
+            }
+            else
+            {
+                effect.Parameters["UseNormalMap"]?.SetValue(false);
+            }
+            
+            if (AOMap != null)
+            {
+                effect.Parameters["AOTexture"]?.SetValue(AOMap);
+                effect.Parameters["UseAOMap"]?.SetValue(true);
+            }
+            else
+            {
+                effect.Parameters["UseAOMap"]?.SetValue(false);
+            }
 
             // Apply Custom Properties (Dynamic execution for custom shaders)
             if (CustomProperties != null && CustomProperties.Count > 0)

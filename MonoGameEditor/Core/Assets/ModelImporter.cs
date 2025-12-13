@@ -151,6 +151,25 @@ namespace MonoGameEditor.Core.Assets
                                 {
                                     meshData.Normals.Add(new System.Numerics.Vector3(0, 1, 0));
                                 }
+                            } // Close else block
+
+                            // Copy Texture Coordinates
+                            if (assimpMesh.HasTextureCoords(0))
+                            {
+                                foreach (var uv in assimpMesh.TextureCoordinateChannels[0])
+                                {
+                                    // Convert Assimp Vector3D to System.Numerics.Vector2
+                                    // Note: We might need to flip Y (1 - uv.Y) depending on model source, keeping raw for now
+                                    meshData.TexCoords.Add(new System.Numerics.Vector2(uv.X, 1.0f - uv.Y)); // Often required for OpenGL/MonoGame
+                                }
+                            }
+                            else
+                            {
+                                // If no UVs, fill with Zero
+                                for (int j = 0; j < assimpMesh.VertexCount; j++)
+                                {
+                                    meshData.TexCoords.Add(System.Numerics.Vector2.Zero);
+                                }
                             }
 
                             // Copy indices

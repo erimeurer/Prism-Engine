@@ -90,7 +90,11 @@ public class ShaderPropertyViewModel : ViewModelBase
     public string TextureValue
     {
         get => Value as string ?? "";
-        set => Value = value;
+        set
+        {
+            ConsoleViewModel.Log($"[ShaderPropertyVM] TextureValue setter for '{Name}': OLD='{Value}', NEW='{value}'");
+            Value = value;
+        }
     }
     
     public string Vector2Value

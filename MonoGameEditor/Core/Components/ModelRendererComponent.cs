@@ -63,6 +63,15 @@ namespace MonoGameEditor.Core.Components
         // Material Properties
         private Materials.PBRMaterial? _material;
         private string? _materialPath;
+        
+        // Pending texture paths used to reload textures for different devices
+        private Dictionary<string, string> _pendingTexturePaths = new();
+        
+        // Multi-device texture cache: Device -> (TextureType -> Texture2D)
+        private Dictionary<GraphicsDevice, Dictionary<string, Texture2D>> _deviceTextureCache = new();
+        
+        // Debug
+        private HashSet<string> _loggedMismatches = new HashSet<string>();
 
         public Materials.PBRMaterial? Material
         {
@@ -86,6 +95,7 @@ namespace MonoGameEditor.Core.Components
             {
                 if (_materialPath != value)
                 {
+                    ConsoleViewModel.Log($"[ModelRenderer] MaterialPath CHANGED: '{_materialPath}' → '{value}'");
                     _materialPath = value;
                     OnPropertyChanged(nameof(MaterialPath));
                     LoadMaterial();
@@ -245,8 +255,40 @@ namespace MonoGameEditor.Core.Components
                         (byte)(data.albedoColor[2] * 255)
                     );
                 }
-                
-                // TODO: Load Textures if needed (skipping for now as we focus on values)
+        
+        // Store texture paths for lazy loading during Draw
+        _pendingTexturePaths.Clear();
+        // _texturesNeedLoading = false;
+        
+        if (!string.IsNullOrEmpty(data.albedoMap))
+        {
+            _pendingTexturePaths["albedo"] = data.albedoMap;
+        }
+        
+        if (!string.IsNullOrEmpty(data.normalMap))
+        {
+            _pendingTexturePaths["normal"] = data.normalMap;
+        }
+        
+        if (!string.IsNullOrEmpty(data.metallicMap))
+        {
+            _pendingTexturePaths["metallic"] = data.metallicMap;
+        }
+        
+        if (!string.IsNullOrEmpty(data.roughnessMap))
+        {
+            _pendingTexturePaths["roughness"] = data.roughnessMap;
+        }
+        
+        if (!string.IsNullOrEmpty(data.aoMap))
+        {
+            _pendingTexturePaths["ao"] = data.aoMap;
+        }
+        
+        if (_pendingTexturePaths.Count > 0)
+        {
+            ConsoleViewModel.Log($"[ModelRenderer] Stored {_pendingTexturePaths.Count} texture paths for lazy loading");
+        }
                 
                 // Load Custom Properties
                 if (data.customProperties != null)
@@ -272,6 +314,149 @@ namespace MonoGameEditor.Core.Components
             {
                 ConsoleViewModel.Log($"[ModelRenderer] Failed to load material: {ex.Message}");
                 Material = Materials.PBRMaterial.CreateDefault();
+            }
+        }
+        
+        /// <summary>
+        /// Ensures textures are loaded for the specific GraphicsDevice and assigned to the Material
+        /// </summary>
+        private void EnsureTexturesForDevice(GraphicsDevice device)
+        {
+            if (Material == null || _pendingTexturePaths.Count == 0)
+                return;
+
+            // Check if we already have textures for this device
+            if (!_deviceTextureCache.ContainsKey(device))
+            {
+                _deviceTextureCache[device] = new Dictionary<string, Texture2D>();
+            }
+
+            var deviceCache = _deviceTextureCache[device];
+            // bool materialNeedsUpdate = false;
+
+            // Load missing textures for this device
+            foreach (var kvp in _pendingTexturePaths)
+            {
+                string key = kvp.Key;
+                string path = kvp.Value;
+
+                if (!deviceCache.ContainsKey(key) || deviceCache[key].IsDisposed || deviceCache[key].GraphicsDevice != device)
+                {
+                    // Load texture for this specific device
+                    Texture2D texture = null;
+                    try
+                    {
+                        // Note: ContentManager might return a texture bound to a DIFFERENT device if shared.
+                        // We must verify the device of the loaded texture.
+                        // If ContentManager shares resources, it might be tricky. 
+                        // For now, let's try to trust ContentManager or fallback to direct load if device mismatches.
+
+                        // Optimization: Try to find existing texture in other caches to clone? No, copy data? Expensive.
+                        // Just load from disk.
+                        
+                        texture = LoadTextureWithoutContentManager(path, device);
+                        
+                        if (texture != null)
+                        {
+                            deviceCache[key] = texture;
+                            // ConsoleViewModel.Log($"[ModelRenderer] Loaded {key} for Device {device.GetHashCode()}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                         // Suppress per-frame error spam, maybe log once
+                    }
+                }
+                
+                // If we have a valid texture in cache, ensure it's on the material
+                if (deviceCache.ContainsKey(key))
+                {
+                    var tex = deviceCache[key];
+                    
+                    // Assign to Material properties based on key
+                    // We ALWAYS assign because the previous Draw might have been for a different device
+                    switch (key)
+                    {
+                        case "albedo":
+                            if (Material.AlbedoMap != tex) { Material.AlbedoMap = tex; }
+                            break;
+                        case "normal":
+                            if (Material.NormalMap != tex) { Material.NormalMap = tex; }
+                            break;
+                        case "metallic":
+                            if (Material.MetallicMap != tex) { Material.MetallicMap = tex; }
+                            break;
+                        case "roughness":
+                            if (Material.RoughnessMap != tex) { Material.RoughnessMap = tex; }
+                            break;
+                        case "ao":
+                            if (Material.AOMap != tex) { Material.AOMap = tex; }
+                            break;
+                    }
+                }
+            }
+            
+            // if (materialNeedsUpdate) ConsoleViewModel.Log($"[ModelRenderer] Swapped textures for Device {device.GetHashCode()}");
+        }
+
+        private Texture2D LoadTextureFromPath(Microsoft.Xna.Framework.Content.ContentManager contentManager, string relativePath)
+        {
+            // Remove file extension if present (ContentManager doesn't need it)
+            string assetName = System.IO.Path.ChangeExtension(relativePath, null);
+            
+            // Try ContentManager first
+            try
+            {
+                return contentManager.Load<Texture2D>(assetName);
+            }
+            catch
+            {
+                // ContentManager failed, try direct file loading
+                string projectPath = ProjectManager.Instance.ProjectPath ?? "";
+                string fullPath = System.IO.Path.Combine(projectPath, relativePath);
+                
+                if (System.IO.File.Exists(fullPath))
+                {
+                    using (var stream = System.IO.File.OpenRead(fullPath))
+                    {
+                        return Texture2D.FromStream(MonoGameControl.SharedGraphicsDevice, stream);
+                    }
+                }
+                else
+                {
+                    throw new System.IO.FileNotFoundException($"Texture not found: {fullPath}");
+                }
+            }
+        }
+        
+        private Texture2D LoadTextureWithoutContentManager(string relativePath, GraphicsDevice device = null)
+        {
+            // Direct file loading without ContentManager
+            string projectPath = ProjectManager.Instance.ProjectPath ?? "";
+            string fullPath = System.IO.Path.Combine(projectPath, relativePath);
+            
+            if (System.IO.File.Exists(fullPath))
+            {
+                using (var stream = System.IO.File.OpenRead(fullPath))
+                {
+                    // Use provided device or try multiple sources
+                    var graphicsDevice = device 
+                                      ?? MonoGameControl.SharedGraphicsDevice 
+                                      ?? GameControl.SharedGraphicsDevice;
+                                      
+                    if (graphicsDevice != null)
+                    {
+                        return Texture2D.FromStream(graphicsDevice, stream);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("No GraphicsDevice available");
+                    }
+                }
+            }
+            else
+            {
+                throw new System.IO.FileNotFoundException($"Texture not found: {fullPath}");
             }
         }
 
@@ -310,6 +495,12 @@ namespace MonoGameEditor.Core.Components
             public float metallic { get; set; }
             public float roughness { get; set; }
             public float ambientOcclusion { get; set; }
+            public string? albedoMap { get; set; }
+            public string? normalMap { get; set; }
+            public string? metallicMap { get; set; }
+            public string? roughnessMap { get; set; }
+            public string? aoMap { get; set; }
+            public string? heightMap { get; set; }
             public string? shaderPath { get; set; }
             public Dictionary<string, System.Text.Json.JsonElement>? customProperties { get; set; }
         }
@@ -368,6 +559,13 @@ namespace MonoGameEditor.Core.Components
                 _deviceResources.Remove(device);
                 return;
             }
+
+            // Ensure textures are loaded for THIS device (handles multi-device caching)
+            EnsureTexturesForDevice(device);
+            
+            // Note: EnsureTexturesForDevice handles assigning correct textures to Material
+            // before we apply the effect.
+
 
             // Set matrices (works for both BasicEffect and custom Effect)
             Matrix world = GameObject != null ? GameObject.Transform.WorldMatrix : Matrix.Identity;
@@ -581,20 +779,26 @@ namespace MonoGameEditor.Core.Components
 
             List<System.Numerics.Vector3> vertices;
             List<System.Numerics.Vector3> normals;
+            List<System.Numerics.Vector2> texCoords;
             List<int> indices;
 
             if (_meshData != null)
             {
                 vertices = _meshData.Vertices;
                 normals = _meshData.Normals;
+                texCoords = _meshData.TexCoords;
                 indices = _meshData.Indices;
             }
             else
             {
                 vertices = _metadata.PreviewVertices;
                 normals = new List<System.Numerics.Vector3>(); // Legacy mode: generate fake normals
+                texCoords = new List<System.Numerics.Vector2>();
                 for (int i = 0; i < vertices.Count; i++)
+                {
                     normals.Add(new System.Numerics.Vector3(0, 1, 0));
+                    texCoords.Add(System.Numerics.Vector2.Zero);
+                }
                 indices = _metadata.PreviewIndices;
             }
             
@@ -603,10 +807,12 @@ namespace MonoGameEditor.Core.Components
             {
                 var v = vertices[i];
                 var n = normals[i];
+                var uv = (i < texCoords.Count) ? texCoords[i] : System.Numerics.Vector2.Zero;
+                
                 uniqueVerts[i] = new VertexPositionNormalTexture(
                     new Vector3(v.X, v.Y, v.Z),
-                    new Vector3(n.X, n.Y, n.Z), // Standard normals
-                    Vector2.Zero
+                    new Vector3(n.X, n.Y, n.Z),
+                    new Vector2(uv.X, uv.Y)
                 );
             }
             
