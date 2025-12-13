@@ -25,4 +25,12 @@
     <Resource Include="Resources\**\*.png" />
   </ItemGroup>
 
+  <!-- Copy built-in editor shaders to output directory -->
+  <ItemGroup>
+    <None Include="Content\bin\Windows\Content\Shaders\*.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Content\Shaders\%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 <UserControl x:Class="MonoGameEditor.Views.InspectorView"
+             x:Name="InspectorRoot"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,11 +9,13 @@
              xmlns:components="clr-namespace:MonoGameEditor.Core.Components"
              xmlns:vm="clr-namespace:MonoGameEditor.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:shaders="clr-namespace:MonoGameEditor.Core.Shaders"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="320">
     <UserControl.Resources>
         <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <local:XnaColorToWpfColorConverter x:Key="XnaColorToWpfColorConverter"/>
+        <local:FilePathToNameConverter x:Key="FilePathToNameConverter"/>
         
         <ObjectDataProvider x:Key="ShadowQualityEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -357,6 +360,29 @@
                                 <TextBlock Text="Materials" Foreground="#DDDDDD" FontWeight="SemiBold" FontSize="11"/>
                             </Expander.Header>
                             <StackPanel Margin="8,4,0,0">
+                                <!-- Material Selection -->
+                                <Grid Style="{StaticResource PropertyRow}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Material" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                                    <ComboBox Grid.Column="1" 
+                                              ItemsSource="{Binding AvailableMaterials, ElementName=InspectorRoot}"
+                                              SelectedItem="{Binding MaterialPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              Background="#333337" 
+                                              Foreground="White"
+                                              ToolTip="Select material asset">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Converter={StaticResource FilePathToNameConverter}}" 
+                                                           Foreground="White" FontSize="11"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </Grid>
+                                
+                                <!-- Albedo Color (read-only preview) -->
                                 <Grid Style="{StaticResource PropertyRow}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="90"/>
@@ -539,12 +565,210 @@
                 </StackPanel>
             </ScrollViewer>
         </DataTemplate>
+
+        <!-- Material Editor Template -->
+        <DataTemplate DataType="{x:Type vm:MaterialEditorViewModel}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="10" Loaded="MaterialEditor_Loaded">
+                    <!-- Header -->
+                    <TextBlock Text="Material" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
+                    
+                    <!-- Shader Selection -->
+                    <TextBlock Text="Shader" FontWeight="SemiBold" Foreground="#DDDDDD" Margin="0,5,0,5"/>
+                    <ComboBox SelectedItem="{Binding ShaderPath, Mode=TwoWay}" 
+                              ItemsSource="{Binding AvailableShaders}"
+                              Background="#333337" Foreground="#DDDDDD" 
+                              BorderBrush="#555555" BorderThickness="1" Padding="5" Margin="0,2,0,5"
+                              ToolTip="Select a shader from the project"/>
+                    
+                    <!-- Compile Shader Button (only visible if shader needs compilation) -->
+                    <Button Content="🔨 Compile Shader" Command="{Binding CompileShaderCommand}"
+                            Visibility="{Binding NeedsCompilation, Converter={StaticResource NullToVisibilityConverter}}"
+                            Background="#D97706" Foreground="White" Padding="8,4" Margin="0,0,0,10"
+                            BorderThickness="0" Cursor="Hand" HorizontalAlignment="Left">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F59E0B"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.ToolTip>
+                            <TextBlock>
+                                <Run Text="Compile .fx shader to .mgfxo format"/><LineBreak/>
+                                <Run Text="Requires mgfxc tool in PATH" FontStyle="Italic" Foreground="Gray"/>
+                            </TextBlock>
+                        </Button.ToolTip>
+                    </Button>
+                    
+                    <!-- Dynamic Shader Properties -->
+                    <ItemsControl ItemsSource="{Binding ShaderProperties}" Margin="0,10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- Property Name -->
+                                    <TextBlock Text="{Binding Name}" Foreground="Gray" VerticalAlignment="Center"/>
+                                    
+                                    <Grid Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                                        <Grid.Resources>
+                                            <Style x:Key="VisibleIfFloat" TargetType="FrameworkElement">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Float}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            
+                                            <Style x:Key="VisibleIfVector2" TargetType="FrameworkElement">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Vector2}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            
+                                            <Style x:Key="VisibleIfVector3" TargetType="FrameworkElement">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Vector3}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            
+                                            <Style x:Key="VisibleIfColor" TargetType="FrameworkElement">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Color}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            
+                                            <Style x:Key="VisibleIfBool" TargetType="FrameworkElement">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Bool}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            
+                                            <Style x:Key="VisibleIfTexture" TargetType="FrameworkElement">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Texture2D}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Resources>
+
+                                        <!-- FLOAT CONTROL -->
+                                        <DockPanel Style="{StaticResource VisibleIfFloat}" LastChildFill="True" MinHeight="25">
+                                            <TextBox DockPanel.Dock="Right" Width="50" Margin="5,0,0,0"
+                                                     Text="{Binding FloatValue, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}" 
+                                                     Background="#333337" Foreground="#DDDDDD" 
+                                                     BorderBrush="#555555" BorderThickness="1" Padding="2"
+                                                     VerticalContentAlignment="Center"/>
+                                            <Slider Minimum="0" Maximum="10" 
+                                                    Value="{Binding FloatValue, UpdateSourceTrigger=PropertyChanged}"
+                                                    TickFrequency="0.1" VerticalAlignment="Center"/>
+                                        </DockPanel>
+
+                                        <!-- VECTOR2 CONTROL -->
+                                        <TextBox Style="{StaticResource VisibleIfVector2}"
+                                                 Text="{Binding Vector2Value, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Background="#333337" Foreground="#DDDDDD" 
+                                                 BorderBrush="#555555" BorderThickness="1" Padding="5"
+                                                 ToolTip="X, Y"/>
+
+                                        <!-- VECTOR3 CONTROL -->
+                                        <TextBox Style="{StaticResource VisibleIfVector3}"
+                                                 Text="{Binding Vector3Value, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Background="#333337" Foreground="#DDDDDD" 
+                                                 BorderBrush="#555555" BorderThickness="1" Padding="5"
+                                                 ToolTip="X, Y, Z"/>
+
+                                        <!-- COLOR CONTROL -->
+                                        <Button Style="{StaticResource VisibleIfColor}"
+                                                Width="80" Height="25" HorizontalAlignment="Left" 
+                                                Command="{Binding PickColorCommand}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="ColorBorder" BorderBrush="#555555" BorderThickness="1" CornerRadius="3">
+                                                        <Border.Background>
+                                                            <SolidColorBrush Color="{Binding ColorValue}"/>
+                                                        </Border.Background>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="ColorBorder" Property="BorderBrush" Value="#777777"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+
+                                        <!-- BOOL CONTROL -->
+                                        <CheckBox Style="{StaticResource VisibleIfBool}"
+                                                  IsChecked="{Binding BoolValue}" VerticalAlignment="Center"/>
+
+                                        <!-- TEXTURE CONTROL -->
+                                        <TextBox Style="{StaticResource VisibleIfTexture}"
+                                                 Text="{Binding TextureValue, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Background="#333337" Foreground="#DDDDDD" 
+                                                 BorderBrush="#555555" BorderThickness="1" Padding="5"
+                                                 ToolTip="Path to texture"/>
+                                                 
+                                        <!-- DEBUG FALLBACK FOR UNKNOWN -->
+                                        <!-- Optional: You can add a textblock that is visible only if NONE of the above match, 
+                                             but simpler to assume one matches based on previous evidence -->
+                                    </Grid>
+
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    
+                    <!-- Separator before Save button -->
+                    <Separator Background="#3E3E3E" Margin="0,15"/>
+                    
+                    <!-- Save Button -->
+                    <Button Content="Save Material" Command="{Binding SaveMaterialCommand}" 
+                            Background="#0E639C" Foreground="White" Padding="10,5" 
+                            BorderThickness="0" Cursor="Hand" Margin="0,10,0,0">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#1177BB"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </DataTemplate>
     </UserControl.Resources>
     
     <Grid Background="#252526">
-        <!-- Content Area -->
+        <!-- Content Area - Show MaterialEditor if available, otherwise SelectedObject -->
+        <ContentControl Content="{Binding MaterialEditor}" 
+                        Visibility="{Binding MaterialEditor, Converter={StaticResource NullToVisibilityConverter}}"/>
+        
         <ContentControl Content="{Binding SelectedObject}" 
-                        Visibility="{Binding SelectedObject, Converter={StaticResource NullToVisibilityConverter}}"/>
+                        Visibility="{Binding MaterialEditor, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}"/>
         
         <!-- Show when nothing selected -->
         <TextBlock Text="Select an object or asset to inspect" Foreground="#666666" 

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,11 +11,50 @@ using MonoGameEditor.Core.Components;
 
 namespace MonoGameEditor.Views
 {
-    public partial class InspectorView : UserControl
+    public partial class InspectorView : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private ObservableCollection<string> _availableMaterials = new();
+        public ObservableCollection<string> AvailableMaterials
+        {
+            get => _availableMaterials;
+            set
+            {
+                _availableMaterials = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableMaterials)));
+            }
+        }
+
         public InspectorView()
         {
             InitializeComponent();
+            // DON'T set DataContext here - it breaks existing bindings from GameObject/Components
+            
+            // Initialize material discovery
+            RefreshMaterialList();
+            
+            // Listen to project load events to refresh material list
+            Core.ProjectManager.Instance.ProjectLoaded += () => RefreshMaterialList();
+        }
+
+        private void RefreshMaterialList()
+        {
+            Core.Assets.MaterialAssetManager.Instance.RefreshMaterialCache();
+            var materials = Core.Assets.MaterialAssetManager.Instance.GetAvailableMaterials();
+            
+            AvailableMaterials.Clear();
+            foreach (var mat in materials)
+            {
+                AvailableMaterials.Add(mat);
+            }
+            
+            // Always add default material
+            var defaultMat = Core.Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
+            if (!AvailableMaterials.Contains(defaultMat))
+            {
+                AvailableMaterials.Insert(0, defaultMat);
+            }
         }
 
         private void AddComponent_Click(object sender, RoutedEventArgs e)
@@ -49,7 +90,7 @@ namespace MonoGameEditor.Views
 
         private void RemoveComponent_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is Component component)
+            if (sender is Button button && button.Tag is Core.Component component)
             {
                 var selectedObject = SceneManager.Instance.SelectedObject;
                 if (selectedObject != null && component.CanRemove)
@@ -78,6 +119,35 @@ namespace MonoGameEditor.Views
                     }
                 }
             }
+        }
+
+        private void MaterialEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            // When Material Editor UI is loaded, ensure shader is loaded (GraphicsDevice may be ready now)
+            if (sender is FrameworkElement element && element.DataContext is ViewModels.MaterialEditorViewModel materialEditor)
+            {
+                materialEditor.EnsureShaderLoaded();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Converts file path to just filename
+    /// </summary>
+    public class FilePathToNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string path && !string.IsNullOrEmpty(path))
+            {
+                return System.IO.Path.GetFileName(path);
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 

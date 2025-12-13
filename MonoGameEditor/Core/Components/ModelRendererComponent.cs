@@ -26,14 +26,6 @@ namespace MonoGameEditor.Core.Components
         private AssetMetadata _metadata;
         private Assets.MeshData _meshData; // For hierarchical models
         
-        // PBR Material
-        private PBRMaterial _material;
-        public PBRMaterial Material
-        {
-            get => _material ??= PBRMaterial.CreateDefault();
-            set => _material = value;
-        }
-
         
         public override string ComponentName => "Model Renderer";
 
@@ -66,6 +58,39 @@ namespace MonoGameEditor.Core.Components
         {
             get => _receiveShadows;
             set { _receiveShadows = value; OnPropertyChanged(nameof(ReceiveShadows)); }
+        }
+
+        // Material Properties
+        private Materials.PBRMaterial? _material;
+        private string? _materialPath;
+
+        public Materials.PBRMaterial? Material
+        {
+            get
+            {
+                // CRITICAL FIX: Always ensure we have a material (prevent blue artifacts with BasicEffect)
+                if (_material == null)
+                {
+                    _material = Materials.PBRMaterial.CreateDefault();
+                    ConsoleViewModel.Log($"[ModelRenderer] Auto-created default material for {GameObject?.Name ?? "unknown"}");
+                }
+                return _material;
+            }
+            set { _material = value; OnPropertyChanged(nameof(Material)); }
+        }
+
+        public string? MaterialPath
+        {
+            get => _materialPath;
+            set
+            {
+                if (_materialPath != value)
+                {
+                    _materialPath = value;
+                    OnPropertyChanged(nameof(MaterialPath));
+                    LoadMaterial();
+                }
+            }
         }
 
         // For hierarchical meshes - stores the original model file path
@@ -128,6 +153,8 @@ namespace MonoGameEditor.Core.Components
              }
         }
 
+        private string? _loadedShaderPath;
+
         /// <summary>
         /// Called after component is added to GameObject (useful after deserialization)
         /// </summary>
@@ -154,6 +181,140 @@ namespace MonoGameEditor.Core.Components
             }
         }
 
+        /// <summary>
+        /// Load material from file path
+        /// </summary>
+        /// <summary>
+        /// Load material from file path
+        /// </summary>
+        private void LoadMaterial()
+        {
+            // Use default material if no material path is set
+            if (string.IsNullOrEmpty(_materialPath))
+            {
+                var defaultPath = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
+                ConsoleViewModel.Log($"[ModelRenderer] No material assigned, using default: {defaultPath}");
+                _materialPath = defaultPath;
+            }
+            
+            if (string.IsNullOrEmpty(_materialPath))
+            {
+                Material = null;
+                _loadedShaderPath = null;
+                return;
+            }
+
+            try
+            {
+                if (!System.IO.File.Exists(_materialPath))
+                {
+                    ConsoleViewModel.Log($"[ModelRenderer] Material file not found: {_materialPath}, falling back to default");
+                    _materialPath = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
+                    
+                    if (!System.IO.File.Exists(_materialPath))
+                    {
+                        Material = Materials.PBRMaterial.CreateDefault();
+                        return;
+                    }
+                }
+
+                string json = System.IO.File.ReadAllText(_materialPath);
+                var data = System.Text.Json.JsonSerializer.Deserialize<MaterialData>(json);
+
+                if (data == null)
+                {
+                    Material = Materials.PBRMaterial.CreateDefault();
+                    return;
+                }
+
+                _loadedShaderPath = data.shaderPath;
+
+                var mat = new Materials.PBRMaterial
+                {
+                    Name = data.name ?? "Material",
+                    Metallic = data.metallic,
+                    Roughness = data.roughness,
+                    AmbientOcclusion = data.ambientOcclusion
+                };
+
+                if (data.albedoColor != null && data.albedoColor.Length >= 3)
+                {
+                    mat.AlbedoColor = new Color(
+                        (byte)(data.albedoColor[0] * 255),
+                        (byte)(data.albedoColor[1] * 255),
+                        (byte)(data.albedoColor[2] * 255)
+                    );
+                }
+                
+                // TODO: Load Textures if needed (skipping for now as we focus on values)
+                
+                // Load Custom Properties
+                if (data.customProperties != null)
+                {
+                    foreach (var kvp in data.customProperties)
+                    {
+                        var value = DeserializePropertyValue(kvp.Value);
+                        if (value != null)
+                        {
+                            mat.CustomProperties[kvp.Key] = value;
+                        }
+                    }
+                }
+
+                // If ShaderPath is defined in JSON, we might want to use it to load specific effect
+                // But ModelRenderer currently manages Effect separately via device resources.
+                // For now, we trust the PBRMaterial properties will be applied to whatever effect is used.
+                
+                Material = mat;
+                ConsoleViewModel.Log($"[ModelRenderer] Loaded Material '{mat.Name}' from {_materialPath}");
+            }
+            catch (Exception ex)
+            {
+                ConsoleViewModel.Log($"[ModelRenderer] Failed to load material: {ex.Message}");
+                Material = Materials.PBRMaterial.CreateDefault();
+            }
+        }
+
+        private object DeserializePropertyValue(System.Text.Json.JsonElement element)
+        {
+            try
+            {
+                switch (element.ValueKind)
+                {
+                    case System.Text.Json.JsonValueKind.Number:
+                        return element.GetSingle();
+                    case System.Text.Json.JsonValueKind.True:
+                    case System.Text.Json.JsonValueKind.False:
+                        return element.GetBoolean();
+                    case System.Text.Json.JsonValueKind.String:
+                        return element.GetString();
+                    case System.Text.Json.JsonValueKind.Object:
+                        // Enable fields for Vector serialization
+                        var options = new System.Text.Json.JsonSerializerOptions { IncludeFields = true };
+                        try { return System.Text.Json.JsonSerializer.Deserialize<Vector4>(element.GetRawText(), options); } catch { return null; }
+                    default:
+                        return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // Private DTO for JSON deserialization
+        private class MaterialData
+        {
+            public string? name { get; set; }
+            public float[]? albedoColor { get; set; }
+            public float metallic { get; set; }
+            public float roughness { get; set; }
+            public float ambientOcclusion { get; set; }
+            public string? shaderPath { get; set; }
+            public Dictionary<string, System.Text.Json.JsonElement>? customProperties { get; set; }
+        }
+
+
         public void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition, 
             Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
@@ -172,6 +333,7 @@ namespace MonoGameEditor.Core.Components
                 _deviceResources[device] = resources;
             }
             
+            
             // RETRY LOGIC: If we have BasicEffect, try to upgrade to PBR
             var sharedContent = MonoGameEditor.Controls.GameControl.SharedContent;
             var ownContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
@@ -182,7 +344,6 @@ namespace MonoGameEditor.Core.Components
             
             if (isBasicEffect && contentToUse != null)
             {
-                
                 try
                 {
                     // Use PBREffectLoader with the ContentManager
@@ -191,7 +352,7 @@ namespace MonoGameEditor.Core.Components
                     {
                         // Upgrade to PBR Effect!
                         resources.Effect = pbrEffect;
-                        ConsoleViewModel.Log($"[ModelRenderer] ✅ Upgraded {GameObject?.Name} from BasicEffect to PBR Effect!");
+                        ConsoleViewModel.Log($"[ModelRenderer] ✅ Upgraded {GameObject?.Name} to PBR!");
                     }
                 }
                 catch (Exception ex)
@@ -214,6 +375,8 @@ namespace MonoGameEditor.Core.Components
             // Check if it's a BasicEffect (easier API) or generic Effect (parameter-based)
             if (resources.Effect is BasicEffect basicEffect)
             {
+                // Ensure Material is not null - use default if needed
+                var materialToUse = Material ?? Materials.PBRMaterial.CreateDefault();
                 
                 basicEffect.World = world;
                 basicEffect.View = view;
@@ -268,7 +431,7 @@ namespace MonoGameEditor.Core.Components
                 }
                 
                 // Apply material color (Linearize albedo)
-                var albedo = Material.AlbedoColor.ToVector3();
+                var albedo = materialToUse.AlbedoColor.ToVector3();
                 albedo = new Vector3(
                     (float)Math.Pow(albedo.X, 2.2),
                     (float)Math.Pow(albedo.Y, 2.2),
@@ -278,19 +441,22 @@ namespace MonoGameEditor.Core.Components
                 basicEffect.DiffuseColor = albedo;
                 
                 // For metallic simulation with BasicEffect, adjust specular
-                if (Material.Metallic > 0.5f)
+                if (materialToUse.Metallic > 0.5f)
                 {
-                    basicEffect.SpecularColor = albedo * Material.Metallic;
-                    basicEffect.SpecularPower = (1.0f - Material.Roughness) * 128f;
+                    basicEffect.SpecularColor = albedo * materialToUse.Metallic;
+                    basicEffect.SpecularPower = (1.0f - materialToUse.Roughness) * 128f;
                 }
                 else
                 {
                     basicEffect.SpecularColor = Vector3.One * 0.04f; // Dielectric F0
-                    basicEffect.SpecularPower = (1.0f - Material.Roughness) * 32f;
+                    basicEffect.SpecularPower = (1.0f - materialToUse.Roughness) * 32f;
                 }
             }
             else
             {
+                // Ensure Material is not null - use default if needed
+                var materialToUse = Material ?? Materials.PBRMaterial.CreateDefault();
+                
                 // Generic Effect - use Parameters
                 resources.Effect.Parameters["World"]?.SetValue(world);
                 resources.Effect.Parameters["View"]?.SetValue(view);
@@ -333,6 +499,7 @@ namespace MonoGameEditor.Core.Components
 
                      resources.Effect.Parameters["LightDirection"]?.SetValue(sceneLight.Transform.Forward);
                      resources.Effect.Parameters["LightColor"]?.SetValue(finalColor);
+                     resources.Effect.Parameters["LightIntensity"]?.SetValue(lightComp.Intensity); // CRITICAL FIX: Was never set!
                      resources.Effect.Parameters["IndirectMultiplier"]?.SetValue(lightComp.IndirectMultiplier);
                 }
                 
@@ -341,7 +508,7 @@ namespace MonoGameEditor.Core.Components
                     resources.Effect.Parameters["UseShadows"]?.SetValue(false);
 
                 // Apply material
-                Material.Apply(resources.Effect);
+                materialToUse.Apply(resources.Effect);
             }
 
             // Enable backface culling to hide back faces
@@ -453,24 +620,80 @@ namespace MonoGameEditor.Core.Components
                 resources.IndexBuffer = new IndexBuffer(device, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.WriteOnly);
                 resources.IndexBuffer.SetData(indices.ToArray());
 
-                // Try to load PBR shader
-                var pbrEffect = PBREffectLoader.Load(device);
-                if (pbrEffect != null)
+                ConsoleViewModel.Log($"[ModelRenderer] CreateResourcesForDevice for {GameObject?.Name}");
+                
+                // Try to load Custom Shader if defined
+                Effect? loadedEffect = null;
+                if (!string.IsNullOrEmpty(_loadedShaderPath))
                 {
-                    resources.Effect = pbrEffect;
+                     ConsoleViewModel.Log($"[ModelRenderer] Attempting custom shader: {_loadedShaderPath}");
+                     try 
+                     {
+                        // Logic to load shader from path. 
+                        // If it's a file path to .mgfxo, we can load bytes.
+                        // If it's a Content path, we use ContentManager.
+                        
+                        // Simplistic approach: Check if .mgfxo exists at path
+                        if (System.IO.File.Exists(_loadedShaderPath))
+                        {
+                            var bytes = System.IO.File.ReadAllBytes(_loadedShaderPath);
+                            loadedEffect = new Effect(device, bytes);
+                            ConsoleViewModel.Log($"[ModelRenderer] ✅ Loaded Custom Shader: {_loadedShaderPath}");
+                        }
+                        else
+                        {
+                             ConsoleViewModel.Log($"[ModelRenderer] Custom shader file not found: {_loadedShaderPath}");
+                             // Try ContentManager if it looks like a content path
+                             var content = MonoGameEditor.Controls.GameControl.SharedContent ?? MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
+                             if (content != null)
+                             {
+                                 // Strip extension and folder if needed purely for Content.Load, but strictly strictly relies on correct pathing
+                                 // For now, let's assume it failed file check.
+                                 ConsoleViewModel.Log($"[ModelRenderer] ContentManager available but no content loading attempted");
+                             }
+                        }
+                     }
+                     catch (Exception ex)
+                     {
+                         ConsoleViewModel.Log($"[ModelRenderer] ❌ Failed to load custom shader '{_loadedShaderPath}': {ex.Message}");
+                     }
+                }
+
+                // Fallback to PBR or Basic
+                if (loadedEffect != null)
+                {
+                    resources.Effect = loadedEffect;
+                    ConsoleViewModel.Log($"[ModelRenderer] Using custom shader for {GameObject?.Name}");
                 }
                 else
                 {
-                    // Fallback to BasicEffect
-                    var initialEffect = new BasicEffect(device);
+                    ConsoleViewModel.Log($"[ModelRenderer] Attempting PBR shader load...");
                     
-                    // Configure lighting manually
-                    initialEffect.LightingEnabled = true;
-                    initialEffect.PreferPerPixelLighting = true;
-                    initialEffect.DirectionalLight1.Enabled = false;
-                    initialEffect.DirectionalLight2.Enabled = false;
+                    // CRITICAL FIX: Pass ContentManager explicitly!
+                    // Try GameControl.SharedContent first (for Game View), then MonoGameControl (for Scene View)
+                    var contentMgr = MonoGameEditor.Controls.GameControl.SharedContent 
+                                  ?? MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
                     
-                    resources.Effect = initialEffect;
+                    var pbrEffect = PBREffectLoader.Load(device, contentMgr);
+                    if (pbrEffect != null)
+                    {
+                        resources.Effect = pbrEffect;
+                        ConsoleViewModel.Log($"[ModelRenderer] ✅ Using PBR Effect for {GameObject?.Name}");
+                    }
+                    else
+                    {
+                        ConsoleViewModel.Log($"[ModelRenderer] ⚠️ PBR failed, using BasicEffect for {GameObject?.Name}");
+                        // Fallback to BasicEffect
+                        var initialEffect = new BasicEffect(device);
+                        
+                        // Configure lighting manually
+                        initialEffect.LightingEnabled = true;
+                        initialEffect.PreferPerPixelLighting = true;
+                        initialEffect.DirectionalLight1.Enabled = false;
+                        initialEffect.DirectionalLight2.Enabled = false;
+                        
+                        resources.Effect = initialEffect;
+                    }
                 }
             }
             catch (Exception ex)

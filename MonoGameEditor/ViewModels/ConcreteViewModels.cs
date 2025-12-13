@@ -1,4 +1,5 @@
 using MonoGameEditor.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -49,7 +50,19 @@ namespace MonoGameEditor.ViewModels
         public object? SelectedObject
         {
             get => _selectedObject;
-            set { _selectedObject = value; OnPropertyChanged(); }
+            set 
+            { 
+                _selectedObject = value; 
+                OnPropertyChanged();
+                UpdateMaterialEditor();
+            }
+        }
+
+        private MaterialEditorViewModel? _materialEditor;
+        public MaterialEditorViewModel? MaterialEditor
+        {
+            get => _materialEditor;
+            set { _materialEditor = value; OnPropertyChanged(); }
         }
 
         public InspectorViewModel() : base("Inspector") 
@@ -59,6 +72,30 @@ namespace MonoGameEditor.ViewModels
             {
                 SelectedObject = SceneManager.Instance.SelectedObject;
             };
+        }
+
+        private string? _currentMaterialPath;
+
+        private void UpdateMaterialEditor()
+        {
+            // Check if selected object is a .mat file
+            if (_selectedObject is FileItemViewModel fileVm && 
+                fileVm.FullPath != null && 
+                fileVm.FullPath.EndsWith(".mat", StringComparison.OrdinalIgnoreCase))
+            {
+                // Only create new MaterialEditor if path changed
+                if (_currentMaterialPath != fileVm.FullPath)
+                {
+                    _currentMaterialPath = fileVm.FullPath;
+                    MaterialEditor = new MaterialEditorViewModel(fileVm.FullPath);
+                }
+                // If same path, keep existing MaterialEditor
+            }
+            else
+            {
+                _currentMaterialPath = null;
+                MaterialEditor = null;
+            }
         }
     }
 

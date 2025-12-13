@@ -25,9 +25,12 @@ namespace MonoGameEditor.Controls
         private ToneMapRenderer _toneMapRenderer;
         private ShadowRenderer _shadowRenderer;
 
-        // Static ContentManager shared across components
+        // Static ContentManager and GraphicsDevice shared across components
         private static Microsoft.Xna.Framework.Content.ContentManager? _sharedContent;
         public static Microsoft.Xna.Framework.Content.ContentManager? SharedContent => _sharedContent;
+        
+        private static GraphicsDevice? _sharedGraphicsDevice;
+        public static GraphicsDevice? SharedGraphicsDevice => _sharedGraphicsDevice;
 
         public GraphicsDevice? GraphicsDevice => _graphicsService?.GraphicsDevice;
 
@@ -58,6 +61,7 @@ namespace MonoGameEditor.Controls
 
             ConsoleViewModel.Log($"[GameControl] OnCreateControl: Handle={Handle}");
             _graphicsService = GraphicsDeviceService.AddRef(Handle, Width, Height);
+            _sharedGraphicsDevice = _graphicsService.GraphicsDevice; // Store for global access
             
             // Setup Services for ContentManager
             var services = new Microsoft.Xna.Framework.GameServiceContainer();
@@ -203,13 +207,13 @@ namespace MonoGameEditor.Controls
                             // Update resolution if changed
                             _shadowRenderer.UpdateResolution(lightComp.ShadowResolution);
                             
-                            // Render Shadows
+                            // Render Shadows  
                             _shadowRenderer.BeginPass(lightComp, cameraComp.GameObject.Transform.Position, cameraComp.GameObject.Transform.Forward);
                             
                             // Draw all objects to shadow map
                             foreach (var obj in MonoGameEditor.Core.SceneManager.Instance.RootObjects)
                             {
-                                RenderShadowsRecursive(obj); // Helper needed
+                                RenderShadowsRecursive(obj);
                             }
                             
                             _shadowRenderer.EndPass();
@@ -223,6 +227,13 @@ namespace MonoGameEditor.Controls
                     GraphicsDevice.SetRenderTarget(_hdrRenderTarget);
                     GraphicsDevice.Clear(cameraComp.BackgroundColor);
 
+                    // CRITICAL: Reset states BEFORE Skybox (not after)
+                    // Skybox saves/restores previous state, so we need clean state first
+                    GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                    GraphicsDevice.BlendState = BlendState.Opaque;
+                    GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                    GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
                     // Render Skybox if needed
                     if (cameraComp.ClearFlags == CameraClearFlags.Skybox)
                     {
@@ -234,16 +245,10 @@ namespace MonoGameEditor.Controls
                         
                         if (_skybox != null)
                         {
-                            // Draw Skybox (first, with Depth disabled internally)
+                            // Draw Skybox (it will manage its own depth state internally)
                             _skybox.Draw(view, projection, cameraComp.GameObject.Transform.Position, cameraComp.FarClip);
                         }
                     }
-
-                    // Reset states
-                    GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                    GraphicsDevice.BlendState = BlendState.Opaque;
-                    GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise; // Cull Back faces
-                    GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
                     if (MonoGameEditor.Core.SceneManager.Instance != null)
                     {
@@ -350,7 +355,8 @@ namespace MonoGameEditor.Controls
         /// </summary>
         private void RenderModelsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> nodes, GraphicsDevice device, Matrix view, Matrix projection, Vector3 camPos, Texture2D shadowMap, Matrix? lightViewProj)
         {
-            Vector3 cameraPosition = Matrix.Invert(view).Translation;
+            // Use camPos parameter directly (already correct from caller)
+            // Previously: Vector3 cameraPosition = Matrix.Invert(view).Translation; ← BUG!
 
             for (int i = 0; i < nodes.Count; i++)
             {
@@ -363,16 +369,12 @@ namespace MonoGameEditor.Controls
                 {
                     // SKIP if ShadowsOnly (invisible to main cam)
                     if (modelRenderer.CastShadows == ShadowMode.ShadowsOnly) continue;
-
-                    // Debug log (throttled)
-                    if (DateTime.Now.Millisecond < 5)
-                        ConsoleViewModel.Log($"[GameView] Drawing {node.Name}");
                         
-                    modelRenderer.Draw(device, view, projection, cameraPosition, shadowMap, lightViewProj);
+                    modelRenderer.Draw(device, view, projection, camPos, shadowMap, lightViewProj);
                 }
 
                 // Recurse to children
-                RenderModelsRecursive(node.Children, device, view, projection, cameraPosition, shadowMap, lightViewProj);
+                RenderModelsRecursive(node.Children, device, view, projection, camPos, shadowMap, lightViewProj);
             }
         }
         

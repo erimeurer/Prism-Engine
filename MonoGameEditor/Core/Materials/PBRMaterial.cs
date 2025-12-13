@@ -130,61 +130,94 @@ namespace MonoGameEditor.Core.Materials
         /// </summary>
         public void Apply(Effect effect)
         {
+            if (effect == null)
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log("[Material] Apply called with null effect!");
+                return;
+            }
+            
             // Set albedo
             var albedoParam = effect.Parameters["AlbedoColor"];
             if (albedoParam != null)
+            {
                 albedoParam.SetValue(AlbedoColor.ToVector4());
+            }
+            else
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Material] ⚠️ AlbedoColor parameter not found in shader");
+            }
             
             // Set metallic
             var metallicParam = effect.Parameters["Metallic"];
             if (metallicParam != null)
+            {
                 metallicParam.SetValue(Metallic);
+            }
+            else
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Material] ⚠️ Metallic parameter not found");
+            }
             
             // Set roughness
             var roughnessParam = effect.Parameters["Roughness"];
             if (roughnessParam != null)
+            {
                 roughnessParam.SetValue(Roughness);
+            }
+            else
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Material] ⚠️ Roughness parameter not found");
+            }
             
             // Set AO
             var aoParam = effect.Parameters["AO"];
             if (aoParam != null)
+            {
                 aoParam.SetValue(AmbientOcclusion);
+            }
             
             // Set texture maps if available
-            if (AlbedoMap != null)
+            if (AlbedoMap != null) effect.Parameters["AlbedoTexture"]?.SetValue(AlbedoMap);
+            if (MetallicMap != null) effect.Parameters["MetallicTexture"]?.SetValue(MetallicMap);
+            if (RoughnessMap != null) effect.Parameters["RoughnessTexture"]?.SetValue(RoughnessMap);
+            if (NormalMap != null) effect.Parameters["NormalTexture"]?.SetValue(NormalMap);
+            if (AOMap != null) effect.Parameters["AOTexture"]?.SetValue(AOMap);
+
+            // Apply Custom Properties (Dynamic execution for custom shaders)
+            if (CustomProperties != null && CustomProperties.Count > 0)
             {
-                var albedoTexParam = effect.Parameters["AlbedoTexture"];
-                if (albedoTexParam != null)
-                    albedoTexParam.SetValue(AlbedoMap);
-            }
-            
-            if (MetallicMap != null)
-            {
-                var metallicTexParam = effect.Parameters["MetallicTexture"];
-                if (metallicTexParam != null)
-                    metallicTexParam.SetValue(MetallicMap);
-            }
-            
-            if (RoughnessMap != null)
-            {
-                var roughnessTexParam = effect.Parameters["RoughnessTexture"];
-                if (roughnessTexParam != null)
-                    roughnessTexParam.SetValue(RoughnessMap);
-            }
-            
-            if (NormalMap != null)
-            {
-                var normalTexParam = effect.Parameters["NormalTexture"];
-                if (normalTexParam != null)
-                    normalTexParam.SetValue(NormalMap);
-            }
-            
-            if (AOMap != null)
-            {
-                var aoTexParam = effect.Parameters["AOTexture"];
-                if (aoTexParam != null)
-                    aoTexParam.SetValue(AOMap);
+                foreach (var kvp in CustomProperties)
+                {
+                    var param = effect.Parameters[kvp.Key];
+                    if (param != null)
+                    {
+                        try 
+                        {
+                            ApplyProperty(param, kvp.Value);
+                        }
+                        catch
+                        {
+                            // Ignore type mismatches during rendering to prevent crash
+                        }
+                    }
+                }
             }
         }
+
+        private void ApplyProperty(EffectParameter param, object value)
+        {
+            if (value is float f) param.SetValue(f);
+            else if (value is Vector2 v2) param.SetValue(v2);
+            else if (value is Vector3 v3) param.SetValue(v3);
+            else if (value is Vector4 v4) param.SetValue(v4);
+            else if (value is Color c) param.SetValue(c.ToVector4());
+            else if (value is bool b) param.SetValue(b);
+            else if (value is Texture2D t) param.SetValue(t);
+            else if (value is int i) param.SetValue(i);
+            else if (value is Matrix m) param.SetValue(m);
+        }
+
+        // Dictionary to store dynamic properties (e.g. from Custom Shaders)
+        public Dictionary<string, object> CustomProperties { get; set; } = new Dictionary<string, object>();
     }
 }

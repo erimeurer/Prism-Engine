@@ -33,6 +33,10 @@ namespace MonoGameEditor.Controls
         // Static property to access MonoGameControl's ContentManager
         public static Microsoft.Xna.Framework.Content.ContentManager? OwnContentManager { get; private set; }
         
+        // Static GraphicsDevice shared across editor
+        private static GraphicsDevice? _sharedGraphicsDevice;
+        public static GraphicsDevice? SharedGraphicsDevice => _sharedGraphicsDevice;
+        
         // Debug flags (one-time logging)
         private static bool _loggedShadowInit = false;
         private static bool _loggedShadowPass = false;
@@ -102,6 +106,7 @@ namespace MonoGameEditor.Controls
             if (DesignMode) return;
 
             _graphicsService = GraphicsDeviceService.AddRef(Handle, Width, Height);
+            _sharedGraphicsDevice = _graphicsService.GraphicsDevice; // Store for MaterialEditor access
             _spriteBatch = new SpriteBatch(GraphicsDevice!);
             
             _camera = new EditorCamera();

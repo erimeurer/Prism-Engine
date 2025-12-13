@@ -260,6 +260,179 @@ namespace MonoGameEditor.ViewModels
                 Console.WriteLine($"Error creating folder: {ex.Message}");
             }
         }
+
+        public ICommand CreateMaterialCommand => new RelayCommand(CreateNewMaterial);
+
+        private void CreateNewMaterial(object param)
+        {
+            try
+            {
+                string parentPath = null;
+
+                if (param is DirectoryItemViewModel dirVm)
+                {
+                    parentPath = dirVm.FullPath;
+                }
+                else if (SelectedDirectory != null)
+                {
+                    parentPath = SelectedDirectory.FullPath;
+                }
+
+                if (string.IsNullOrEmpty(parentPath)) return;
+
+                // Generate unique name
+                string baseName = "NewMaterial";
+                string newPath = Path.Combine(parentPath, $"{baseName}.mat");
+                int counter = 1;
+                while (File.Exists(newPath))
+                {
+                    newPath = Path.Combine(parentPath, $"{baseName}{counter}.mat");
+                    counter++;
+                }
+
+                // Create default material
+                var material = Core.Materials.PBRMaterial.CreateDefault();
+                material.Name = Path.GetFileNameWithoutExtension(newPath);
+
+                // Save to JSON (shader will be set by MaterialEditorViewModel fallback)
+                string json = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    name = material.Name,
+                    albedoColor = new float[] { material.AlbedoColor.R / 255f, material.AlbedoColor.G / 255f, material.AlbedoColor.B / 255f },
+                    metallic = material.Metallic,
+                    roughness = material.Roughness,
+                    ambientOcclusion = material.AmbientOcclusion
+                }, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+
+                File.WriteAllText(newPath, json);
+
+                // Refresh directory view
+                if (SelectedDirectory != null && SelectedDirectory.FullPath == parentPath)
+                {
+                    LoadCurrentDirectory();
+
+                    // Find and rename the new file
+                    var newItem = GridItems.OfType<FileItemViewModel>().FirstOrDefault(x => x.FullPath == newPath);
+                    if (newItem != null)
+                    {
+                        newItem.IsRenaming = true;
+                    }
+                }
+
+                Console.WriteLine($"Created material: {newPath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating material: {ex.Message}");
+            }
+        }
+
+        public ICommand CreateShaderCommand => new RelayCommand(CreateNewShader);
+
+        private void CreateNewShader(object param)
+        {
+            try
+            {
+                string parentPath = null;
+
+                if (param is DirectoryItemViewModel dirVm)
+                {
+                    parentPath = dirVm.FullPath;
+                }
+                else if (SelectedDirectory != null)
+                {
+                    parentPath = SelectedDirectory.FullPath;
+                }
+
+                if (string.IsNullOrEmpty(parentPath)) return;
+
+                // Generate unique name
+                string baseName = "NewShader";
+                string newPath = Path.Combine(parentPath, $"{baseName}.fx");
+                int counter = 1;
+                while (File.Exists(newPath))
+                {
+                    newPath = Path.Combine(parentPath, $"{baseName}{counter}.fx");
+                    counter++;
+                }
+
+                // Create shader template
+                string template = @"#if OPENGL
+	#define SV_POSITION POSITION
+	#define VS_SHADERMODEL vs_3_0
+	#define PS_SHADERMODEL ps_3_0
+#else
+	#define VS_SHADERMODEL vs_4_0
+	#define PS_SHADERMODEL ps_4_0
+#endif
+
+// Transformation matrices
+float4x4 World;
+float4x4 View;
+float4x4 Projection;
+
+// Custom properties - Change these!
+float4 MainColor = float4(1, 1, 1, 1);
+
+struct VertexShaderInput
+{
+    float4 Position : POSITION0;
+};
+
+struct VertexShaderOutput
+{
+    float4 Position : SV_POSITION;
+};
+
+VertexShaderOutput MainVS(in VertexShaderInput input)
+{
+    VertexShaderOutput output = (VertexShaderOutput)0;
+    
+    float4 worldPosition = mul(input.Position, World);
+    float4 viewPosition = mul(worldPosition, View);
+    output.Position = mul(viewPosition, Projection);
+    
+    return output;
+}
+
+float4 MainPS(VertexShaderOutput input) : COLOR
+{
+    return MainColor;
+}
+
+technique BasicColorDrawing
+{
+    pass P0
+    {
+        VertexShader = compile VS_SHADERMODEL MainVS();
+        PixelShader = compile PS_SHADERMODEL MainPS();
+    }
+};
+";
+
+                File.WriteAllText(newPath, template);
+
+                // Refresh directory view
+                if (SelectedDirectory != null && SelectedDirectory.FullPath == parentPath)
+                {
+                    LoadCurrentDirectory();
+
+                    // Find and rename the new file
+                    var newItem = GridItems.OfType<FileItemViewModel>().FirstOrDefault(x => x.FullPath == newPath);
+                    if (newItem != null)
+                    {
+                        newItem.IsRenaming = true;
+                    }
+                }
+
+                Console.WriteLine($"Created shader: {newPath}");
+                Console.WriteLine("Note: Compile shader with MGCB or mgfxc tool to use in materials");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating shader: {ex.Message}");
+            }
+        }
     }
 
     public abstract class FileSystemItemViewModel : ViewModelBase
@@ -315,7 +488,18 @@ namespace MonoGameEditor.ViewModels
             try
             {
                 string parentDir = Path.GetDirectoryName(FullPath);
-                string newPath = Path.Combine(parentDir, RenameText);
+                string renamedText = RenameText;
+                
+                // Auto-add .mat extension for material files if missing
+                if (!IsDirectory && Path.GetExtension(FullPath).Equals(".mat", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!renamedText.EndsWith(".mat", StringComparison.OrdinalIgnoreCase))
+                    {
+                        renamedText += ".mat";
+                    }
+                }
+                
+                string newPath = Path.Combine(parentDir, renamedText);
 
                 if (IsDirectory)
                 {
@@ -338,7 +522,8 @@ namespace MonoGameEditor.ViewModels
                 }
 
                 FullPath = newPath;
-                Name = RenameText;
+                Name = renamedText;
+                RenameText = renamedText;  // Update rename text to include extension
                 OnPropertyChanged(nameof(FullPath));
                 OnPropertyChanged(nameof(Name));
                 IsRenaming = false;

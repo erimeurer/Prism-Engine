@@ -116,6 +116,12 @@
                         <MenuItem Header="Create New Folder" 
                                   Command="{Binding DataContext.CreateFolderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                   CommandParameter="{Binding}" />
+                        <MenuItem Header="Create Material" 
+                                  Command="{Binding DataContext.CreateMaterialCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                  CommandParameter="{Binding}" />
+                        <MenuItem Header="Create Shader" 
+                                  Command="{Binding DataContext.CreateShaderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                  CommandParameter="{Binding}" />
                         <Separator/>
                         <MenuItem Header="Rename" 
                                   Command="{Binding StartRenameCommand}" />
@@ -291,6 +297,10 @@
                         <ContextMenu>
                             <MenuItem Header="Create New Folder" 
                                       Command="{Binding CreateFolderCommand}" />
+                            <MenuItem Header="Create Material" 
+                                      Command="{Binding CreateMaterialCommand}" />
+                            <MenuItem Header="Create Shader" 
+                                      Command="{Binding CreateShaderCommand}" />
                             <Separator/>
                              <!-- Context menu for empty space doesn't make sense to have Rename, unless we bind to SelectedDirectory? 
                                   Actually, usually you rename a specific item. 

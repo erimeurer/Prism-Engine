@@ -28,3 +28,9 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Shaders/ToneMap.fx
+
+#begin Shaders/Unlit.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/Unlit.fx

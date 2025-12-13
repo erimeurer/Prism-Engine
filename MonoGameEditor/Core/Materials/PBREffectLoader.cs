@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MonoGameEditor.Core.Materials
@@ -35,6 +36,29 @@ namespace MonoGameEditor.Core.Materials
                     catch (Exception ex)
                     {
                         MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] Provided ContentManager load failed: {ex.Message}");
+                    }
+                }
+                
+                // Try MonoGameControl's ContentManager (for SceneView)
+                var monoGameContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
+                if (monoGameContent != null)
+                {
+                    // Check cache
+                    if (_effectCache.TryGetValue(monoGameContent, out var cachedEffect) && !cachedEffect.IsDisposed)
+                    {
+                        return cachedEffect;
+                    }
+                    
+                    try
+                    {
+                        var effect = monoGameContent.Load<Effect>("Shaders/PBREffect");
+                        _effectCache[monoGameContent] = effect;
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] PBR shader loaded via MonoGameControl.OwnContentManager!");
+                        return effect;
+                    }
+                    catch (Exception ex)
+                    {
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] MonoGameControl ContentManager load failed: {ex.Message}");
                     }
                 }
                 
