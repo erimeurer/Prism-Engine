@@ -147,20 +147,16 @@ namespace MonoGameEditor.Controls
             bool isSkinned = renderer is SkinnedModelRendererComponent;
             string techniqueName = isSkinned ? "SkinnedShadowDepth" : "ShadowDepth";
             
-            // DEBUG: Log technique selection
-            MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Drawing {obj.Name} with technique: {techniqueName} (isSkinned={isSkinned})");
-            
             // Try to set the technique
             var technique = _shadowDepthEffect.Techniques[techniqueName];
             if (technique != null)
             {
                 _shadowDepthEffect.CurrentTechnique = technique;
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] ✓ Technique '{techniqueName}' found and set");
             }
             else
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] ❌ Technique '{techniqueName}' NOT FOUND!");
-                return; // Don't render if technique is missing
+                // Only log error once, not every frame
+                return;
             }
             
             // Render

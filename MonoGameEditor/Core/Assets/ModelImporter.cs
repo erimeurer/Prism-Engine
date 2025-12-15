@@ -107,7 +107,22 @@ namespace MonoGameEditor.Core.Assets
                 {
                     using (var context = new AssimpContext())
                     {
-                        var scene = context.ImportFile(path, PostProcessSteps.Triangulate | PostProcessSteps.GenerateNormals);
+                        // CRITICAL for Mixamo FBX: Disable pivot preservation
+                        // Mixamo FBX files have pivot transforms that cause issues
+                        // This config resolves many Mixamo animation/transformation problems
+                        context.SetConfig(new Assimp.Configs.FBXPreservePivotsConfig(false));
+                        
+                        // Post-process flags optimized for skeletal animation (Mixamo/FBX)
+                        // - Triangulate: Convert all faces to triangles
+                        // - GenerateNormals: Generate smooth normals if missing
+                        // - LimitBoneWeights: Limit to max 4 bones per vertex (shader requirement)
+                        // - JoinIdenticalVertices: Optimize by joining duplicate vertices
+                        var importFlags = PostProcessSteps.Triangulate 
+                            | PostProcessSteps.GenerateNormals
+                            | PostProcessSteps.LimitBoneWeights
+                            | PostProcessSteps.JoinIdenticalVertices;
+                        
+                        var scene = context.ImportFile(path, importFlags);
 
                         if (scene == null || !scene.HasMeshes) return null;
 
@@ -340,8 +355,81 @@ namespace MonoGameEditor.Core.Assets
             // If no bones found, return
             if (boneNames.Count == 0) return;
             
-            // Traverse node hierarchy and extract bones
-            TraverseNodeHierarchy(scene.RootNode, null, -1, boneNames, modelData, scene);
+            // CRITICAL FIX: Build bones in mesh.Bones[] order, NOT hierarchy order!
+            // Vertex bone indices reference mesh.Bones[], so we MUST match that order.
+            
+            // Step 1: Build ordered list from mesh.Bones[] (this is what vertex indices reference)
+            var boneOrderedList = new List<string>();
+            var boneOffsets = new Dictionary<string, System.Numerics.Matrix4x4>();
+            
+            foreach (var mesh in scene.Meshes)
+            {
+                if (mesh.HasBones)
+                {
+                    foreach (var bone in mesh.Bones)
+                    {
+                        if (!boneOrderedList.Contains(bone.Name))
+                        {
+                            boneOrderedList.Add(bone.Name);  // Preserve mesh.Bones[] order!
+                            boneOffsets[bone.Name] = ConvertMatrix(bone.OffsetMatrix);
+                        }
+                    }
+                }
+            }
+            
+            // Step 2: Build node map for fast lookup
+            var nodeMap = new Dictionary<string, Node>();
+            BuildNodeMap(scene.RootNode, nodeMap);
+            
+            // Step 3: Create bones in mesh.Bones[] order
+            for (int i = 0; i < boneOrderedList.Count; i++)
+            {
+                string boneName = boneOrderedList[i];
+                
+                if (nodeMap.TryGetValue(boneName, out Node node))
+                {
+                    // Find parent index (must search in boneOrderedList, not hierarchy)
+                    int parentIndex = -1;
+                    if (node.Parent != null)
+                    {
+                        parentIndex = boneOrderedList.IndexOf(node.Parent.Name);
+                        // If parent not in list, keep looking up the hierarchy
+                        Node ancestor = node.Parent;
+                        while (parentIndex < 0 && ancestor.Parent != null)
+                        {
+                            ancestor = ancestor.Parent;
+                            parentIndex = boneOrderedList.IndexOf(ancestor.Name);
+                        }
+                    }
+                    
+                    var boneData = new BoneData
+                    {
+                        Name = boneName,
+                        OffsetMatrix = boneOffsets[boneName],
+                        LocalTransform = ConvertMatrix(node.Transform),
+                        ParentIndex = parentIndex
+                    };
+                    
+                    modelData.Bones.Add(boneData);
+                    modelData.BoneNameToIndex[boneName] = i;
+                    
+                    System.Diagnostics.Debug.WriteLine($"[ModelImporter] Bone[{i}] '{boneName}' | ParentIdx: {parentIndex}");
+                }
+            }
+            
+            System.Diagnostics.Debug.WriteLine($"[ModelImporter] Created {modelData.Bones.Count} bones in mesh.Bones[] order");
+        }
+        
+        /// <summary>
+        /// Recursively build map of node names to nodes
+        /// </summary>
+        private static void BuildNodeMap(Node node, Dictionary<string, Node> map)
+        {
+            map[node.Name] = node;
+            foreach (var child in node.Children)
+            {
+                BuildNodeMap(child, map);
+            }
         }
         
         /// <summary>
@@ -387,13 +475,19 @@ namespace MonoGameEditor.Core.Assets
                 modelData.BoneNameToIndex[node.Name] = currentIndex;
                 
                 var t = node.Transform;
-                System.Diagnostics.Debug.WriteLine($"[ModelImporter] Found bone: {node.Name} | LocalPos: {t.A4},{t.B4},{t.C4}");
+                System.Diagnostics.Debug.WriteLine($"[ModelImporter] Found bone: {node.Name} | ParentIdx: {parentIndex} | LocalPos: {t.A4},{t.B4},{t.C4}");
             }
             
             // Recursively process children
+            // CRITICAL FIX: If current node is NOT a bone (currentIndex == -1), 
+            // pass through the parentIndex we received instead of -1.
+            // This ensures bone hierarchy is preserved even when there are non-bone
+            // intermediate nodes (common in Mixamo FBX files).
+            int parentForChildren = (currentIndex >= 0) ? currentIndex : parentIndex;
+            
             foreach (var child in node.Children)
             {
-                TraverseNodeHierarchy(child, node, currentIndex, boneNames, modelData, scene);
+                TraverseNodeHierarchy(child, node, parentForChildren, boneNames, modelData, scene);
             }
         }
         
