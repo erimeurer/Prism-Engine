@@ -44,6 +44,31 @@ namespace MonoGameEditor.Views
                 }
             }
         }
+
+        private void ListBox_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Select on mouse UP, not DOWN - prevents Inspector changes during drag
+            var listBox = sender as System.Windows.Controls.ListBox;
+            if (listBox == null) return;
+
+            var item = GetItemFromPoint(listBox, e.GetPosition(listBox));
+            if (item != null && DataContext is MonoGameEditor.ViewModels.ProjectViewModel vm)
+            {
+                vm.SelectedGridItem = item;
+            }
+        }
+
+        private object GetItemFromPoint(System.Windows.Controls.ListBox listBox, System.Windows.Point point)
+        {
+            var element = listBox.InputHitTest(point) as UIElement;
+            while (element != null)
+            {
+                if (element is System.Windows.Controls.ListBoxItem)
+                    return ((System.Windows.Controls.ListBoxItem)element).DataContext;
+                element = System.Windows.Media.VisualTreeHelper.GetParent(element) as UIElement;
+            }
+            return null;
+        }
     }
 
     public static class FocusExtension

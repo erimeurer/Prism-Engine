@@ -287,11 +287,11 @@
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                 <ListBox ItemsSource="{Binding GridItems}" 
-                         SelectedItem="{Binding SelectedGridItem}"
                          Background="#1E1E1E" 
                          BorderThickness="0"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                         MouseLeftButtonUp="ListBox_MouseLeftButtonUp"
                          PreviewMouseMove="ListBox_PreviewMouseMove">
                     <ListBox.ContextMenu>
                         <ContextMenu>

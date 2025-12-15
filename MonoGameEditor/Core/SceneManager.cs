@@ -132,7 +132,7 @@ namespace MonoGameEditor.Core
             if (newParent != null)
             {
                 newParent.AddChild(child);
-                newParent.IsExpanded = true; 
+                // Don't force expand - let user control tree state
             }
             else
             {

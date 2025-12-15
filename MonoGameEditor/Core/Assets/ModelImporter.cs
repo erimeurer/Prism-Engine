@@ -10,6 +10,14 @@ namespace MonoGameEditor.Core.Assets
 {
     public static class ModelImporter
     {
+        // PERFORMANCE: Cache processed models for instant loading (like Unity!)
+        private static readonly Dictionary<string, ModelData> _modelCache = new Dictionary<string, ModelData>();
+        
+        /// <summary>
+        /// Clear model cache (call when assets are modified)
+        /// </summary>
+        public static void ClearCache() => _modelCache.Clear();
+        
         public static Task<AssetMetadata> LoadMetadataAsync(string path)
         {
             return Task.Run(() =>
@@ -102,6 +110,18 @@ namespace MonoGameEditor.Core.Assets
             return Task.Run(() =>
             {
                 if (!File.Exists(path)) return null;
+                
+                // CHECK CACHE FIRST - instant return if already processed!
+                lock (_modelCache)
+                {
+                    if (_modelCache.TryGetValue(path, out ModelData cachedModel))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[ModelImporter] ✓ Cache HIT: {Path.GetFileName(path)} - instant!");
+                        return cachedModel;
+                    }
+                }
+                
+                System.Diagnostics.Debug.WriteLine($"[ModelImporter] Cache MISS: {Path.GetFileName(path)} - loading...");
 
                 try
                 {
@@ -224,6 +244,12 @@ namespace MonoGameEditor.Core.Assets
                         
                         // Extract bone hierarchy if present
                         ExtractBoneHierarchy(scene, modelData);
+                        
+                        // CACHE IT - next time will be instant!
+                        lock (_modelCache)
+                        {
+                            _modelCache[path] = modelData;
+                        }
 
                         return modelData;
                     }

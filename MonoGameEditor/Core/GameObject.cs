@@ -23,7 +23,7 @@ namespace MonoGameEditor.Core
     {
         private string _name = "GameObject";
         private bool _isActive = true;
-        private bool _isExpanded = true;
+        private bool _isExpanded = false;
         private bool _isSelected;
         private GameObject? _parent;
         private GameObjectType _objectType = GameObjectType.Default;
