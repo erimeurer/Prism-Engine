@@ -1,0 +1,2 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"D:/git/Prism-Engine/MonoGameEditor/Content/Shaders/SkinnedPBR.fx","D:/git/Prism-Engine/MonoGameEditor/Content/Shaders/SkinnedPBR.xnb","EffectProcessor","CompiledEffectContent",17597,33301,0,3042687

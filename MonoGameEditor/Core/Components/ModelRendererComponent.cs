@@ -1,3 +1,4 @@
+#nullable disable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace MonoGameEditor.Core.Components
 
     public class ModelRendererComponent : Component
     {
-        private class DeviceResources
+        protected class DeviceResources
         {
             public VertexBuffer VertexBuffer { get; set; }
             public IndexBuffer IndexBuffer { get; set; }
@@ -24,7 +25,11 @@ namespace MonoGameEditor.Core.Components
         private readonly Dictionary<GraphicsDevice, DeviceResources> _deviceResources = new();
         private string _modelPath;
         private AssetMetadata _metadata;
-        private Assets.MeshData _meshData; // For hierarchical models
+        
+        // Multi-mesh support
+        private List<Assets.MeshData> _meshes = new(); // Multiple meshes
+        protected Assets.MeshData _meshData; // Legacy single mesh (for backward compatibility)
+        
         
         
         public override string ComponentName => "Model Renderer";
@@ -60,9 +65,14 @@ namespace MonoGameEditor.Core.Components
             set { _receiveShadows = value; OnPropertyChanged(nameof(ReceiveShadows)); }
         }
 
-        // Material Properties
+        // Material Properties (single - legacy)
         private Materials.PBRMaterial? _material;
         private string? _materialPath;
+        
+        // Multi-material support (one per mesh)
+        private List<Materials.PBRMaterial> _materials = new();
+        private List<string> _materialPaths = new();
+        public System.Collections.ObjectModel.ObservableCollection<MaterialSlotViewModel> MaterialSlots { get; } = new();
         
         // Pending texture paths used to reload textures for different devices
         private Dictionary<string, string> _pendingTexturePaths = new();
@@ -72,6 +82,13 @@ namespace MonoGameEditor.Core.Components
         
         // Debug
         private HashSet<string> _loggedMismatches = new HashSet<string>();
+        
+        // Dynamic Shader Properties (for Custom Shaders / PBR Extensions)
+        public System.Collections.ObjectModel.ObservableCollection<ShaderPropertyViewModel> DynamicProperties { get; } = new();
+        private Dictionary<string, object?> _customProperties = new();
+        private Core.Shaders.ShaderAsset _currentShader;
+        private object _propLock = new object();
+        private bool _propertiesLoaded = false;
 
         public Materials.PBRMaterial? Material
         {
@@ -127,6 +144,52 @@ namespace MonoGameEditor.Core.Components
             ClearResources();
             
             ConsoleViewModel.Log($"SetMeshData called for mesh '{meshData.Name}' from '{originalModelPath}'");
+        }
+        
+        /// <summary>
+        /// Sets multiple meshes (for multi-material models)
+        /// </summary>
+        public void SetMeshes(List<Assets.MeshData> meshes, string originalModelPath = null)
+        {
+            _meshes = meshes ?? new List<Assets.MeshData>();
+            _originalModelPath = originalModelPath;
+            
+            // Clear existing resources
+            ClearResources();
+            
+            // Initialize material lists
+            _materials.Clear();
+            _materialPaths.Clear();
+            MaterialSlots.Clear();
+            
+            // Create one material slot per mesh
+            for (int i = 0; i < _meshes.Count; i++)
+            {
+                var mesh = _meshes[i];
+                var slot = new MaterialSlotViewModel
+                {
+                    Index = i,
+                    MeshName = mesh.Name,
+                    MaterialPath = "" // Will use default
+                };
+                
+                // Subscribe to material path changes
+                slot.MaterialPathChanged += (sender, newPath) =>
+                {
+                    var s = sender as MaterialSlotViewModel;
+                    if (s != null && s.Index < _materialPaths.Count)
+                    {
+                        _materialPaths[s.Index] = newPath;
+                        LoadMaterialForSlot(s.Index);
+                    }
+                };
+                
+                MaterialSlots.Add(slot);
+                _materialPaths.Add("");
+                _materials.Add(null);
+            }
+            
+            ConsoleViewModel.Log($"SetMeshes called with {meshes?.Count ?? 0} meshes from '{originalModelPath}'");
         }
 
         private void ClearResources()
@@ -199,15 +262,17 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         private void LoadMaterial()
         {
+            // Determine which material path to use (without modifying _materialPath unless explicitly set)
+            string materialPathToLoad = _materialPath;
+            
             // Use default material if no material path is set
-            if (string.IsNullOrEmpty(_materialPath))
+            if (string.IsNullOrEmpty(materialPathToLoad))
             {
-                var defaultPath = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
-                ConsoleViewModel.Log($"[ModelRenderer] No material assigned, using default: {defaultPath}");
-                _materialPath = defaultPath;
+                materialPathToLoad = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
+                ConsoleViewModel.Log($"[ModelRenderer] No material assigned, using default: {materialPathToLoad}");
             }
             
-            if (string.IsNullOrEmpty(_materialPath))
+            if (string.IsNullOrEmpty(materialPathToLoad))
             {
                 Material = null;
                 _loadedShaderPath = null;
@@ -216,26 +281,64 @@ namespace MonoGameEditor.Core.Components
 
             try
             {
-                if (!System.IO.File.Exists(_materialPath))
+            string fullPath = materialPathToLoad;
+            if (!System.IO.Path.IsPathRooted(fullPath))
+            {
+                // Try to resolve relative to project path
+                var projectPath = ProjectManager.Instance.ProjectPath;
+                if (!string.IsNullOrEmpty(projectPath))
                 {
-                    ConsoleViewModel.Log($"[ModelRenderer] Material file not found: {_materialPath}, falling back to default");
-                    _materialPath = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
-                    
-                    if (!System.IO.File.Exists(_materialPath))
-                    {
-                        Material = Materials.PBRMaterial.CreateDefault();
-                        return;
-                    }
+                    fullPath = System.IO.Path.Combine(projectPath, materialPathToLoad);
                 }
+            }
 
-                string json = System.IO.File.ReadAllText(_materialPath);
-                var data = System.Text.Json.JsonSerializer.Deserialize<MaterialData>(json);
+            if (!System.IO.File.Exists(fullPath))
+            {
+                ConsoleViewModel.Log($"[ModelRenderer] Material file not found: {fullPath} (Original: {materialPathToLoad}), falling back to default");
+                // Don't change _materialPath property if just not found temporarily, but for now we fallback
+                
+                var defaultPath = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
+                 // Resolve default path too if needed, but it usually returns absolute or relative?
+                 // Let's assume absolute for safely. 
+                 // actually GetDefaultMaterialPath might return relative.
+                 
+                materialPathToLoad = defaultPath;
+                fullPath = defaultPath; // Assume default path is absolute or resolvable?
+                 // If default path is relative, we might need to resolve it too.
+                 if (!System.IO.Path.IsPathRooted(fullPath) && !string.IsNullOrEmpty(ProjectManager.Instance.ProjectPath))
+                 {
+                     fullPath = System.IO.Path.Combine(ProjectManager.Instance.ProjectPath, defaultPath);
+                 }
 
-                if (data == null)
+                if (!System.IO.File.Exists(fullPath))
                 {
                     Material = Materials.PBRMaterial.CreateDefault();
                     return;
                 }
+            }
+
+                string json = System.IO.File.ReadAllText(fullPath);
+                
+                // DEBUG LOGGING
+                ConsoleViewModel.Log($"[ModelRenderer] Loading Material: {materialPathToLoad}");
+                ConsoleViewModel.Log($"[ModelRenderer] JSON Preview: {json.Substring(0, Math.Min(json.Length, 150))}...");
+                
+                var options = new System.Text.Json.JsonSerializerOptions 
+                { 
+                    PropertyNameCaseInsensitive = true,
+                    ReadCommentHandling = System.Text.Json.JsonCommentHandling.Skip,
+                    AllowTrailingCommas = true
+                };
+                var data = System.Text.Json.JsonSerializer.Deserialize<MaterialData>(json, options);
+
+                if (data == null)
+                {
+                    ConsoleViewModel.Log($"[ModelRenderer] FAILED to deserialize material data from {_materialPath}");
+                    Material = Materials.PBRMaterial.CreateDefault();
+                    return;
+                }
+                
+                ConsoleViewModel.Log($"[ModelRenderer] Deserialized: Metallic={data.metallic}, Roughness={data.roughness}, AlbedoLen={data.albedoColor?.Length ?? 0}");
 
                 _loadedShaderPath = data.shaderPath;
 
@@ -244,7 +347,8 @@ namespace MonoGameEditor.Core.Components
                     Name = data.name ?? "Material",
                     Metallic = data.metallic,
                     Roughness = data.roughness,
-                    AmbientOcclusion = data.ambientOcclusion
+                    AmbientOcclusion = data.ambientOcclusion,
+                    ShaderPath = data.shaderPath
                 };
 
                 if (data.albedoColor != null && data.albedoColor.Length >= 3)
@@ -254,7 +358,23 @@ namespace MonoGameEditor.Core.Components
                         (byte)(data.albedoColor[1] * 255),
                         (byte)(data.albedoColor[2] * 255)
                     );
+                    ConsoleViewModel.Log($"[ModelRenderer] Set AlbedoColor: {mat.AlbedoColor}");
                 }
+                else 
+                {
+                    ConsoleViewModel.Log($"[ModelRenderer] AlbedoColor not set (null or len<3)");
+                }
+
+                if (data.customProperties != null)
+                {
+                    foreach(var kvp in data.customProperties)
+                    {
+                        mat.CustomProperties[kvp.Key] = kvp.Value;
+                    }
+                }
+
+                // Load Dynamic Properties (Lazy load in Draw to ensure device)
+                _propertiesLoaded = false;
         
         // Store texture paths for lazy loading during Draw
         _pendingTexturePaths.Clear();
@@ -315,6 +435,16 @@ namespace MonoGameEditor.Core.Components
                 ConsoleViewModel.Log($"[ModelRenderer] Failed to load material: {ex.Message}");
                 Material = Materials.PBRMaterial.CreateDefault();
             }
+        }
+        
+        /// <summary>
+        /// Load material for a specific slot (multi-mesh)
+        /// </summary>
+        private void LoadMaterialForSlot(int index)
+        {
+            // TODO: Implement per-slot material loading
+            // For now, just log
+            ConsoleViewModel.Log($"[ModelRenderer] LoadMaterialForSlot called for index {index}");
         }
         
         /// <summary>
@@ -487,7 +617,158 @@ namespace MonoGameEditor.Core.Components
             }
         }
 
-        // Private DTO for JSON deserialization
+        private async void LoadDynamicProperties()
+        {
+            if (Material == null || string.IsNullOrEmpty(Material.ShaderPath)) return;
+            string shaderPath = Material.ShaderPath;
+            
+            // Wait for device (essential for shader reflection)
+            if (MonoGameControl.SharedGraphicsDevice == null) return;
+            var device = MonoGameControl.SharedGraphicsDevice;
+            
+            lock(_propLock)
+            {
+                DynamicProperties.Clear();
+                _customProperties.Clear();
+            }
+            
+            // 2. Load Shader to see what properties exist
+            string shaderPathToLoad = shaderPath;
+            if (!shaderPath.StartsWith("Content/", StringComparison.OrdinalIgnoreCase))
+            {
+                 string projectPath = ProjectManager.Instance.ProjectPath ?? "";
+                 shaderPathToLoad = System.IO.Path.Combine(projectPath, shaderPath);
+            }
+            
+            try
+            {
+                _currentShader = Core.Shaders.ShaderLoader.LoadShaderAsset(device, shaderPathToLoad, "MaterialShader");
+                if (_currentShader == null) return;
+                
+                // Mark as loaded
+                _propertiesLoaded = true;
+                
+                foreach (var prop in _currentShader.Properties)
+                {
+                     // Skip PBRMaps that have dedicated UI AND internal system booleans
+                     if (prop.Name == "AlbedoMap" || prop.Name == "NormalMap" || prop.Name == "MetallicMap" || prop.Name == "RoughnessMap" || prop.Name == "AOMap" ||
+                         prop.Name == "UseAlbedoMap" || prop.Name == "UseNormalMap" || prop.Name == "UseMetallicMap" || prop.Name == "UseRoughnessMap" || prop.Name == "UseAOMap")
+                        continue;
+                        
+                     object? initialValue = null;
+
+                     // SPECIAL HANDLING: Sync PBR Standard Properties
+                     bool isStandardProp = false;
+                     if (prop.Name.Equals("Metallic", StringComparison.OrdinalIgnoreCase))
+                     {
+                         initialValue = Material.Metallic;
+                         isStandardProp = true;
+                     }
+                     else if (prop.Name.Equals("Roughness", StringComparison.OrdinalIgnoreCase))
+                     {
+                         initialValue = Material.Roughness;
+                         isStandardProp = true;
+                     }
+                     else if (prop.Name.Equals("AO", StringComparison.OrdinalIgnoreCase) || prop.Name.Equals("AmbientOcclusion", StringComparison.OrdinalIgnoreCase))
+                     {
+                         initialValue = Material.AmbientOcclusion;
+                         isStandardProp = true;
+                     }
+                     else if (prop.Name.Equals("AlbedoColor", StringComparison.OrdinalIgnoreCase))
+                     {
+                         initialValue = Material.AlbedoColor.ToVector4(); // Shader usually uses Vector4
+                         isStandardProp = true;
+                     } 
+                     
+                     // If NOT standard, check CustomProperties dictionary
+                     if (!isStandardProp)
+                     {
+                         if (Material.CustomProperties.TryGetValue(prop.Name, out var storedVal))
+                         {
+                             if (storedVal is System.Text.Json.JsonElement jsonEl)
+                             {
+                                 initialValue = ParseJsonToValue(prop.Type, jsonEl);
+                                 if (initialValue != null) Material.CustomProperties[prop.Name] = initialValue;
+                             }
+                             else
+                             {
+                                 initialValue = storedVal;
+                             }
+                         }
+                         else if (prop.DefaultValue != null)
+                         {
+                             initialValue = prop.DefaultValue;
+                         }
+                     }
+                     
+                     var vm = new ShaderPropertyViewModel(prop, initialValue);
+                     vm.PropertyChanged += (s, e) => 
+                     {
+                         if(e.PropertyName == "Value") 
+                         {
+                             lock(_propLock)
+                             {
+                                 _customProperties[prop.Name] = vm.Value;
+                                 if (Material != null) 
+                                 {
+                                     Material.CustomProperties[prop.Name] = vm.Value;
+                                     
+                                     // Sync back to Material standard properties
+                                     if (prop.Name.Equals("Metallic", StringComparison.OrdinalIgnoreCase) && vm.Value is float fMet)
+                                         Material.Metallic = fMet;
+                                     else if (prop.Name.Equals("Roughness", StringComparison.OrdinalIgnoreCase) && vm.Value is float fRough)
+                                         Material.Roughness = fRough;
+                                     else if ((prop.Name.Equals("AO", StringComparison.OrdinalIgnoreCase) || prop.Name.Equals("AmbientOcclusion", StringComparison.OrdinalIgnoreCase)) && vm.Value is float fAO)
+                                         Material.AmbientOcclusion = fAO;
+                                     else if (prop.Name.Equals("AlbedoColor", StringComparison.OrdinalIgnoreCase) && vm.Value is Microsoft.Xna.Framework.Vector4 vCol)
+                                         Material.AlbedoColor = new Microsoft.Xna.Framework.Color(vCol);
+                                 }
+                             }
+                         }
+                     };
+                     
+                     // Add to collections
+                     lock(_propLock)
+                     {
+                         DynamicProperties.Add(vm);
+                         _customProperties[prop.Name] = vm.Value;
+                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                 ConsoleViewModel.Log($"[ModelRenderer] Error loading props: {ex.Message}");
+            }
+        }
+        
+        private object? ParseJsonToValue(Core.Shaders.ShaderPropertyType propType, System.Text.Json.JsonElement element)
+        {
+             try
+             {
+                 if (propType == Core.Shaders.ShaderPropertyType.Float && element.ValueKind == System.Text.Json.JsonValueKind.Number) return element.GetSingle();
+                 if (propType == Core.Shaders.ShaderPropertyType.Bool && (element.ValueKind == System.Text.Json.JsonValueKind.True || element.ValueKind == System.Text.Json.JsonValueKind.False)) return element.GetBoolean();
+                 
+                 // Arrays
+                 if (element.ValueKind == System.Text.Json.JsonValueKind.Array) 
+                 {
+                     var arr = new List<float>();
+                     foreach(var item in element.EnumerateArray()) 
+                         if(item.ValueKind == System.Text.Json.JsonValueKind.Number) arr.Add(item.GetSingle());
+                     
+                     if (propType == Core.Shaders.ShaderPropertyType.Vector2 && arr.Count >= 2) return new Microsoft.Xna.Framework.Vector2(arr[0], arr[1]);
+                     if (propType == Core.Shaders.ShaderPropertyType.Vector3 && arr.Count >= 3) return new Microsoft.Xna.Framework.Vector3(arr[0], arr[1], arr[2]);
+                     if (propType == Core.Shaders.ShaderPropertyType.Vector4 && arr.Count >= 4) return new Microsoft.Xna.Framework.Vector4(arr[0], arr[1], arr[2], arr[3]);
+                     
+                     // VM expects Vector4 for Color
+                     if (propType == Core.Shaders.ShaderPropertyType.Color && arr.Count >= 3) 
+                        return new Microsoft.Xna.Framework.Vector4(arr[0], arr[1], arr[2], arr.Count > 3 ? arr[3] : 1f);
+                 }
+                 return null;
+             }
+             catch { return null; }
+        }
+
+
         private class MaterialData
         {
             public string? name { get; set; }
@@ -512,7 +793,38 @@ namespace MonoGameEditor.Core.Components
             // Check for disposed device
             if (device == null || device.IsDisposed) return;
 
-            // Use _meshData if set (hierarchical), otherwise use _metadata (legacy single-mesh)
+
+            // Support both multi-mesh and legacy single-mesh
+            var hasMultiMesh = _meshes != null && _meshes.Count > 0;
+            var hasSingleMesh = _meshData != null;
+            var hasLegacyData = _metadata != null && _metadata.PreviewVertices.Count > 0;
+            var hasData = hasMultiMesh || hasSingleMesh || hasLegacyData;
+            
+            if (!hasData) return;
+            
+            // If we have multiple meshes, render each one
+            if (hasMultiMesh)
+            {
+                for (int meshIndex = 0; meshIndex < _meshes.Count; meshIndex++)
+                {
+                    // Temporarily set _meshData to current mesh for rendering
+                    var currentMesh = _meshes[meshIndex];
+                    _meshData = currentMesh;
+                    
+                    // Render this mesh using existing single-mesh logic below
+                    DrawSingleMesh(device, view, projection, cameraPosition, shadowMap, lightViewProj);
+                }
+                return;
+            }
+            
+            // Fall through to legacy single-mesh rendering
+            DrawSingleMesh(device, view, projection, cameraPosition, shadowMap, lightViewProj);
+        }
+        
+        private void DrawSingleMesh(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition,
+            Texture2D shadowMap = null, Matrix? lightViewProj = null)
+        {
+            // Check for valid mesh data
             var hasData = _meshData != null || (_metadata != null && _metadata.PreviewVertices.Count > 0);
             if (!hasData) return;
 
@@ -522,6 +834,12 @@ namespace MonoGameEditor.Core.Components
                 resources = CreateResourcesForDevice(device);
                 if (resources == null) return; // Failed to create
                 _deviceResources[device] = resources;
+            }
+            
+            // Lazy load properties if needed
+            if (!_propertiesLoaded && Material != null && !string.IsNullOrEmpty(Material.ShaderPath))
+            {
+                LoadDynamicProperties();
             }
             
             
@@ -707,11 +1025,35 @@ namespace MonoGameEditor.Core.Components
 
                 // Apply material
                 materialToUse.Apply(resources.Effect);
+                
+                // Apply Dynamic Properties (User Overrides)
+                lock(_propLock)
+                {
+                    foreach (var kvp in _customProperties)
+                    {
+                        var param = resources.Effect.Parameters[kvp.Key];
+                        if (param != null && kvp.Value != null)
+                        {
+                            try {
+                                if (kvp.Value is float f) param.SetValue(f);
+                                else if (kvp.Value is Vector2 v2) param.SetValue(v2);
+                                else if (kvp.Value is Vector3 v3) param.SetValue(v3);
+                                else if (kvp.Value is Vector4 v4) param.SetValue(v4);
+                                else if (kvp.Value is Color c) param.SetValue(c.ToVector3()); 
+                                else if (kvp.Value is bool b) param.SetValue(b);
+                                else if (kvp.Value is Texture2D t) param.SetValue(t);
+                            } catch {}
+                        }
+                    }
+                }
             }
 
             // Enable backface culling to hide back faces
             var previousRasterizerState = device.RasterizerState;
             device.RasterizerState = RasterizerState.CullClockwise;
+
+            // Allow derived classes to set custom effect parameters (e.g., bone matrices)
+            ApplyCustomEffectParameters(resources.Effect, device);
 
             foreach (var pass in resources.Effect.CurrentTechnique.Passes)
             {
@@ -723,6 +1065,15 @@ namespace MonoGameEditor.Core.Components
 
             // Restore previous state
             device.RasterizerState = previousRasterizerState;
+        }
+        
+        /// <summary>
+        /// Virtual hook for derived classes to set custom effect parameters
+        /// </summary>
+        protected virtual void ApplyCustomEffectParameters(Effect effect, GraphicsDevice device)
+        {
+            // Base implementation does nothing
+            // Derived classes like SkinnedModelRendererComponent override this
         }
 
         private Vector3 KelvinToRGB(float k)
@@ -768,7 +1119,7 @@ namespace MonoGameEditor.Core.Components
             return Vector3.Clamp(color, Vector3.Zero, Vector3.One);
         }
 
-        private DeviceResources CreateResourcesForDevice(GraphicsDevice device)
+        protected virtual DeviceResources CreateResourcesForDevice(GraphicsDevice device)
         {
             // Guard: If data isn't loaded yet, we can't create resources
             if (_meshData == null && _metadata == null)
@@ -987,5 +1338,31 @@ namespace MonoGameEditor.Core.Components
             }
             return null;
         }
+    }
+    
+    /// <summary>
+    /// ViewModel for individual material slots in multi-material objects
+    /// </summary>
+    public class MaterialSlotViewModel : ViewModels.ViewModelBase
+    {
+        public int Index { get; set; }
+        public string MeshName { get; set; }
+        private string _materialPath;
+        
+        public string MaterialPath
+        {
+            get => _materialPath;
+            set
+            {
+                if (_materialPath != value)
+                {
+                    _materialPath = value;
+                    OnPropertyChanged();
+                    MaterialPathChanged?.Invoke(this, value);
+                }
+            }
+        }
+        
+        public event EventHandler<string> MaterialPathChanged;
     }
 }

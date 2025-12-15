@@ -1,3 +1,4 @@
+#nullable disable
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ namespace MonoGameEditor.Views
 {
     public partial class InspectorView : UserControl, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private ObservableCollection<string> _availableMaterials = new();
         public ObservableCollection<string> AvailableMaterials
@@ -127,6 +128,37 @@ namespace MonoGameEditor.Views
             if (sender is FrameworkElement element && element.DataContext is ViewModels.MaterialEditorViewModel materialEditor)
             {
                 materialEditor.EnsureShaderLoaded();
+            }
+        }
+
+        private void Material_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                if (files != null && files.Length > 0)
+                {
+                    string filePath = files[0];
+                    if (System.IO.Path.GetExtension(filePath).ToLower() == ".mat")
+                    {
+                        // Get the component from the DataContext of the Border (sender)
+                        if (sender is FrameworkElement element && element.DataContext is ModelRendererComponent component)
+                        {
+                             // Try to make relative to project path if possible
+                             string projectPath = Core.ProjectManager.Instance.ProjectPath;
+                             string finalPath = filePath;
+                             
+                             if (!string.IsNullOrEmpty(projectPath) && filePath.StartsWith(projectPath, StringComparison.OrdinalIgnoreCase))
+                             {
+                                 // Make relative
+                                 finalPath = System.IO.Path.GetRelativePath(projectPath, filePath);
+                             }
+                             
+                             // Update property
+                             component.MaterialPath = finalPath;
+                        }
+                    }
+                }
             }
         }
     }

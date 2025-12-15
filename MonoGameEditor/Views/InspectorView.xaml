@@ -367,63 +367,107 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Material" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                    <ComboBox Grid.Column="1" 
-                                              ItemsSource="{Binding AvailableMaterials, ElementName=InspectorRoot}"
-                                              SelectedItem="{Binding MaterialPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                              Background="#333337" 
-                                              Foreground="White"
-                                              ToolTip="Select material asset">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Converter={StaticResource FilePathToNameConverter}}" 
-                                                           Foreground="White" FontSize="11"/>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
+                                    <Border Grid.Column="1" Background="#333337" CornerRadius="2" Height="20" AllowDrop="True" Drop="Material_Drop" ToolTip="Drag .mat file here">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <!-- Icon -->
+                                            <Viewbox Grid.Column="0" Width="12" Height="12" Margin="4,0,0,0">
+                                                <Canvas Width="24" Height="24">
+                                                     <Path Fill="#AAAAAA" Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                                                </Canvas>
+                                            </Viewbox>
+                                            
+                                            <TextBlock Grid.Column="1" Text="{Binding MaterialPath, Converter={StaticResource FilePathToNameConverter}}" 
+                                                       Foreground="White" FontSize="11" VerticalAlignment="Center" Margin="5,0,0,0"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                                       
+                                            <TextBlock Grid.Column="2" Text="◎" Foreground="#888888" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                        </Grid>
+                                    </Border>
                                 </Grid>
                                 
-                                <!-- Albedo Color (read-only preview) -->
-                                <Grid Style="{StaticResource PropertyRow}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Albedo" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                    <Button Grid.Column="1" Height="20" Margin="0" BorderThickness="1" BorderBrush="#555555"
-                                            Click="PickColor_Click" Tag="{Binding Material}" ToolTip="Click to pick color">
-                                        <Button.Background>
-                                            <SolidColorBrush Color="{Binding Material.AlbedoColor, Mode=OneWay, Converter={StaticResource XnaColorToWpfColorConverter}}"/>
-                                        </Button.Background>
-                                    </Button>
-                                </Grid>
-                               
-                                <Grid Style="{StaticResource PropertyRow}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="50"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Metallic" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                    <Slider Grid.Column="1" Value="{Binding Material.Metallic, Mode=TwoWay}" 
-                                            Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True"
-                                            VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <TextBox Grid.Column="2" Text="{Binding Material.Metallic, StringFormat={}{0:F2}}" 
-                                             Style="{StaticResource NumericTextBox}"/>
-                                </Grid>
-                                
-                                <Grid Style="{StaticResource PropertyRow}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="50"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Smoothness" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                                    <Slider Grid.Column="1" Value="{Binding Material.Smoothness, Mode=TwoWay}" 
-                                            Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True"
-                                            VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <TextBox Grid.Column="2" Text="{Binding Material.Smoothness, StringFormat={}{0:F2}}" 
-                                             Style="{StaticResource NumericTextBox}"/>
-                                </Grid>
+
+
+                                <Separator Background="#3E3E3E" Margin="0,5,0,5"/>
+                                <TextBlock Text="Shader Properties" Foreground="#DDDDDD" FontWeight="SemiBold" Margin="0,5"/>
+                                 
+                                <ItemsControl ItemsSource="{Binding DynamicProperties}" 
+                                              Tag="{Binding DataContext, RelativeSource={RelativeSource Self}}" Margin="0,0,0,5">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <TextBlock Text="{Binding Name}" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center" ToolTip="{Binding Name}"/>
+                                                
+                                                <Grid Grid.Column="1" VerticalAlignment="Center">
+                                                     <Grid.Resources>
+                                                        <Style x:Key="VisFloat" TargetType="FrameworkElement">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Float}">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                        <Style x:Key="VisBool" TargetType="FrameworkElement">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Bool}">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                         <Style x:Key="VisVec3" TargetType="FrameworkElement">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Vector3}">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                        <Style x:Key="VisColor" TargetType="FrameworkElement">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Type}" Value="{x:Static shaders:ShaderPropertyType.Color}">
+                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                     </Grid.Resources>
+                                                     
+                                                     <Grid Style="{StaticResource VisFloat}">
+                                                         <Grid.ColumnDefinitions>
+                                                             <ColumnDefinition Width="*"/>
+                                                             <ColumnDefinition Width="50"/>
+                                                         </Grid.ColumnDefinitions>
+                                                         <Slider Value="{Binding FloatValue}" Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True" Margin="0,0,5,0"/>
+                                                         <TextBox Grid.Column="1" Text="{Binding FloatValue, StringFormat=F2}" Style="{StaticResource NumericTextBox}"/>
+                                                     </Grid>
+                                                     
+                                                     <CheckBox Style="{StaticResource VisBool}" IsChecked="{Binding BoolValue}"/>
+                                                     
+                                                      <TextBox Style="{StaticResource VisVec3}" Text="{Binding Vector3Value}" Background="#333337" Foreground="#DDDDDD" BorderThickness="0"/>
+                                                      
+                                                              <Button Style="{StaticResource VisColor}" Command="{Binding PickColorCommand}" Width="50" Height="20" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="#555555">
+                                                           <Button.Background>
+                                                               <SolidColorBrush Color="{Binding ColorValue}"/>
+                                                           </Button.Background>
+                                                      </Button>
+                                                </Grid>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
                             </StackPanel>
                         </Expander>
                         
@@ -459,6 +503,9 @@
                             <TextBlock Text="Receive Shadows" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                             <CheckBox Grid.Column="1" IsChecked="{Binding ReceiveShadows}" VerticalAlignment="Center"/>
                         </Grid>
+
+
+
                     </StackPanel>
                 </Border>
             </Expander>

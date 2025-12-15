@@ -183,6 +183,21 @@ namespace MonoGameEditor.Core.Assets
                                 }
                             }
 
+                            // Extract bone weights for skinning (if mesh has bones)
+                            if (assimpMesh.HasBones)
+                            {
+                                ExtractBoneWeights(assimpMesh, meshData, scene);
+                            }
+                            else
+                            {
+                                // No bones - fill with defaults
+                                for (int j = 0; j < assimpMesh.VertexCount; j++)
+                                {
+                                    meshData.BoneIndices.Add(System.Numerics.Vector4.Zero);
+                                    meshData.BoneWeights.Add(new System.Numerics.Vector4(1, 0, 0, 0));
+                                }
+                            }
+
                             totalVertices += meshData.Vertices.Count;
                             totalTriangles += meshData.Indices.Count / 3;
 
@@ -191,6 +206,9 @@ namespace MonoGameEditor.Core.Assets
 
                         modelData.TotalVertexCount = totalVertices;
                         modelData.TotalTriangleCount = totalTriangles;
+                        
+                        // Extract bone hierarchy if present
+                        ExtractBoneHierarchy(scene, modelData);
 
                         return modelData;
                     }
@@ -201,6 +219,199 @@ namespace MonoGameEditor.Core.Assets
                     return null;
                 }
             });
+        }
+        
+        /// <summary>
+        /// Extracts bone weights for vertex skinning
+        /// </summary>
+        private static void ExtractBoneWeights(Mesh assimpMesh, MeshData meshData, Scene scene)
+        {
+            // First, build a bone name to index mapping
+            var boneNameToIndex = new Dictionary<string, int>();
+            for (int i = 0; i < assimpMesh.BoneCount; i++)
+            {
+                boneNameToIndex[assimpMesh.Bones[i].Name] = i;
+            }
+            
+            // Initialize arrays for each vertex (up to 4 bones per vertex)
+            var vertexBoneIndices = new List<List<int>>();
+            var vertexBoneWeights = new List<List<float>>();
+            
+            for (int i = 0; i < assimpMesh.VertexCount; i++)
+            {
+                vertexBoneIndices.Add(new List<int>());
+                vertexBoneWeights.Add(new List<float>());
+            }
+            
+            // Process each bone in the mesh
+            foreach (var bone in assimpMesh.Bones)
+            {
+                // Get bone index from our mapping
+                int boneIndex = boneNameToIndex[bone.Name];
+                
+                // Process each vertex weight for this bone
+                foreach (var weight in bone.VertexWeights)
+                {
+                    int vertexId = weight.VertexID;
+                    if (vertexId >= 0 && vertexId < assimpMesh.VertexCount)
+                    {
+                        vertexBoneIndices[vertexId].Add(boneIndex);
+                        vertexBoneWeights[vertexId].Add(weight.Weight);
+                    }
+                }
+            }
+            
+            // Convert to Vector4 format (max 4 bones per vertex)
+            for (int i = 0; i < assimpMesh.VertexCount; i++)
+            {
+                var indices = vertexBoneIndices[i];
+                var weights = vertexBoneWeights[i];
+                
+                // Sort by weight (descending) and take top 4
+                if (indices.Count > 4)
+                {
+                    var combined = indices.Zip(weights, (idx, wgt) => new { Index = idx, Weight = wgt })
+                                         .OrderByDescending(x => x.Weight)
+                                         .Take(4)
+                                         .ToList();
+                    indices = combined.Select(x => x.Index).ToList();
+                    weights = combined.Select(x => x.Weight).ToList();
+                }
+                
+                // Normalize weights to sum to 1.0
+                float totalWeight = weights.Sum();
+                if (totalWeight > 0.001f)
+                {
+                    for (int j = 0; j < weights.Count; j++)
+                    {
+                        weights[j] /= totalWeight;
+                    }
+                }
+                
+                // Ensure we have exactly 4 entries (pad with zeros if needed)
+                while (indices.Count < 4)
+                {
+                    indices.Add(0);
+                    weights.Add(0f);
+                }
+                
+                // Create Vector4s
+                var boneIdx = new System.Numerics.Vector4(
+                    indices.Count > 0 ? indices[0] : 0,
+                    indices.Count > 1 ? indices[1] : 0,
+                    indices.Count > 2 ? indices[2] : 0,
+                    indices.Count > 3 ? indices[3] : 0
+                );
+                
+                var boneWgt = new System.Numerics.Vector4(
+                    weights.Count > 0 ? weights[0] : 0,
+                    weights.Count > 1 ? weights[1] : 0,
+                    weights.Count > 2 ? weights[2] : 0,
+                    weights.Count > 3 ? weights[3] : 0
+                );
+                
+                meshData.BoneIndices.Add(boneIdx);
+                meshData.BoneWeights.Add(boneWgt);
+            }
+            
+            System.Diagnostics.Debug.WriteLine($"[ModelImporter] Extracted bone weights for {assimpMesh.VertexCount} vertices ({assimpMesh.BoneCount} bones)");
+        }
+        
+        /// <summary>
+        /// Extracts bone hierarchy from Assimp scene
+        /// </summary>
+        private static void ExtractBoneHierarchy(Scene scene, ModelData modelData)
+        {
+            if (scene.RootNode == null) return;
+            
+            // First, collect all bones mentioned in meshes
+            var boneNames = new HashSet<string>();
+            foreach (var mesh in scene.Meshes)
+            {
+                if (mesh.HasBones)
+                {
+                    foreach (var bone in mesh.Bones)
+                    {
+                        boneNames.Add(bone.Name);
+                    }
+                }
+            }
+            
+            // If no bones found, return
+            if (boneNames.Count == 0) return;
+            
+            // Traverse node hierarchy and extract bones
+            TraverseNodeHierarchy(scene.RootNode, null, -1, boneNames, modelData, scene);
+        }
+        
+        /// <summary>
+        /// Recursively traverses node hierarchy to build bone list
+        /// </summary>
+        private static void TraverseNodeHierarchy(Node node, Node parent, int parentIndex, 
+            HashSet<string> boneNames, ModelData modelData, Scene scene)
+        {
+            int currentIndex = -1;
+            
+            // Check if this node is a bone
+            if (boneNames.Contains(node.Name))
+            {
+                currentIndex = modelData.Bones.Count;
+                
+                // Get offset matrix from mesh bones
+                var offsetMatrix = System.Numerics.Matrix4x4.Identity;
+                foreach (var mesh in scene.Meshes)
+                {
+                    if (mesh.HasBones)
+                    {
+                        foreach (var bone in mesh.Bones)
+                        {
+                            if (bone.Name == node.Name)
+                            {
+                                // Convert Assimp Matrix4x4 to System.Numerics.Matrix4x4
+                                offsetMatrix = ConvertMatrix(bone.OffsetMatrix);
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                var boneData = new BoneData
+                {
+                    Name = node.Name,
+                    OffsetMatrix = offsetMatrix,
+                    LocalTransform = ConvertMatrix(node.Transform),
+                    ParentIndex = parentIndex
+                };
+                
+                modelData.Bones.Add(boneData);
+                modelData.BoneNameToIndex[node.Name] = currentIndex;
+                
+                var t = node.Transform;
+                System.Diagnostics.Debug.WriteLine($"[ModelImporter] Found bone: {node.Name} | LocalPos: {t.A4},{t.B4},{t.C4}");
+            }
+            
+            // Recursively process children
+            foreach (var child in node.Children)
+            {
+                TraverseNodeHierarchy(child, node, currentIndex, boneNames, modelData, scene);
+            }
+        }
+        
+        /// <summary>
+        /// Converts Assimp Matrix4x4 to System.Numerics.Matrix4x4
+        /// IMPORTANT: Assimp uses ROW-major matrices, System.Numerics uses COLUMN-major
+        /// We need to TRANSPOSE the matrix (swap rows and columns)
+        /// </summary>
+        private static System.Numerics.Matrix4x4 ConvertMatrix(Assimp.Matrix4x4 m)
+        {
+            // Transpose: Assimp rows become System.Numerics columns
+            // This ensures translation components (A4, B4, C4) end up in M41, M42, M43
+            return new System.Numerics.Matrix4x4(
+                m.A1, m.B1, m.C1, m.D1,  // Column 1 (was Row 1)
+                m.A2, m.B2, m.C2, m.D2,  // Column 2 (was Row 2)
+                m.A3, m.B3, m.C3, m.D3,  // Column 3 (was Row 3)
+                m.A4, m.B4, m.C4, m.D4   // Column 4 (was Row 4) - TRANSLATION
+            );
         }
     }
 }

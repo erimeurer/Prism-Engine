@@ -713,10 +713,12 @@ namespace MonoGameEditor.Controls
                         return;
                     }
 
-                    // Create root GameObject
+                    // Create root GameObject - use first mesh name if available
                     var rootGO = new MonoGameEditor.Core.GameObject 
                     { 
-                        Name = modelData.Name 
+                        Name = (modelData.Meshes.Count > 0 && !string.IsNullOrEmpty(modelData.Meshes[0].Name)) 
+                            ? modelData.Meshes[0].Name 
+                            : modelData.Name
                     };
                     
                     // Position in front of camera
@@ -727,6 +729,10 @@ namespace MonoGameEditor.Controls
                     }
 
                     // Create child GameObject for each mesh
+                    var meshRenderers = new List<MonoGameEditor.Core.Components.ModelRendererComponent>();
+                    
+                    ConsoleViewModel.Log($"[MonoGameControl] TRACE: About to create {modelData.Meshes.Count} mesh children");
+                    
                     foreach (var meshData in modelData.Meshes)
                     {
                         var childGO = new MonoGameEditor.Core.GameObject
@@ -734,18 +740,51 @@ namespace MonoGameEditor.Controls
                             Name = meshData.Name
                         };
 
-                        // Add ModelRendererComponent with mesh-specific data
-                        var renderer = new MonoGameEditor.Core.Components.ModelRendererComponent();
-                        renderer.SetMeshData(meshData, file); // Pass original file path
+                        // Use SkinnedModelRenderer if model has bones, otherwise regular renderer
+                        MonoGameEditor.Core.Components.ModelRendererComponent renderer;
+                        
+                        if (modelData.Bones.Count > 0)
+                        {
+                            renderer = new MonoGameEditor.Core.Components.SkinnedModelRendererComponent();
+                            ConsoleViewModel.Log($"[MonoGameControl] Using SkinnedModelRenderer for '{meshData.Name}'");
+                        }
+                        else
+                        {
+                            renderer = new MonoGameEditor.Core.Components.ModelRendererComponent();
+                        }
+                        
+                        renderer.SetMeshData(meshData, file);
                         childGO.AddComponent(renderer);
+                        meshRenderers.Add(renderer);
 
                         // Add as child
                         rootGO.AddChild(childGO);
                     }
 
+                    // Create bone hierarchy if model has bones
+                    List<MonoGameEditor.Core.GameObject> boneObjects = null;
+                    
+                    // DEBUG: Check if model has bones
+                    ConsoleViewModel.Log($"[MonoGameControl] Model '{modelData.Name}' has {modelData.Bones.Count} bones");
+                    
+                    if (modelData.Bones.Count > 0)
+                    {
+                        boneObjects = CreateBoneHierarchy(rootGO, modelData);
+                        
+                        // Connect bones to all skinned renderers
+                        foreach (var renderer in meshRenderers)
+                        {
+                            if (renderer is MonoGameEditor.Core.Components.SkinnedModelRendererComponent skinnedRenderer)
+                            {
+                                skinnedRenderer.SetBones(boneObjects, modelData.Bones.Select(b => b.OffsetMatrix).ToList());
+                                ConsoleViewModel.Log($"[MonoGameControl] Connected {boneObjects.Count} bones to renderer");
+                            }
+                        }
+                    }
+
                     Core.SceneManager.Instance.RootObjects.Add(rootGO);
                     
-                    ConsoleViewModel.Log($"[MonoGameControl] Successfully created '{rootGO.Name}' with {modelData.Meshes.Count} mesh(es)");
+                    ConsoleViewModel.Log($"[MonoGameControl] Successfully created '{rootGO.Name}' with {modelData.Meshes.Count} mesh(es) and {modelData.Bones.Count} bone(s)");
                     
                     if (MainViewModel.Instance != null)
                         MainViewModel.Instance.Inspector.SelectedObject = rootGO;
@@ -820,6 +859,107 @@ namespace MonoGameEditor.Controls
                 base.Dispose(disposing);
             }
             catch { }
+        }
+        
+        /// <summary>
+        /// Creates GameObject hierarchy for bones
+        /// </summary>
+        private List<MonoGameEditor.Core.GameObject> CreateBoneHierarchy(MonoGameEditor.Core.GameObject parent, MonoGameEditor.Core.Assets.ModelData modelData)
+        {
+            var boneObjects = new List<MonoGameEditor.Core.GameObject>();
+            
+            // Create GameObject for each bone
+            foreach (var bone in modelData.Bones)
+            {
+                var boneGO = new MonoGameEditor.Core.GameObject
+                {
+                    Name = bone.Name
+                };
+                
+                // Convert System.Numerics matrix to XNA Matrix
+                var m = bone.LocalTransform;
+                var xnaMatrix = new Microsoft.Xna.Framework.Matrix(
+                    m.M11, m.M12, m.M13, m.M14,
+                    m.M21, m.M22, m.M23, m.M24,
+                    m.M31, m.M32, m.M33, m.M34,
+                    m.M41, m.M42, m.M43, m.M44
+                );
+                
+                // Decompose matrix to set Transform properties
+                xnaMatrix.Decompose(out var scale, out var rotation, out var translation);
+                
+                boneGO.Transform.LocalPosition = translation;
+                boneGO.Transform.LocalRotation = ToEulerAngles(rotation);
+                boneGO.Transform.LocalScale = scale;
+                
+                boneObjects.Add(boneGO);
+                ConsoleViewModel.Log($"[MonoGameControl] Bone: {bone.Name} at {translation}");
+            }
+            
+            // Build hierarchy (parent-child relationships)
+            for (int i = 0; i < modelData.Bones.Count; i++)
+            {
+                var bone = modelData.Bones[i];
+                var boneGO = boneObjects[i];
+                
+                if (bone.ParentIndex >= 0 && bone.ParentIndex < boneObjects.Count)
+                {
+                    // Has parent bone - add as child of parent bone
+                    boneObjects[bone.ParentIndex].AddChild(boneGO);
+                }
+                else
+                {
+                    // Root bone - add as child of model root
+                    parent.AddChild(boneGO);
+                }
+            }
+            
+            // DEBUG: After hierarchy is built, log world positions
+            ConsoleViewModel.Log($"[MonoGameControl] === Bone Hierarchy Built - Bind Pose Applied ===");
+            for (int i = 0; i < Math.Min(3, boneObjects.Count); i++)
+            {
+                var boneGO = boneObjects[i];
+                ConsoleViewModel.Log($"[MonoGameControl] Bone[{i}] '{boneGO.Name}': BindPose={boneGO.Transform.LocalPosition}");
+            }
+            
+            ConsoleViewModel.Log($"[MonoGameControl] Created bone hierarchy with {modelData.Bones.Count} bones");
+            return boneObjects;
+        }
+
+        private static Microsoft.Xna.Framework.Vector3 ToEulerAngles(Microsoft.Xna.Framework.Quaternion q)
+        {
+            // Convert Quaternion to Euler angles (Pitch, Yaw, Roll)
+            // Math derived from: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+            
+            float sqw = q.W * q.W;
+            float sqx = q.X * q.X;
+            float sqy = q.Y * q.Y;
+            float sqz = q.Z * q.Z;
+            
+            // Pitch (x-axis rotation)
+            float sinr_cosp = 2 * (q.W * q.X + q.Y * q.Z);
+            float cosr_cosp = 1 - 2 * (sqx + sqy);
+            float pitch = (float)System.Math.Atan2(sinr_cosp, cosr_cosp);
+
+            // Yaw (y-axis rotation)
+            float sinp = 2 * (q.W * q.Y - q.Z * q.X);
+            float yaw;
+            if (System.Math.Abs(sinp) >= 1)
+                yaw = (float)System.Math.CopySign(MathHelper.Pi / 2, sinp);
+            else
+                yaw = (float)System.Math.Asin(sinp);
+
+            // Roll (z-axis rotation)
+            float siny_cosp = 2 * (q.W * q.Z + q.X * q.Y);
+            float cosy_cosp = 1 - 2 * (sqy + sqz);
+            float roll = (float)System.Math.Atan2(siny_cosp, cosy_cosp);
+
+            // Convert to degrees for Transform component
+            return new Microsoft.Xna.Framework.Vector3(
+                MathHelper.ToDegrees(pitch),
+                MathHelper.ToDegrees(yaw),
+                MathHelper.ToDegrees(roll)
+            );
         }
     }
 }

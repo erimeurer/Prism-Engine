@@ -117,6 +117,10 @@ namespace MonoGameEditor.ViewModels
                 var files = Directory.GetFiles(SelectedDirectory.FullPath);
                 foreach (var file in files)
                 {
+                    // Skip .meta files
+                    if (file.EndsWith(".meta", StringComparison.OrdinalIgnoreCase))
+                        continue;
+                        
                     GridItems.Add(new FileItemViewModel(file));
                 }
             }

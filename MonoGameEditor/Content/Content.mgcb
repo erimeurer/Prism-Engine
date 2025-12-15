@@ -29,6 +29,12 @@
 /processorParam:DebugMode=Auto
 /build:Shaders/ToneMap.fx
 
+#begin Shaders/SkinnedPBR.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Shaders/SkinnedPBR.fx
+
 #begin Shaders/Unlit.fx
 /importer:EffectImporter
 /processor:EffectProcessor

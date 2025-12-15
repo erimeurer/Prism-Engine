@@ -31,6 +31,8 @@ namespace MonoGameEditor.Core.Materials
             }
         }
         
+        public string? ShaderPath { get; set; }
+        
         // Base Properties
         public Color AlbedoColor
         {

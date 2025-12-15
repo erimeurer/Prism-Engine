@@ -156,15 +156,27 @@ namespace MonoGameEditor.Core
             set { var s = _localScale; s.Z = value; LocalScale = s; }
         }
 
+        /// <summary>
+        /// Local transformation matrix (without parent)
+        /// Used for skeletal animation bone calculations
+        /// </summary>
+        public Matrix LocalMatrix
+        {
+            get
+            {
+                return Matrix.CreateScale(_localScale) *
+                       Matrix.CreateRotationX(MathHelper.ToRadians(_localRotation.X)) *
+                       Matrix.CreateRotationY(MathHelper.ToRadians(_localRotation.Y)) *
+                       Matrix.CreateRotationZ(MathHelper.ToRadians(_localRotation.Z)) *
+                       Matrix.CreateTranslation(_localPosition);
+            }
+        }
+
         public Matrix WorldMatrix
         {
             get
             {
-                var localMat = Matrix.CreateScale(_localScale) *
-                               Matrix.CreateRotationX(MathHelper.ToRadians(_localRotation.X)) *
-                               Matrix.CreateRotationY(MathHelper.ToRadians(_localRotation.Y)) *
-                               Matrix.CreateRotationZ(MathHelper.ToRadians(_localRotation.Z)) *
-                               Matrix.CreateTranslation(_localPosition);
+                var localMat = LocalMatrix;
 
                 if (GameObject?.Parent != null)
                 {
