@@ -121,7 +121,7 @@ namespace MonoGameEditor.Core.Components
         }
 
         // For hierarchical meshes - stores the original model file path
-        private string _originalModelPath;
+        protected string _originalModelPath;
         public string OriginalModelPath
         {
             get => _originalModelPath;
@@ -233,6 +233,15 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         public async void OnComponentAdded()
         {
+            // CRITICAL: Don't reload during scene deserialization!
+            // SceneSerializer will call InitializeAfterSceneLoad() when ready
+            if (MonoGameEditor.IO.SceneSerializer.IsLoadingScene)
+            {
+                ConsoleViewModel.Log($"[ModelRenderer] Skipping OnComponentAdded reload for {GameObject?.Name} - scene is loading");
+                _needsPostSceneLoadInit = true;
+                return;
+            }
+            
             // If we have OriginalModelPath but no _meshData, reload from file
             if (!string.IsNullOrEmpty(_originalModelPath) && _meshData == null)
             {
@@ -252,6 +261,112 @@ namespace MonoGameEditor.Core.Components
                     }
                 }
             }
+        }
+        
+        // Flag to indicate this component needs initialization after scene loading
+        private bool _needsPostSceneLoadInit = false;
+        
+        /// <summary>
+        /// Called by SceneSerializer after scene hierarchy is fully restored
+        /// </summary>
+        public async Task InitializeAfterSceneLoad()
+        {
+            if (!_needsPostSceneLoadInit)
+                return;
+                
+            _needsPostSceneLoadInit = false;
+            
+            ConsoleViewModel.Log($"[ModelRenderer] Post-scene-load init for {GameObject?.Name} (ID: {GameObject?.Id})");
+            
+            // Reload mesh data
+            await ReloadMeshDataOnly();
+        }
+        
+        /// <summary>
+        /// Reloads ONLY the mesh geometry data without recreating bone hierarchy
+        /// Used after scene deserialization to populate _meshData
+        /// </summary>
+        private async Task ReloadMeshDataOnly()
+        {
+            if (string.IsNullOrEmpty(_originalModelPath) || _meshData != null)
+                return;
+                
+            ConsoleViewModel.Log($"[ModelRenderer] Reloading mesh data only for {GameObject?.Name}");
+            
+            var modelData = await Assets.ModelImporter.LoadModelDataAsync(_originalModelPath);
+            if (modelData != null && modelData.Meshes.Count > 0)
+            {
+                // Find which mesh we are by GameObject name
+                var myMeshData = modelData.Meshes.FirstOrDefault(m => m.Name == GameObject?.Name);
+                if (myMeshData != null)
+                {
+                    _meshData = myMeshData;
+                    ClearResources(); // Invalidate resources so buffers get recreated
+                    ConsoleViewModel.Log($"[ModelRenderer] Mesh data reloaded for '{GameObject?.Name}'");
+                    
+                    // CRITICAL: If this is a SkinnedModelRendererComponent, reconnect to bones
+                    if (this is SkinnedModelRendererComponent skinnedComp && GameObject != null)
+                    {
+                        ConsoleViewModel.Log($"[ModelRenderer] Attempting to reconnect bones for {GameObject.Name} (ID: {GameObject.Id})");
+                        ConsoleViewModel.Log($"[ModelRenderer] GameObject position: {GameObject.Transform.LocalPosition}");
+                        
+                        // Bones are siblings of this mesh (children of parent GameObject)
+                        var searchRoot = GameObject.Parent ?? GameObject;
+                        ConsoleViewModel.Log($"[ModelRenderer] Searching in '{searchRoot.Name}' which has {searchRoot.Children.Count} children");
+                        
+                        // Find bones in the hierarchy that were loaded from scene
+                        var bones = new List<GameObject>();
+                        var offsetMatrices = new List<System.Numerics.Matrix4x4>();
+                        
+                        // The bones should be siblings of this GameObject (loaded from scene)
+                        foreach (var boneData in modelData.Bones)
+                        {
+                            // Find the bone GameObject by name in the search root's hierarchy
+                            var boneObj = FindChildByName(searchRoot, boneData.Name);
+                            if (boneObj != null)
+                            {
+                                bones.Add(boneObj);
+                                offsetMatrices.Add(boneData.OffsetMatrix);
+                                ConsoleViewModel.Log($"[ModelRenderer] Found bone: {boneData.Name} at local pos {boneObj.Transform.LocalPosition}");
+                            }
+                            else
+                            {
+                                ConsoleViewModel.Log($"[ModelRenderer] WARNING: Bone '{boneData.Name}' not found in hierarchy!");
+                            }
+                        }
+                        
+                        if (bones.Count > 0)
+                        {
+                            ConsoleViewModel.Log($"[ModelRenderer] Reconnecting {bones.Count} bones for skinned mesh");
+                            skinnedComp.SetBones(bones, offsetMatrices);
+                        }
+                        else
+                        {
+                            ConsoleViewModel.Log($"[ModelRenderer] ERROR: No bones found to reconnect!");
+                        }
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Helper to find a child GameObject by name recursively
+        /// </summary>
+        private GameObject FindChildByName(GameObject parent, string name)
+        {
+            if (parent == null) return null;
+            
+            foreach (var child in parent.Children)
+            {
+                if (child.Name == name)
+                    return child;
+                    
+                var found = FindChildByName(child, name);
+                if (found != null)
+                    return found;
+            }
+            
+            return null;
         }
 
         /// <summary>
@@ -1063,6 +1178,19 @@ namespace MonoGameEditor.Core.Components
                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, resources.IndexBuffer.IndexCount / 3);
             }
 
+            // CRITICAL: Clean up graphics device state to prevent leaking to next object
+            // This prevents:
+            // 1. Objects inheriting textures from previous objects
+            // 2. Objects becoming invisible due to wrong buffers/state
+            device.SetVertexBuffer(null);
+            device.Indices = null;
+            
+            // Clear all texture samplers to prevent texture bleeding
+            for (int i = 0; i < 16; i++)
+            {
+                device.Textures[i] = null;
+            }
+
             // Restore previous state
             device.RasterizerState = previousRasterizerState;
         }
@@ -1266,7 +1394,7 @@ namespace MonoGameEditor.Core.Components
         /// Draws the model using a custom effect (e.g. Shadow Depth shader)
         /// overrideWorld: Optional custom matrix
         /// </summary>
-        public void DrawWithCustomEffect(Effect customEffect, Matrix lightViewProj)
+        public virtual void DrawWithCustomEffect(Effect customEffect, Matrix lightViewProj)
         {
             // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] Request Draw {GameObject.Name}");
 

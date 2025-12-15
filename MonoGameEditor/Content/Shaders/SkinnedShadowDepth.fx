@@ -1,6 +1,5 @@
-// Shadow Depth Shader
-// Renders linear depth to texture (R32F or similar)
-// Supports both regular and skinned models
+// Skinned Shadow Depth Shader
+// Renders linear depth to texture with skeletal animation support
 
 float4x4 World;
 float4x4 LightViewProjection;
@@ -9,10 +8,11 @@ float4x4 LightViewProjection;
 #define MAX_BONES 128
 float4x4 Bones[MAX_BONES];
 
-// ===== REGULAR (Non-Skinned) =====
 struct VertexShaderInput
 {
     float4 Position : POSITION0;
+    float4 BoneIndices : BLENDINDICES0;
+    float4 BoneWeights : BLENDWEIGHT0;
 };
 
 struct VertexShaderOutput
@@ -22,28 +22,6 @@ struct VertexShaderOutput
 };
 
 VertexShaderOutput MainVS(VertexShaderInput input)
-{
-    VertexShaderOutput output;
-    
-    // Transform to light space
-    float4 worldPos = mul(input.Position, World);
-    output.Position = mul(worldPos, LightViewProjection);
-    
-    // Pass depth (Z, W) for perspective divide
-    output.Depth = output.Position.zw;
-    
-    return output;
-}
-
-// ===== SKINNED =====
-struct SkinnedVertexInput
-{
-    float4 Position : POSITION0;
-    float4 BoneIndices : BLENDINDICES0;
-    float4 BoneWeights : BLENDWEIGHT0;
-};
-
-VertexShaderOutput SkinnedVS(SkinnedVertexInput input)
 {
     VertexShaderOutput output;
     
@@ -74,7 +52,6 @@ VertexShaderOutput SkinnedVS(SkinnedVertexInput input)
     return output;
 }
 
-// ===== PIXEL SHADER (Shared) =====
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
     // Linear Depth = Z / W (0..1 range)
@@ -84,21 +61,11 @@ float4 MainPS(VertexShaderOutput input) : COLOR
     return float4(depth, 0, 0, 1);
 }
 
-// ===== TECHNIQUES =====
 technique ShadowDepth
 {
     pass P0
     {
         VertexShader = compile vs_4_0 MainVS();
-        PixelShader = compile ps_4_0 MainPS();
-    }
-}
-
-technique SkinnedShadowDepth
-{
-    pass P0
-    {
-        VertexShader = compile vs_4_0 SkinnedVS();
         PixelShader = compile ps_4_0 MainPS();
     }
 }

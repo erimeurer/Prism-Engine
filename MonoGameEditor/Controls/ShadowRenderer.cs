@@ -31,15 +31,15 @@ namespace MonoGameEditor.Controls
         {
             try
             {
-                // Load XNB via ContentManager
+                // Load shadow depth shader (contains both regular and skinned techniques)
                 _shadowDepthEffect = content.Load<Effect>("Shaders/ShadowDepth");
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log("[ShadowRenderer] ShadowDepth shader loaded successfully (XNB)");
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log("[ShadowRenderer] ShadowDepth shader loaded with techniques: " + 
+                    string.Join(", ", _shadowDepthEffect.Techniques.Select(t => t.Name)));
             }
             catch (System.Exception ex) 
             { 
-                 MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Exception loading shader: {ex.Message}");
+                 MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Failed to load ShadowDepth: {ex.Message}");
             }
-
         }
 
         public void UpdateResolution(int newSize)
@@ -118,10 +118,6 @@ namespace MonoGameEditor.Controls
             
             LightViewProjection = view * projection;
             
-            // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] LightPos: {lightPos} Dir: {lightDir}");
-            // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] View: {view.Forward}"); 
-            // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Proj: {projection.M11}");
-
             // 2. Setup Render Target
             _graphicsDevice.SetRenderTarget(_shadowMap);
             _graphicsDevice.Clear(Color.White); // Depth 1.0 = Far
@@ -131,7 +127,7 @@ namespace MonoGameEditor.Controls
             _graphicsDevice.DepthStencilState = DepthStencilState.Default;
             _graphicsDevice.RasterizerState = RasterizerState.CullClockwise; // Backface culling = minimal bias!
             
-            // 3. Setup Effect
+            // Setup shadow shader
             if (_shadowDepthEffect != null)
             {
                 _shadowDepthEffect.Parameters["LightViewProjection"]?.SetValue(LightViewProjection);
@@ -140,28 +136,34 @@ namespace MonoGameEditor.Controls
         
         public void DrawObject(GameObject obj, ModelRendererComponent renderer)
         {
-            if (_shadowDepthEffect == null) 
-            {
-                 // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Skip {obj.Name}: Start NULL SHADER"); 
-                 return;
-            }
-            if (renderer == null) return;
+            if (_shadowDepthEffect == null || renderer == null) return;
             
             if (renderer.CastShadows == ShadowMode.Off) 
             {
-                 // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Skip {obj.Name}: CastShadows is OFF");
                  return;
             }
             
-            // Render logic
-            // We need to bypass the ModelRenderer's standard Draw because we want to use OUR shader (ShadowDepth)
-            // But ModelRenderer usually draws itself. 
-            // We'll implemented a dedicated "DrawDepth" helper or use local logic if we can access buffers.
-            // Since ModelRendererComponent encapsulates buffers privately, let's assume we add a "DrawWithEffect" method or similar.
+            // Choose the correct technique based on renderer type
+            bool isSkinned = renderer is SkinnedModelRendererComponent;
+            string techniqueName = isSkinned ? "SkinnedShadowDepth" : "ShadowDepth";
             
-            // For now, let's use a public method on ModelRendererComponent if we add one, or reflection, 
-            // OR simpler: Add DrawDepth(Effect effect) to ModelRendererComponent.
+            // DEBUG: Log technique selection
+            MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] Drawing {obj.Name} with technique: {techniqueName} (isSkinned={isSkinned})");
             
+            // Try to set the technique
+            var technique = _shadowDepthEffect.Techniques[techniqueName];
+            if (technique != null)
+            {
+                _shadowDepthEffect.CurrentTechnique = technique;
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] ✓ Technique '{techniqueName}' found and set");
+            }
+            else
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowRenderer] ❌ Technique '{techniqueName}' NOT FOUND!");
+                return; // Don't render if technique is missing
+            }
+            
+            // Render
             renderer.DrawWithCustomEffect(_shadowDepthEffect, LightViewProjection);
         }
 

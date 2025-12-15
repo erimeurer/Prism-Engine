@@ -4,7 +4,7 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>D:/git/Prism-Engine/MonoGameEditor/Content/Shaders/SkinnedPBR.fx</File>
+    <File>D:/git/Prism-Engine/MonoGameEditor/Content/Shaders/ShadowDepth.fx</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

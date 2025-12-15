@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using MonoGameEditor.Core;
+using MonoGameEditor.Core.Components;
 
 namespace MonoGameEditor.IO
 {
@@ -101,9 +102,14 @@ namespace MonoGameEditor.IO
 
             if (sceneData == null) return;
 
-            // Clear current scene
-            SceneManager.Instance.RootObjects.Clear();
-            SceneManager.Instance.SelectedObject = null;
+            // Set flag to prevent components from reloading assets during deserialization
+            _isLoadingScene = true;
+            
+            try
+            {
+                // Clear current scene
+                SceneManager.Instance.RootObjects.Clear();
+                SceneManager.Instance.SelectedObject = null;
 
             // 1. Recreate Objects from Data
             var idToObjMap = new Dictionary<Guid, GameObject>();
@@ -143,6 +149,8 @@ namespace MonoGameEditor.IO
                 go.Transform.LocalPosition = objData.LocalPosition;
                 go.Transform.LocalRotation = objData.LocalRotation;
                 go.Transform.LocalScale = objData.LocalScale;
+                
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Loaded {go.Name} (ID: {go.Id}) at position {objData.LocalPosition}");
 
                 // Re-add components
                 foreach (var compData in objData.Components)
@@ -173,9 +181,19 @@ namespace MonoGameEditor.IO
 
                         go.AddComponent(comp);
                         
+                        // Log when adding component
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Added {type.Name} to {go.Name} (ID: {go.Id})");
+                        
                         // Call OnComponentAdded if it exists (for re-initialization after deserialization)
                         var onAddedMethod = type.GetMethod("OnComponentAdded");
-                        onAddedMethod?.Invoke(comp, null);
+                        if (onAddedMethod != null)
+                        {
+                            onAddedMethod.Invoke(comp, null);
+                        }
+                    }
+                    else if (type != null)
+                    {
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] WARNING: Could not create instance of {compData.TypeName}");
                     }
                 }
 
@@ -211,6 +229,35 @@ namespace MonoGameEditor.IO
                     parent.AddChild(child);
                 }
             }
+            
+            // 3. Initialize components that need post-load setup
+            MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Initializing {idToObjMap.Count} objects post-load");
+            
+            foreach (var obj in idToObjMap.Values)
+            {
+                foreach (var component in obj.Components)
+                {
+                    if (component is ModelRendererComponent renderer)
+                    {
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Calling InitializeAfterSceneLoad for {obj.Name} (ID: {obj.Id})");
+                        _ = renderer.InitializeAfterSceneLoad();
+                    }
+                }
+            }
+        }
+        finally
+        {
+            // Always reset flag when done loading
+            _isLoadingScene = false;
         }
     }
+    
+    // Flag to prevent asset reloading during scene deserialization
+    private static bool _isLoadingScene = false;
+    
+    /// <summary>
+    /// Returns true if we're currently loading a scene (used to prevent asset reloading)
+    /// </summary>
+    public static bool IsLoadingScene => _isLoadingScene;
+}
 }
