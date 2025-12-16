@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using WinForms = System.Windows.Forms;
 using MonoGameEditor.ViewModels;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Controls
 {
@@ -28,6 +29,7 @@ namespace MonoGameEditor.Controls
         private RenderTarget2D? _hdrRenderTarget;
         private ToneMapRenderer? _toneMapRenderer;
         private ShadowRenderer? _shadowRenderer;
+        private SelectionOutlineRenderer? _outlineRenderer;
         private Microsoft.Xna.Framework.Content.ContentManager? _ownContentManager;
         
         // Static property to access MonoGameControl's ContentManager
@@ -165,6 +167,11 @@ namespace MonoGameEditor.Controls
                 ConsoleViewModel.Log($"[MonoGameControl] ❌ Shadow renderer failed: {ex.Message}");
             }
             
+            // Initialize Selection Box (simple wireframe)
+            _outlineRenderer = new SelectionOutlineRenderer();
+            _outlineRenderer.Initialize(GraphicsDevice!);
+            ConsoleViewModel.Log("[MonoGameControl] ✅ Selection box initialized!");
+            
             ResizeHDRTarget(Width, Height);
 
             InitializeToolbar();
@@ -273,6 +280,13 @@ namespace MonoGameEditor.Controls
             deltaTime = Math.Min(deltaTime, 0.1f);
             
             ProcessKeyboardInput(deltaTime);
+            
+            // Update scripts (only in Play mode)
+            if (ViewModels.MainViewModel.Instance?.IsPlaying == true)
+            {
+                var gameTime = new GameTime(currentTime, TimeSpan.FromSeconds(deltaTime));
+                ScriptManager.Instance.UpdateScripts(gameTime);
+            }
             
             Invalidate(); // Triggers OnPaint
         }
@@ -607,6 +621,16 @@ namespace MonoGameEditor.Controls
                          else if (vm.ActiveTool == TransformTool.Rotate)
                              _rotationGizmo?.Draw(_camera, selectedObj.Transform.Position);
                      }
+                }
+                
+                // Render selection outline
+                if (_outlineRenderer != null)
+                {
+                    var selectedObj = MainViewModel.Instance?.Inspector?.SelectedObject as MonoGameEditor.Core.GameObject;
+                    if (selectedObj != null)
+                    {
+                        _outlineRenderer.RenderOutline(selectedObj, _camera.View, _camera.Projection);
+                    }
                 }
                 
                 // Restore depth state
@@ -963,3 +987,9 @@ namespace MonoGameEditor.Controls
         }
     }
 }
+
+
+
+
+
+

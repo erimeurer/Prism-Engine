@@ -233,6 +233,28 @@ namespace MonoGameEditor.Core.Assets
                                 }
                             }
 
+                            // Calculate local bounding box from vertices
+                            if (meshData.Vertices.Count > 0)
+                            {
+                                float minX = float.MaxValue, minY = float.MaxValue, minZ = float.MaxValue;
+                                float maxX = float.MinValue, maxY = float.MinValue, maxZ = float.MinValue;
+                                
+                                foreach (var v in meshData.Vertices)
+                                {
+                                    if (v.X < minX) minX = v.X;
+                                    if (v.Y < minY) minY = v.Y;
+                                    if (v.Z < minZ) minZ = v.Z;
+                                    if (v.X > maxX) maxX = v.X;
+                                    if (v.Y > maxY) maxY = v.Y;
+                                    if (v.Z > maxZ) maxZ = v.Z;
+                                }
+                                
+                                meshData.LocalBounds = new Microsoft.Xna.Framework.BoundingBox(
+                                    new Microsoft.Xna.Framework.Vector3(minX, minY, minZ),
+                                    new Microsoft.Xna.Framework.Vector3(maxX, maxY, maxZ)
+                                );
+                            }
+
                             totalVertices += meshData.Vertices.Count;
                             totalTriangles += meshData.Indices.Count / 3;
 

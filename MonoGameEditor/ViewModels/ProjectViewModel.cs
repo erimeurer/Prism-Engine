@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using MonoGameEditor.Core;
+using MonoGameEditor.ViewModels;
 
 namespace MonoGameEditor.ViewModels
 {
@@ -437,6 +438,97 @@ technique BasicColorDrawing
                 Console.WriteLine($"Error creating shader: {ex.Message}");
             }
         }
+
+        public ICommand CreateScriptCommand => new RelayCommand(CreateNewScript);
+
+        private void CreateNewScript(object param)
+        {
+            try
+            {
+                string parentPath = null;
+
+                if (param is DirectoryItemViewModel dirVm)
+                {
+                    parentPath = dirVm.FullPath;
+                }
+                else if (SelectedDirectory != null)
+                {
+                    parentPath = SelectedDirectory.FullPath;
+                }
+
+                if (string.IsNullOrEmpty(parentPath)) return;
+
+                // Generate unique name FIRST (before creating file)
+                string baseName = "NewScript";
+                string className = baseName;
+                string newPath = Path.Combine(parentPath, $"{className}.cs");
+                int counter = 1;
+                while (File.Exists(newPath))
+                {
+                    className = $"{baseName}{counter}";
+                    newPath = Path.Combine(parentPath, $"{className}.cs");
+                    counter++;
+                }
+
+                // Load template
+                string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ScriptTemplates", "NewScript.cs");
+                string template;
+                
+                if (File.Exists(templatePath))
+                {
+                    template = File.ReadAllText(templatePath);
+                }
+                else
+                {
+                    // Fallback template if file not found
+                    template = @"using MonoGameEditor.Core.Components;
+using Microsoft.Xna.Framework;
+
+public class {ClassName} : ScriptComponent
+{
+    public override string ComponentName => ""{ClassName}"";
+    
+    public override void Start()
+    {
+        // Called when the script is first initialized
+    }
+    
+    public override void Update(GameTime gameTime)
+    {
+        // Called every frame
+    }
+}
+";
+                }
+
+                // Replace class name with the FINAL unique name
+                template = template.Replace("NewScript", className).Replace("{ClassName}", className);
+
+                File.WriteAllText(newPath, template);
+
+                // Refresh directory view
+                if (SelectedDirectory != null && SelectedDirectory.FullPath == parentPath)
+                {
+                    LoadCurrentDirectory();
+
+                    // Find and put in rename mode so user can change the name if they want
+                    var newItem = GridItems.OfType<FileItemViewModel>().FirstOrDefault(x => x.FullPath == newPath);
+                    if (newItem != null)
+                    {
+                        newItem.IsRenaming = true;
+                    }
+                }
+
+                Console.WriteLine($"Created script: {newPath}");
+                ConsoleViewModel.Log($"[ProjectBrowser] Created C# script: {className}");
+                ConsoleViewModel.Log($"[ProjectBrowser] If you rename the file, the class name will update automatically");
+                ConsoleViewModel.Log($"[ProjectBrowser] Restart editor to compile scripts");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating script: {ex.Message}");
+            }
+        }
     }
 
     public abstract class FileSystemItemViewModel : ViewModelBase
@@ -503,6 +595,15 @@ technique BasicColorDrawing
                     }
                 }
                 
+                // Auto-add .cs extension for script files if missing
+                if (!IsDirectory && Path.GetExtension(FullPath).Equals(".cs", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!renamedText.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    {
+                        renamedText += ".cs";
+                    }
+                }
+                
                 string newPath = Path.Combine(parentDir, renamedText);
 
                 if (IsDirectory)
@@ -523,6 +624,40 @@ technique BasicColorDrawing
                         return;
                     }
                     File.Move(FullPath, newPath);
+                    
+                    // If it's a .cs file, update the class name inside
+                    if (Path.GetExtension(newPath).Equals(".cs", StringComparison.OrdinalIgnoreCase))
+                    {
+                        try
+                        {
+                            string oldClassName = Path.GetFileNameWithoutExtension(FullPath);
+                            string newClassName = Path.GetFileNameWithoutExtension(newPath);
+                            
+                            if (oldClassName != newClassName)
+                            {
+                                string content = File.ReadAllText(newPath);
+                                
+                                // Replace class declaration
+                                content = System.Text.RegularExpressions.Regex.Replace(
+                                    content,
+                                    $@"\bclass\s+{System.Text.RegularExpressions.Regex.Escape(oldClassName)}\b",
+                                    $"class {newClassName}");
+                                
+                                // Replace ComponentName if exists
+                                content = System.Text.RegularExpressions.Regex.Replace(
+                                    content,
+                                    $@"ComponentName\s*=>\s*""{System.Text.RegularExpressions.Regex.Escape(oldClassName)}""",
+                                    $"ComponentName => \"{newClassName}\"");
+                                
+                                File.WriteAllText(newPath, content);
+                                Console.WriteLine($"Updated class name from {oldClassName} to {newClassName}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error updating class name: {ex.Message}");
+                        }
+                    }
                 }
 
                 FullPath = newPath;

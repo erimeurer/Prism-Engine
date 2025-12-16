@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MonoGameEditor.ViewModels
@@ -228,6 +229,41 @@ namespace MonoGameEditor.ViewModels
             };
         }
 
+        /// <summary>
+        /// Open a C# script file in the Monaco Editor as a docked document
+        /// </summary>
+        public void OpenScriptEditor(string scriptPath)
+        {
+            if (string.IsNullOrEmpty(scriptPath))
+                return;
+
+            // Check if this script is already open
+            var existingDoc = Documents.OfType<ScriptEditorViewModel>()
+                .FirstOrDefault(d => d.ScriptPath == scriptPath);
+
+            if (existingDoc != null)
+            {
+                // Already open, just activate it
+                ActiveDocument = existingDoc;
+                return;
+            }
+
+            // Create new script editor document
+            var scriptEditor = new ScriptEditorViewModel
+            {
+                ScriptPath = scriptPath,
+                ScriptName = System.IO.Path.GetFileName(scriptPath),
+                Title = System.IO.Path.GetFileName(scriptPath),
+                ContentId = $"script_{System.IO.Path.GetFileName(scriptPath)}"
+            };
+
+            Documents.Add(scriptEditor);
+            ActiveDocument = scriptEditor;
+        }
+
+        // Scene state for Play mode restore
+        private string? _sceneStateBeforePlay = null;
+
         private void TogglePlay()
         {
             IsPlaying = !IsPlaying;
@@ -235,9 +271,24 @@ namespace MonoGameEditor.ViewModels
             {
                 IsPaused = false;
                 ActiveDocument = Scene; // Switch back to Scene on Stop
+                
+                // Restore scene state (properties only, no GPU resource destruction)
+                if (_sceneStateBeforePlay != null)
+                {
+                    IO.SceneSerializer.RestoreScenePropertiesFromString(_sceneStateBeforePlay);
+                    _sceneStateBeforePlay = null;
+                    ConsoleViewModel.LogInfo("Scene transforms restored");
+                }
+                
+                // Reset all scripts when exiting Play mode
+                Core.ScriptManager.Instance.ResetAllScripts();
             }
             else
             {
+                // Save scene state before entering Play mode
+                _sceneStateBeforePlay = IO.SceneSerializer.SerializeSceneToString();
+                ConsoleViewModel.LogInfo("Scene state saved for Play mode");
+                
                 ActiveDocument = Game; // Switch to Game on Play
             }
             ConsoleViewModel.Log(IsPlaying ? "Play Mode Started" : "Play Mode Stopped");

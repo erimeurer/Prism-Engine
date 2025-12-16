@@ -215,6 +215,29 @@
             </Expander>
         </DataTemplate>
         
+        <!-- ScriptComponent DataTemplate -->
+        <DataTemplate DataType="{x:Type components:ScriptComponent}">
+            <Expander IsExpanded="True" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding ComponentName}" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0" x:Name="ScriptBorder" Tag="{Binding}" Loaded="ScriptComponent_Loaded">
+                    <StackPanel x:Name="ScriptPropertiesPanel">
+                        <TextBlock Text="Script" Foreground="#888888" FontSize="10" FontStyle="Italic"/>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+        
         <!-- LightComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:LightComponent}">
             <Expander IsExpanded="True" Margin="0,0,0,4">
@@ -514,7 +537,9 @@
         
         <!-- GameObject Template -->
         <DataTemplate DataType="{x:Type core:GameObject}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" AllowDrop="True" 
+                          DragEnter="Inspector_DragEnter" DragLeave="Inspector_DragLeave" 
+                          Drop="Script_Drop" Background="Transparent">
                 <StackPanel Margin="8">
                     <!-- Object Header -->
                     <Border Background="#333337" CornerRadius="3" Padding="8,6" Margin="0,0,0,8">

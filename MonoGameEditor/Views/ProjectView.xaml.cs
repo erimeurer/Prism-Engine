@@ -69,6 +69,20 @@ namespace MonoGameEditor.Views
             }
             return null;
         }
+        
+        private void ListBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is System.Windows.Controls.ListBox listBox && listBox.SelectedItem is ViewModels.FileItemViewModel fileItem)
+            {
+                // Check if it's a C# script file
+                if (fileItem.FullPath.EndsWith(".cs", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    // Open as docked document in main editor
+                    ViewModels.MainViewModel.Instance?.OpenScriptEditor(fileItem.FullPath);
+                    e.Handled = true;
+                }
+            }
+        }
     }
 
     public static class FocusExtension
@@ -90,17 +104,16 @@ namespace MonoGameEditor.Views
         {
             if ((bool)e.NewValue)
             {
-                if (d is TextBox textBox)
+                if ( d is Control control)
                 {
-                    textBox.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new System.Action(() =>
+                    control.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input, new System.Action(() =>
                     {
-                        textBox.Focus();
-                        textBox.SelectAll();
+                        control.Focus();
+                        if (control is TextBox textBox)
+                        {
+                            textBox.SelectAll();
+                        }
                     }));
-                }
-                else if (d is Control control)
-                {
-                    control.Focus();
                 }
             }
         }

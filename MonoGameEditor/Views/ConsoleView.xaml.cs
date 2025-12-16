@@ -42,5 +42,16 @@ namespace MonoGameEditor.Views
         {
             MonoGameEditor.ViewModels.ConsoleViewModel.Instance.Clear();
         }
+
+        private void Tab_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.RadioButton rb && rb.Tag is string tag)
+            {
+                if (int.TryParse(tag, out int index))
+                {
+                    MonoGameEditor.ViewModels.ConsoleViewModel.Instance.SelectedTabIndex = index;
+                }
+            }
+        }
     }
 }

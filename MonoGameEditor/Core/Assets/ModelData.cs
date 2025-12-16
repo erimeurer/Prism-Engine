@@ -17,6 +17,9 @@ namespace MonoGameEditor.Core.Assets
         // Skeletal animation skinning data (up to 4 bones per vertex)
         public List<System.Numerics.Vector4> BoneIndices { get; set; } = new List<System.Numerics.Vector4>();
         public List<System.Numerics.Vector4> BoneWeights { get; set; } = new List<System.Numerics.Vector4>();
+        
+        // Cached bounding box in local space (calculated once during import)
+        public Microsoft.Xna.Framework.BoundingBox LocalBounds { get; set; }
     }
     
     /// <summary>

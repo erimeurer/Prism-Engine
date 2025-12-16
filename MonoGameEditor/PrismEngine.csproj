@@ -13,6 +13,8 @@
     <PackageReference Include="AssimpNet" Version="4.1.0" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2210.55" />
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
@@ -23,11 +25,18 @@
 
   <ItemGroup>
     <Resource Include="Resources\**\*.png" />
+    <None Include="Resources\MonacoEditor.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <!-- Copy built-in editor shaders to output directory -->
   <ItemGroup>
     <None Include="Content\bin\Windows\Content\Shaders\*.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Content\Shaders\%(Filename)%(Extension)</Link>
+    </None>
+    <None Include="Content\Content\Shaders\Outline.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>Content\Shaders\%(Filename)%(Extension)</Link>
     </None>

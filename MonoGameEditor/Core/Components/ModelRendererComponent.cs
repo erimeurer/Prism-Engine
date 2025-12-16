@@ -15,7 +15,7 @@ namespace MonoGameEditor.Core.Components
 
     public class ModelRendererComponent : Component
     {
-        protected class DeviceResources
+        public class DeviceResources
         {
             public VertexBuffer VertexBuffer { get; set; }
             public IndexBuffer IndexBuffer { get; set; }
@@ -198,11 +198,28 @@ namespace MonoGameEditor.Core.Components
             {
                 resources.VertexBuffer?.Dispose();
                 resources.IndexBuffer?.Dispose();
-                // Note: We don't dispose the Effect here as it might be shared effectively or managed by ContentManager in a real engine,
-                // but here we create them manually so we should probably dispose them or leave them for GC if detached.
-                // For safety in this specific architecture, let's treat them as unique per device instance.
             }
             _deviceResources.Clear();
+        }
+
+        /// <summary>
+        /// Get device resources for outline rendering (public access for SelectionOutlineRenderer)
+        /// </summary>
+        public DeviceResources GetDeviceResources(GraphicsDevice device)
+        {
+            if (_deviceResources.TryGetValue(device, out var resources))
+            {
+                return resources;
+            }
+            return null;
+        }
+        
+        /// <summary>
+        /// Get mesh data with cached bounds (for SelectionOutlineRenderer)
+        /// </summary>
+        public Assets.MeshData GetMeshData()
+        {
+            return _meshData;
         }
 
         public async void LoadModel()

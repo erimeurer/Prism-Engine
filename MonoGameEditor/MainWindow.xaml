@@ -6,6 +6,7 @@
         xmlns:dock="https://github.com/Dirkster99/AvalonDock"
         xmlns:dockThemes="clr-namespace:AvalonDock.Themes;assembly=AvalonDock.Themes.VS2013"
         xmlns:views="clr-namespace:MonoGameEditor.Views"
+        xmlns:vm="clr-namespace:MonoGameEditor.ViewModels"
         xmlns:localConverters="clr-namespace:MonoGameEditor.Converters"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="768" Width="1366"
@@ -55,6 +56,11 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
+        <!-- DataTemplate for Script Editor -->
+        <DataTemplate DataType="{x:Type vm:ScriptEditorViewModel}">
+            <views:ScriptEditorView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -63,6 +69,7 @@
             <RowDefinition Height="Auto" /> <!-- Menu -->
             <RowDefinition Height="40" /> <!-- Toolbar -->
             <RowDefinition Height="*" /> <!-- Content -->
+            <RowDefinition Height="28" /> <!-- Status Bar -->
         </Grid.RowDefinitions>
 
         <!-- Custom Title Bar -->
@@ -149,5 +156,16 @@
 
         <!-- Docking Content -->
         <views:EditorLayoutView Grid.Row="3" DataContext="{Binding}"/>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="4" Background="{Binding Console.StatusColor}" BorderBrush="#3F3F46" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" Margin="8,0" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Console.StatusText}" 
+                           Foreground="White" 
+                           FontWeight="SemiBold"
+                           FontSize="11"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

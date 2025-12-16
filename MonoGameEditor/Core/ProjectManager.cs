@@ -37,6 +37,12 @@ namespace MonoGameEditor.Core
             _shaderCompiler.StartMonitoring();
             
             ProjectLoaded?.Invoke();
+
+            // Fix any script class names that don't match filenames
+            Utilities.ScriptClassNameFixer.FixAllScriptsInProject();
+            
+            // Discover and compile scripts
+            ScriptManager.Instance.DiscoverAndCompileScripts();
         }
 
         public void CreateProject(string path)

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco Editor</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #1e1e1e;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+
+    <!-- Monaco Editor from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script>
+        let editor;
+        let customTypes = {}; // Store custom user types for autocomplete
+
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+
+            // ============== INTELLISENSE SETUP ==============
+
+            // Define built-in engine types and their members
+            const engineAPI = {
+                'GameObject': {
+                    kind: monaco.languages.CompletionItemKind.Class,
+                    documentation: 'Represents a game object in the scene',
+                    members: {
+                        'Name': { type: 'string', doc: 'The name of the GameObject' },
+                        'Transform': { type: 'Transform', doc: 'The Transform component of this GameObject' },
+                        'IsActive': { type: 'bool', doc: 'Whether this GameObject is active' },
+                        'GetComponent': {
+                            type: 'method',
+                            signature: 'T GetComponent<T>() where T : Component',
+                            doc: 'Gets a component of the specified type',
+                            insertText: 'GetComponent<${1:Component}>()',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        },
+                        'AddComponent': {
+                            type: 'method',
+                            signature: 'T AddComponent<T>() where T : Component',
+                            doc: 'Adds a component of the specified type',
+                            insertText: 'AddComponent<${1:Component}>()',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        },
+                        'GetComponentInChildren': {
+                            type: 'method',
+                            signature: 'T GetComponentInChildren<T>() where T : Component',
+                            doc: 'Gets a component in children',
+                            insertText: 'GetComponentInChildren<${1:Component}>()',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        },
+                        'AddChild': {
+                            type: 'method',
+                            signature: 'void AddChild(GameObject child)',
+                            doc: 'Adds a child GameObject',
+                            insertText: 'AddChild(${1:child})',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        }
+                    }
+                },
+                'Transform': {
+                    kind: monaco.languages.CompletionItemKind.Class,
+                    documentation: 'Component that holds position, rotation, and scale',
+                    members: {
+                        'Position': { type: 'Vector3', doc: 'World position of the transform' },
+                        'LocalPosition': { type: 'Vector3', doc: 'Local position relative to parent' },
+                        'Rotation': { type: 'Vector3', doc: 'Euler rotation in degrees (X, Y, Z)' },
+                        'LocalRotation': { type: 'Vector3', doc: 'Local rotation relative to parent' },
+                        'Scale': { type: 'Vector3', doc: 'Local scale of the transform' },
+                        'Forward': { type: 'Vector3', doc: 'The forward direction vector' },
+                        'Right': { type: 'Vector3', doc: 'The right direction vector' },
+                        'Up': { type: 'Vector3', doc: 'The up direction vector' },
+                        'WorldMatrix': { type: 'Matrix', doc: 'The world transformation matrix' }
+                    }
+                },
+                'Vector3': {
+                    kind: monaco.languages.CompletionItemKind.Struct,
+                    documentation: 'Represents a 3D vector',
+                    members: {
+                        'X': { type: 'float', doc: 'X component' },
+                        'Y': { type: 'float', doc: 'Y component' },
+                        'Z': { type: 'float', doc: 'Z component' },
+                        'Zero': { type: 'Vector3', doc: 'Shorthand for Vector3(0, 0, 0)', static: true },
+                        'One': { type: 'Vector3', doc: 'Shorthand for Vector3(1, 1, 1)', static: true },
+                        'UnitX': { type: 'Vector3', doc: 'Unit vector along X axis', static: true },
+                        'UnitY': { type: 'Vector3', doc: 'Unit vector along Y axis', static: true },
+                        'UnitZ': { type: 'Vector3', doc: 'Unit vector along Z axis', static: true },
+                        'Normalize': {
+                            type: 'method',
+                            signature: 'void Normalize()',
+                            doc: 'Normalizes this vector to unit length'
+                        },
+                        'Length': {
+                            type: 'method',
+                            signature: 'float Length()',
+                            doc: 'Returns the length of the vector'
+                        }
+                    }
+                },
+                'Component': {
+                    kind: monaco.languages.CompletionItemKind.Class,
+                    documentation: 'Base class for all components',
+                    members: {
+                        'GameObject': { type: 'GameObject', doc: 'The GameObject this component is attached to' },
+                        'IsEnabled': { type: 'bool', doc: 'Whether this component is enabled' }
+                    }
+                },
+                'ScriptComponent': {
+                    kind: monaco.languages.CompletionItemKind.Class,
+                    documentation: 'Base class for custom scripts',
+                    members: {
+                        'GameObject': { type: 'GameObject', doc: 'The GameObject this script is attached to' },
+                        'Transform': { type: 'Transform', doc: 'Shortcut to GameObject.Transform' },
+                        'Start': {
+                            type: 'method',
+                            signature: 'void Start()',
+                            doc: 'Called when the script is initialized'
+                        },
+                        'Update': {
+                            type: 'method',
+                            signature: 'void Update(GameTime gameTime)',
+                            doc: 'Called every frame'
+                        }
+                    }
+                },
+                'GameTime': {
+                    kind: monaco.languages.CompletionItemKind.Class,
+                    documentation: 'Provides timing information',
+                    members: {
+                        'TotalGameTime': { type: 'TimeSpan', doc: 'Total elapsed time since game start' },
+                        'ElapsedGameTime': { type: 'TimeSpan', doc: 'Time elapsed since last frame' }
+                    }
+                },
+                'Input': {
+                    kind: monaco.languages.CompletionItemKind.Class,
+                    documentation: 'Handle keyboard and mouse input',
+                    members: {
+                        'IsKeyDown': {
+                            type: 'method',
+                            signature: 'bool IsKeyDown(Keys key)',
+                            doc: 'Returns true if the specified key is currently pressed',
+                            insertText: 'IsKeyDown(Keys.${1:Space})',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        },
+                        'IsKeyPressed': {
+                            type: 'method',
+                            signature: 'bool IsKeyPressed(Keys key)',
+                            doc: 'Returns true if the specified key was just pressed this frame',
+                            insertText: 'IsKeyPressed(Keys.${1:Space})',
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                        },
+                        'GetMousePosition': {
+                            type: 'method',
+                            signature: 'Vector2 GetMousePosition()',
+                            doc: 'Returns the current mouse position'
+                        }
+                    }
+                }
+            };
+
+            // Register completion provider for C#
+            monaco.languages.registerCompletionItemProvider('csharp', {
+                triggerCharacters: ['.'],
+                provideCompletionItems: function (model, position) {
+                    const textUntilPosition = model.getValueInRange({
+                        startLineNumber: position.lineNumber,
+                        startColumn: 1,
+                        endLineNumber: position.lineNumber,
+                        endColumn: position.column
+                    });
+
+                    // Match patterns like "variableName." or "GameObject." or "Transform."
+                    const match = textUntilPosition.match(/(\w+)\.$/);
+
+                    if (match) {
+                        const objectName = match[1];
+
+                        // Try to determine type by name convention or known types
+                        let suggestions = [];
+
+                        // Check if it's a known type
+                        if (engineAPI[objectName]) {
+                            suggestions = createMemberSuggestions(engineAPI[objectName].members);
+                        }
+                        // Check custom types from user scripts
+                        else if (customTypes[objectName]) {
+                            suggestions = createMemberSuggestions(customTypes[objectName].members);
+                        }
+                        // Try to infer from common naming (e.g., "transform", "gameObject")
+                        else {
+                            const lowerName = objectName.toLowerCase();
+                            if (lowerName === 'transform') {
+                                suggestions = createMemberSuggestions(engineAPI['Transform'].members);
+                            } else if (lowerName === 'gameobject') {
+                                suggestions = createMemberSuggestions(engineAPI['GameObject'].members);
+                            } else if (lowerName === 'input') {
+                                suggestions = createMemberSuggestions(engineAPI['Input'].members);
+                            }
+                        }
+
+                        return { suggestions: suggestions };
+                    }
+
+                    // If no dot, provide general suggestions (types, keywords, etc.)
+                    const word = model.getWordUntilPosition(position);
+                    const range = {
+                        startLineNumber: position.lineNumber,
+                        endLineNumber: position.lineNumber,
+                        startColumn: word.startColumn,
+                        endColumn: word.endColumn
+                    };
+
+                    let generalSuggestions = [];
+
+                    // Add engine types
+                    for (const [typeName, typeInfo] of Object.entries(engineAPI)) {
+                        generalSuggestions.push({
+                            label: typeName,
+                            kind: typeInfo.kind,
+                            documentation: typeInfo.documentation,
+                            insertText: typeName,
+                            range: range
+                        });
+                    }
+
+                    // Add custom user types
+                    for (const [typeName, typeInfo] of Object.entries(customTypes)) {
+                        generalSuggestions.push({
+                            label: typeName,
+                            kind: monaco.languages.CompletionItemKind.Class,
+                            documentation: typeInfo.documentation || 'Custom script',
+                            insertText: typeName,
+                            range: range
+                        });
+                    }
+
+                    return { suggestions: generalSuggestions };
+                }
+            });
+
+            // Helper function to create member suggestions
+            function createMemberSuggestions(members) {
+                const suggestions = [];
+                for (const [memberName, memberInfo] of Object.entries(members)) {
+                    let kind;
+                    if (memberInfo.type === 'method') {
+                        kind = monaco.languages.CompletionItemKind.Method;
+                    } else {
+                        kind = monaco.languages.CompletionItemKind.Property;
+                    }
+
+                    suggestions.push({
+                        label: memberName,
+                        kind: kind,
+                        documentation: memberInfo.doc + (memberInfo.signature ? '\n\n' + memberInfo.signature : ''),
+                        insertText: memberInfo.insertText || memberName,
+                        insertTextRules: memberInfo.insertTextRules || monaco.languages.CompletionItemInsertTextRule.None,
+                        detail: memberInfo.type
+                    });
+                }
+                return suggestions;
+            }
+
+            // Register hover provider for tooltips
+            monaco.languages.registerHoverProvider('csharp', {
+                provideHover: function (model, position) {
+                    const word = model.getWordAtPosition(position);
+                    if (!word) return null;
+
+                    const wordText = word.word;
+
+                    // Check if it's a known engine type
+                    if (engineAPI[wordText]) {
+                        return {
+                            range: new monaco.Range(
+                                position.lineNumber,
+                                word.startColumn,
+                                position.lineNumber,
+                                word.endColumn
+                            ),
+                            contents: [
+                                { value: '**' + wordText + '**' },
+                                { value: engineAPI[wordText].documentation }
+                            ]
+                        };
+                    }
+
+                    // Check custom types
+                    if (customTypes[wordText]) {
+                        return {
+                            range: new monaco.Range(
+                                position.lineNumber,
+                                word.startColumn,
+                                position.lineNumber,
+                                word.endColumn
+                            ),
+                            contents: [
+                                { value: '**' + wordText + '**' },
+                                { value: customTypes[wordText].documentation || 'Custom script component' }
+                            ]
+                        };
+                    }
+
+                    // Try to infer variable type from context
+                    const variableType = inferVariableType(model, position, wordText);
+                    if (variableType) {
+                        const typeDoc = engineAPI[variableType]?.documentation ||
+                            customTypes[variableType]?.documentation ||
+                            '';
+
+                        return {
+                            range: new monaco.Range(
+                                position.lineNumber,
+                                word.startColumn,
+                                position.lineNumber,
+                                word.endColumn
+                            ),
+                            contents: [
+                                { value: `\`\`\`csharp\n${variableType} ${wordText}\n\`\`\`` },
+                                { value: typeDoc }
+                            ]
+                        };
+                    }
+
+                    return null;
+                }
+            });
+
+            // Helper function to infer variable type from code context
+            function inferVariableType(model, position, variableName) {
+                const allText = model.getValue();
+                const lines = allText.split('\n');
+
+                // Pattern 1: Explicit type declaration - "Type varName = ..."
+                const explicitPattern = new RegExp(`\\b(\\w+)\\s+${variableName}\\s*[=;]`, 'g');
+                const explicitMatch = allText.match(explicitPattern);
+                if (explicitMatch && explicitMatch.length > 0) {
+                    const match = explicitMatch[0].match(/\b(\w+)\s+/);
+                    if (match) return match[1];
+                }
+
+                // Pattern 2: var declaration with new - "var varName = new Type(...)"
+                const varNewPattern = new RegExp(`var\\s+${variableName}\\s*=\\s*new\\s+(\\w+)`, 'g');
+                const varNewMatch = allText.match(varNewPattern);
+                if (varNewMatch && varNewMatch.length > 0) {
+                    const match = varNewMatch[0].match(/new\s+(\w+)/);
+                    if (match) return match[1];
+                }
+
+                // Pattern 3: GetComponent<Type>() - "var varName = GetComponent<Type>()"
+                const getComponentPattern = new RegExp(`${variableName}\\s*=.*GetComponent<(\\w+)>`, 'g');
+                const getComponentMatch = allText.match(getComponentPattern);
+                if (getComponentMatch && getComponentMatch.length > 0) {
+                    const match = getComponentMatch[0].match(/GetComponent<(\w+)>/);
+                    if (match) return match[1];
+                }
+
+                // Pattern 4: AddComponent<Type>() - "var varName = AddComponent<Type>()"
+                const addComponentPattern = new RegExp(`${variableName}\\s*=.*AddComponent<(\\w+)>`, 'g');
+                const addComponentMatch = allText.match(addComponentPattern);
+                if (addComponentMatch && addComponentMatch.length > 0) {
+                    const match = addComponentMatch[0].match(/AddComponent<(\w+)>/);
+                    if (match) return match[1];
+                }
+
+                // Pattern 5: Class field/property - "public Type varName"
+                const fieldPattern = new RegExp(`(public|private|protected)\\s+(\\w+)\\s+${variableName}\\s*[=;]`, 'g');
+                const fieldMatch = allText.match(fieldPattern);
+                if (fieldMatch && fieldMatch.length > 0) {
+                    const match = fieldMatch[0].match(/(public|private|protected)\s+(\w+)\s+/);
+                    if (match) return match[2];
+                }
+
+                // Pattern 6: foreach - "foreach (Type varName in ...)"
+                const foreachPattern = new RegExp(`foreach\\s*\\(\\s*(\\w+)\\s+${variableName}\\s+in`, 'g');
+                const foreachMatch = allText.match(foreachPattern);
+                if (foreachMatch && foreachMatch.length > 0) {
+                    const match = foreachMatch[0].match(/foreach\s*\(\s*(\w+)\s+/);
+                    if (match) return match[1];
+                }
+
+                // Pattern 7: Method parameter - look for method containing current line
+                const currentLine = position.lineNumber;
+                for (let i = currentLine - 1; i >= Math.max(0, currentLine - 20); i--) {
+                    const line = lines[i];
+                    // Check if this is a method declaration
+                    if (line.match(/\b(void|public|private|protected|override)\s+/)) {
+                        const paramPattern = new RegExp(`\\b(\\w+)\\s+${variableName}\\b`);
+                        const paramMatch = line.match(paramPattern);
+                        if (paramMatch) return paramMatch[1];
+                    }
+                }
+
+                // Special handling for common variable names
+                const lowerName = variableName.toLowerCase();
+                if (lowerName === 'transform') return 'Transform';
+                if (lowerName === 'gameobject') return 'GameObject';
+                if (lowerName === 'gametime') return 'GameTime';
+                if (lowerName === 'position' || lowerName === 'velocity' || lowerName === 'rotation') return 'Vector3';
+
+                return null;
+            }
+
+            // ============== EDITOR CREATION ==============
+
+            editor = monaco.editor.create(document.getElementById('container'), {
+                value: '// Loading...',
+                language: 'csharp',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                fontSize: 14,
+                minimap: { enabled: true },
+                scrollBeyondLastLine: false,
+                wordWrap: 'off',
+                lineNumbers: 'on',
+                renderWhitespace: 'selection',
+                tabSize: 4,
+                insertSpaces: true,
+                suggestOnTriggerCharacters: true,
+                quickSuggestions: {
+                    other: true,
+                    comments: false,
+                    strings: false
+                }
+            });
+
+            // Notify WPF that editor is ready
+            if (window.chrome && window.chrome.webview) {
+                window.chrome.webview.postMessage({ type: 'ready' });
+            }
+
+            // Listen for content changes
+            editor.onDidChangeModelContent(() => {
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage({
+                        type: 'contentChanged',
+                        isDirty: true
+                    });
+                }
+            });
+
+            // Listen for cursor position changes
+            editor.onDidChangeCursorPosition((e) => {
+                if (window.chrome && window.chrome.webview) {
+                    window.chrome.webview.postMessage({
+                        type: 'cursorChanged',
+                        line: e.position.lineNumber,
+                        column: e.position.column
+                    });
+                }
+            });
+        });
+
+        // ============== FUNCTIONS CALLABLE FROM WPF ==============
+
+        function loadCode(content) {
+            if (editor) {
+                editor.setValue(content);
+                editor.setScrollPosition({ scrollTop: 0 });
+            }
+        }
+
+        function getCode() {
+            if (editor) {
+                // Return as base64 to avoid any escaping issues
+                const code = editor.getValue();
+                return btoa(unescape(encodeURIComponent(code)));
+            }
+            return '';
+        }
+
+        function setReadOnly(readOnly) {
+            if (editor) {
+                editor.updateOptions({ readOnly: readOnly });
+            }
+        }
+
+        // Register custom user types for autocomplete
+        function registerCustomType(typeName, members, documentation) {
+            customTypes[typeName] = {
+                members: members || {},
+                documentation: documentation || 'Custom script component'
+            };
+            console.log('Registered custom type:', typeName);
+        }
+
+        // Clear all custom types
+        function clearCustomTypes() {
+            customTypes = {};
+            console.log('Cleared custom types');
+        }
+    </script>
+</body>
+
+</html>

@@ -33,6 +33,93 @@ namespace MonoGameEditor.IO
             File.WriteAllText(filePath, json);
         }
 
+        /// <summary>
+        /// Serialize current scene to JSON string (for Play mode state restore)
+        /// </summary>
+        public static string SerializeSceneToString()
+        {
+            var sceneData = new SceneData();
+            
+            foreach (var rootObj in SceneManager.Instance.RootObjects)
+            {
+                CaptureObject(rootObj, sceneData);
+            }
+
+            return JsonSerializer.Serialize(sceneData, _options);
+        }
+
+        /// <summary>
+        /// Deserialize scene from JSON string (for Play mode state restore)
+        /// </summary>
+        public static void DeserializeSceneFromString(string json)
+        {
+            if (string.IsNullOrEmpty(json)) return;
+
+            var sceneData = JsonSerializer.Deserialize<SceneData>(json, _options);
+            if (sceneData == null) return;
+
+            // Set flag to prevent components from reloading assets during deserialization
+            _isLoadingScene = true;
+            
+            try
+            {
+                // Clear current scene
+                SceneManager.Instance.RootObjects.Clear();
+                SceneManager.Instance.SelectedObject = null;
+
+                // Rebuild scene from data (reuse LoadScene logic)
+                RestoreSceneFromData(sceneData);
+            }
+            finally
+            {
+                _isLoadingScene = false;
+            }
+        }
+
+        /// <summary>
+        /// Restore ONLY Transform properties from JSON (for Play mode restore without GPU bugs)
+        /// This updates existing GameObjects without destroying/recreating them
+        /// </summary>
+        public static void RestoreScenePropertiesFromString(string json)
+        {
+            if (string.IsNullOrEmpty(json)) return;
+
+            var sceneData = JsonSerializer.Deserialize<SceneData>(json, _options);
+            if (sceneData == null) return;
+
+            // Create a map of ID -> saved transform data
+            var transformData = new Dictionary<Guid, (Vector3 pos, Vector3 rot, Vector3 scale)>();
+            foreach (var objData in sceneData.Objects)
+            {
+                transformData[objData.Id] = (
+                    objData.LocalPosition,
+                    objData.LocalRotation,
+                    objData.LocalScale
+                );
+            }
+
+            // Recursively update transforms of existing GameObjects
+            RestoreTransformsRecursive(SceneManager.Instance.RootObjects, transformData);
+        }
+
+        private static void RestoreTransformsRecursive(
+            System.Collections.ObjectModel.ObservableCollection<GameObject> objects,
+            Dictionary<Guid, (Vector3 pos, Vector3 rot, Vector3 scale)> transformData)
+        {
+            foreach (var obj in objects)
+            {
+                if (transformData.TryGetValue(obj.Id, out var data))
+                {
+                    obj.Transform.LocalPosition = data.pos;
+                    obj.Transform.LocalRotation = data.rot;
+                    obj.Transform.LocalScale = data.scale;
+                }
+                
+                // Recurse into children
+                RestoreTransformsRecursive(obj.Children, transformData);
+            }
+        }
+
         private static void CaptureObject(GameObject go, SceneData data)
         {
             var goData = new GameObjectData
@@ -111,6 +198,20 @@ namespace MonoGameEditor.IO
                 SceneManager.Instance.RootObjects.Clear();
                 SceneManager.Instance.SelectedObject = null;
 
+                RestoreSceneFromData(sceneData);
+            }
+            finally
+            {
+                // Always reset flag when done loading
+                _isLoadingScene = false;
+            }
+        }
+
+        /// <summary>
+        /// Restore scene from SceneData (shared by LoadScene and DeserializeSceneFromString)
+        /// </summary>
+        private static void RestoreSceneFromData(SceneData sceneData)
+        {
             // 1. Recreate Objects from Data
             var idToObjMap = new Dictionary<Guid, GameObject>();
             var parentIds = new Dictionary<Guid, Guid>();
@@ -155,14 +256,37 @@ namespace MonoGameEditor.IO
                 // Re-add components
                 foreach (var compData in objData.Components)
                 {
-                    // Simple reflection to instantiate component
+                    // Try to create instance
+                    Component? comp = null;
+                    
+                    // First try normal Type.GetType
                     Type? type = Type.GetType(compData.TypeName);
-                    if (type != null && Activator.CreateInstance(type) is Component comp)
+                    
+                    // If that fails and it looks like a user script, try ScriptManager's compiled assembly
+                    if (type == null && !compData.TypeName.StartsWith("MonoGameEditor."))
                     {
+                        MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Type.GetType failed for '{compData.TypeName}', trying ScriptManager assembly");
+                        type = Core.ScriptManager.Instance.GetCompiledType(compData.TypeName);
+                    }
+                    
+                    if (type != null && Activator.CreateInstance(type) is Component c)
+                    {
+                        comp = c;
+                        MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Created instance of {type.Name}");
+                    }
+                    else
+                    {
+                        MonoGameEditor.ViewModels.ConsoleViewModel.LogWarning($"[SceneLoader] Failed to create component of type '{compData.TypeName}'");
+                    }
+                    
+                    if (comp != null)
+                    {
+                        var componentType = comp.GetType();
+                        
                         // Restore properties
                         foreach (var kvp in compData.Properties)
                         {
-                            var propInfo = type.GetProperty(kvp.Key);
+                            var propInfo = componentType.GetProperty(kvp.Key);
                             if (propInfo != null && propInfo.CanWrite)
                             {
                                 try
@@ -170,7 +294,7 @@ namespace MonoGameEditor.IO
                                     // Deserialize value from JSON
                                     var value = JsonSerializer.Deserialize(kvp.Value, propInfo.PropertyType, _options);
                                     propInfo.SetValue(comp, value);
-                                    System.Diagnostics.Debug.WriteLine($"Restored {type.Name}.{kvp.Key} = {value}");
+                                    System.Diagnostics.Debug.WriteLine($"Restored {componentType.Name}.{kvp.Key} = {value}");
                                 }
                                 catch (Exception ex)
                                 {
@@ -181,8 +305,14 @@ namespace MonoGameEditor.IO
 
                         go.AddComponent(comp);
                         
+                        // Reset started flag for ScriptComponents
+                        if (comp is Core.Components.ScriptComponent script)
+                        {
+                            script.ResetStartedFlag();
+                        }
+                        
                         // Log when adding component
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Added {type.Name} to {go.Name} (ID: {go.Id})");
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Added {componentType.Name} to {go.Name} (ID: {go.Id})");
                         
                         // Call OnComponentAdded if it exists (for re-initialization after deserialization)
                         var onAddedMethod = type.GetMethod("OnComponentAdded");
@@ -191,7 +321,7 @@ namespace MonoGameEditor.IO
                             onAddedMethod.Invoke(comp, null);
                         }
                     }
-                    else if (type != null)
+                    else
                     {
                         MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] WARNING: Could not create instance of {compData.TypeName}");
                     }
@@ -231,7 +361,7 @@ namespace MonoGameEditor.IO
             }
             
             // 3. Initialize components that need post-load setup
-            MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Initializing {idToObjMap.Count} objects post-load");
+            MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Initializing {idToObjMap.Count} objects post-load");
             
             foreach (var obj in idToObjMap.Values)
             {
@@ -239,18 +369,12 @@ namespace MonoGameEditor.IO
                 {
                     if (component is ModelRendererComponent renderer)
                     {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Calling InitializeAfterSceneLoad for {obj.Name} (ID: {obj.Id})");
+                        MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Reinitializing renderer for {obj.Name}");
                         _ = renderer.InitializeAfterSceneLoad();
                     }
                 }
             }
         }
-        finally
-        {
-            // Always reset flag when done loading
-            _isLoadingScene = false;
-        }
-    }
     
     // Flag to prevent asset reloading during scene deserialization
     private static bool _isLoadingScene = false;
