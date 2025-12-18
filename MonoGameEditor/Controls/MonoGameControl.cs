@@ -685,7 +685,7 @@ namespace MonoGameEditor.Controls
                 if (_outlineRenderer != null)
                 {
                     var selectedObj = MainViewModel.Instance?.Inspector?.SelectedObject as MonoGameEditor.Core.GameObject;
-                    if (selectedObj != null)
+                    if (selectedObj != null && selectedObj.IsActive)
                     {
                         _outlineRenderer.RenderOutline(selectedObj, _camera.View, _camera.Projection);
                     }
@@ -729,6 +729,8 @@ namespace MonoGameEditor.Controls
 
         private void RenderRecursively(MonoGameEditor.Core.GameObject node, Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
+            if (!node.IsActive) return;
+
             var modelRenderer = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.ModelRendererComponent) as MonoGameEditor.Core.Components.ModelRendererComponent;
             modelRenderer?.Draw(GraphicsDevice, _camera.View, _camera.Projection, _camera.Position, shadowMap, lightViewProj);
 

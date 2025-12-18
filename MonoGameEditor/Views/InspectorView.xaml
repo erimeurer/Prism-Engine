@@ -22,6 +22,11 @@
                 <x:Type TypeName="components:ShadowQuality"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <ObjectDataProvider x:Key="CapsuleDirectionEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="components:CapsuleDirection"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
         
         <!-- TextBox Style -->
         <Style x:Key="NumericTextBox" TargetType="TextBox">
@@ -36,13 +41,28 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         
-        <!-- Label Style -->
+        <!-- Axis Label Style (X, Y, Z) -->
         <Style x:Key="AxisLabel" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#888888"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Width" Value="14"/>
             <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="SizeWE"/>
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="NumericLabel_PreviewMouseLeftButtonDown"/>
+            <EventSetter Event="PreviewMouseMove" Handler="NumericLabel_PreviewMouseMove"/>
+            <EventSetter Event="PreviewMouseLeftButtonUp" Handler="NumericLabel_PreviewMouseLeftButtonUp"/>
+        </Style>
+
+        <!-- Generic Numeric Label Style -->
+        <Style x:Key="NumericLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#AAAAAA"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="SizeWE"/>
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="NumericLabel_PreviewMouseLeftButtonDown"/>
+            <EventSetter Event="PreviewMouseMove" Handler="NumericLabel_PreviewMouseMove"/>
+            <EventSetter Event="PreviewMouseLeftButtonUp" Handler="NumericLabel_PreviewMouseLeftButtonUp"/>
         </Style>
         
         <!-- Property Row Style -->
@@ -183,16 +203,24 @@
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Field of View" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding FieldOfView, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                            <TextBlock Text="Field of View" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=CamFovTb}"/>
+                            <TextBox x:Name="CamFovTb" Grid.Column="1" Text="{Binding FieldOfView, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
                         </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Near Clip" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding NearClip, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                            <TextBlock Text="Near Clip" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=CamNearTb}"/>
+                            <TextBox x:Name="CamNearTb" Grid.Column="1" Text="{Binding NearClip, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Far Clip" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=CamFarTb}"/>
+                            <TextBox x:Name="CamFarTb" Grid.Column="1" Text="{Binding FarClip, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
                         </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
@@ -280,16 +308,24 @@
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Intensity" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding Intensity, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                            <TextBlock Text="Intensity" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=LightIntensityTb}"/>
+                            <TextBox x:Name="LightIntensityTb" Grid.Column="1" Text="{Binding Intensity, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}" Width="80"/>
                         </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Range" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding Range, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                            <TextBlock Text="Range" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=LightRangeTb}"/>
+                            <TextBox x:Name="LightRangeTb" Grid.Column="1" Text="{Binding Range, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Spot Angle" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=LightAngleTb}"/>
+                            <TextBox x:Name="LightAngleTb" Grid.Column="1" Text="{Binding SpotAngle, StringFormat={}{0:F1}}" Style="{StaticResource NumericTextBox}" Width="80"/>
                         </Grid>
                         
                         <Grid Style="{StaticResource PropertyRow}">
@@ -343,27 +379,220 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="50"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Strength" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBlock Text="Strength" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=ShadowStrengthTb}"/>
                             <Slider Grid.Column="1" Value="{Binding ShadowStrength, Mode=TwoWay}" 
                                     Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True"
                                     VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBox Grid.Column="2" Text="{Binding ShadowStrength, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}"/>
+                            <TextBox x:Name="ShadowStrengthTb" Grid.Column="2" Text="{Binding ShadowStrength, StringFormat={}{0:F2}}" Style="{StaticResource NumericTextBox}"/>
                         </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Bias" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding ShadowBias, StringFormat={}{0:F4}}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                            <TextBlock Text="Bias" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=ShadowBiasTb}"/>
+                            <TextBox x:Name="ShadowBiasTb" Grid.Column="1" Text="{Binding ShadowBias, StringFormat={}{0:F4}}" Style="{StaticResource NumericTextBox}" Width="80"/>
                         </Grid>
                         <Grid Style="{StaticResource PropertyRow}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Resolution" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
-                            <TextBox Grid.Column="1" Text="{Binding ShadowResolution}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                            <TextBlock Text="Resolution" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=ShadowResTb}"/>
+                            <TextBox x:Name="ShadowResTb" Grid.Column="1" Text="{Binding ShadowResolution}" Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+
+        <!-- BoxColliderComponent DataTemplate -->
+        <DataTemplate DataType="{x:Type components:BoxColliderComponent}">
+            <Expander IsExpanded="True" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Box Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                    <StackPanel>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Is Trigger" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding IsTrigger}" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Center" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=BoxCenterXTb}"/>
+                                <TextBox x:Name="BoxCenterXTb" Text="{Binding CenterX, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=BoxCenterYTb}"/>
+                                <TextBox x:Name="BoxCenterYTb" Text="{Binding CenterY, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=BoxCenterZTb}"/>
+                                <TextBox x:Name="BoxCenterZTb" Text="{Binding CenterZ, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Size" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=BoxSizeXTb}"/>
+                                <TextBox x:Name="BoxSizeXTb" Text="{Binding SizeX, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=BoxSizeYTb}"/>
+                                <TextBox x:Name="BoxSizeYTb" Text="{Binding SizeY, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=BoxSizeZTb}"/>
+                                <TextBox x:Name="BoxSizeZTb" Text="{Binding SizeZ, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+
+        <!-- SphereColliderComponent DataTemplate -->
+        <DataTemplate DataType="{x:Type components:SphereColliderComponent}">
+            <Expander IsExpanded="True" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Sphere Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                    <StackPanel>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Is Trigger" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding IsTrigger}" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Center" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=SphereCenterXTb}"/>
+                                <TextBox x:Name="SphereCenterXTb" Text="{Binding CenterX, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=SphereCenterYTb}"/>
+                                <TextBox x:Name="SphereCenterYTb" Text="{Binding CenterY, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=SphereCenterZTb}"/>
+                                <TextBox x:Name="SphereCenterZTb" Text="{Binding CenterZ, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Radius" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=SphereRadiusTb}"/>
+                            <TextBox x:Name="SphereRadiusTb" Grid.Column="1" Text="{Binding Radius, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}" Width="60" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+
+        <!-- CapsuleColliderComponent DataTemplate -->
+        <DataTemplate DataType="{x:Type components:CapsuleColliderComponent}">
+            <Expander IsExpanded="True" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Capsule Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                    <StackPanel>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Is Trigger" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding IsTrigger}" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Center" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=CapCenterXTb}"/>
+                                <TextBox x:Name="CapCenterXTb" Text="{Binding CenterX, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=CapCenterYTb}"/>
+                                <TextBox x:Name="CapCenterYTb" Text="{Binding CenterY, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=CapCenterZTb}"/>
+                                <TextBox x:Name="CapCenterZTb" Text="{Binding CenterZ, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Radius" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=CapRadiusTb}"/>
+                            <TextBox x:Name="CapRadiusTb" Grid.Column="1" Text="{Binding Radius, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}" Width="60" HorizontalAlignment="Left"/>
+                        </Grid>
+
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Height" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=CapHeightTb}"/>
+                            <TextBox x:Name="CapHeightTb" Grid.Column="1" Text="{Binding Height, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}" Width="60" HorizontalAlignment="Left"/>
+                        </Grid>
+
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Direction" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" SelectedItem="{Binding Direction}" 
+                                      ItemsSource="{Binding Source={StaticResource CapsuleDirectionEnum}}"
+                                      Background="#333333" Foreground="White" BorderThickness="1" BorderBrush="#555555"
+                                      Width="100" HorizontalAlignment="Left"/>
                         </Grid>
                     </StackPanel>
                 </Border>
@@ -578,12 +807,12 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Position" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
-                                        <TextBox Text="{Binding Transform.PositionX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                        <TextBox Text="{Binding Transform.PositionY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                        <TextBox Text="{Binding Transform.PositionZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=PosX}"/>
+                                        <TextBox x:Name="PosX" Text="{Binding Transform.PositionX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=PosY}"/>
+                                        <TextBox x:Name="PosY" Text="{Binding Transform.PositionY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=PosZ}"/>
+                                        <TextBox x:Name="PosZ" Text="{Binding Transform.PositionZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
                                     </StackPanel>
                                 </Grid>
                                 <!-- Rotation -->
@@ -594,12 +823,12 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Rotation" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
-                                        <TextBox Text="{Binding Transform.RotationX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                        <TextBox Text="{Binding Transform.RotationY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                        <TextBox Text="{Binding Transform.RotationZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=RotX}"/>
+                                        <TextBox x:Name="RotX" Text="{Binding Transform.RotationX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=RotY}"/>
+                                        <TextBox x:Name="RotY" Text="{Binding Transform.RotationY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=RotZ}"/>
+                                        <TextBox x:Name="RotZ" Text="{Binding Transform.RotationZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
                                     </StackPanel>
                                 </Grid>
                                 <!-- Scale -->
@@ -610,12 +839,12 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Scale" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}"/>
-                                        <TextBox Text="{Binding Transform.ScaleX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                        <TextBox Text="{Binding Transform.ScaleY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
-                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0"/>
-                                        <TextBox Text="{Binding Transform.ScaleZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=ScaleX}"/>
+                                        <TextBox x:Name="ScaleX" Text="{Binding Transform.ScaleX, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=ScaleY}"/>
+                                        <TextBox x:Name="ScaleY" Text="{Binding Transform.ScaleY, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
+                                        <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=ScaleZ}"/>
+                                        <TextBox x:Name="ScaleZ" Text="{Binding Transform.ScaleZ, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}" Style="{StaticResource NumericTextBox}"/>
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>

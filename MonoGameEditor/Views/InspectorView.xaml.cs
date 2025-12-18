@@ -18,6 +18,13 @@ namespace MonoGameEditor.Views
         private System.Windows.Point _dragStartPoint;
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        // Draggable label state
+        private bool _isDraggingLabel = false;
+        private System.Windows.Point _labelDragStartPoint;
+        private double _initialLabelValue;
+        private TextBox _associatedTextBox;
+        private double _accumulatedDelta = 0;
+
         private ObservableCollection<string> _availableMaterials = new();
         public ObservableCollection<string> AvailableMaterials
         {
@@ -88,6 +95,23 @@ namespace MonoGameEditor.Views
             
             menu.Items.Add(cameraItem);
             menu.Items.Add(lightItem);
+
+            // Add Physics submenu
+            var physicsItem = new MenuItem { Header = "Physics" };
+            
+            var boxColliderItem = new MenuItem { Header = "Box Collider" };
+            boxColliderItem.Click += (s, args) => selectedObject.AddComponent(new BoxColliderComponent());
+            
+            var sphereColliderItem = new MenuItem { Header = "Sphere Collider" };
+            sphereColliderItem.Click += (s, args) => selectedObject.AddComponent(new SphereColliderComponent());
+            
+            var capsuleColliderItem = new MenuItem { Header = "Capsule Collider" };
+            capsuleColliderItem.Click += (s, args) => selectedObject.AddComponent(new CapsuleColliderComponent());
+            
+            physicsItem.Items.Add(boxColliderItem);
+            physicsItem.Items.Add(sphereColliderItem);
+            physicsItem.Items.Add(capsuleColliderItem);
+            menu.Items.Add(physicsItem);
             
             // Add Scripts submenu
             var scriptAssets = ScriptManager.Instance.ScriptAssets;
@@ -153,6 +177,71 @@ namespace MonoGameEditor.Views
         {
             _dragStartPoint = e.GetPosition(null);
         }
+
+
+
+        #region Draggable Labels
+        private void NumericLabel_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement label && label.Tag is TextBox tb)
+            {
+                _associatedTextBox = tb;
+                // Try parsing current value, if fail use 0
+                if (!double.TryParse(tb.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out _initialLabelValue))
+                {
+                    if (!double.TryParse(tb.Text, out _initialLabelValue))
+                        _initialLabelValue = 0;
+                }
+
+                _isDraggingLabel = true;
+                _labelDragStartPoint = e.GetPosition(this);
+                _accumulatedDelta = 0;
+                label.CaptureMouse();
+                Mouse.OverrideCursor = Cursors.SizeWE;
+                e.Handled = true;
+            }
+        }
+
+        private void NumericLabel_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (_isDraggingLabel && _associatedTextBox != null)
+            {
+                var currentPoint = e.GetPosition(this);
+                double delta = currentPoint.X - _labelDragStartPoint.X;
+                
+                // Sensitivity
+                double multiplier = 0.05;
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) multiplier = 0.5;
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) multiplier = 0.005;
+                
+                double newValue = _initialLabelValue + (delta * multiplier);
+                
+                // Update the textbox text
+                _associatedTextBox.Text = newValue.ToString("F2", CultureInfo.InvariantCulture);
+                
+                // Force binding update
+                var binding = BindingOperations.GetBindingExpression(_associatedTextBox, TextBox.TextProperty);
+                binding?.UpdateSource();
+
+                // Special case for script fields that might not use bindings
+                // (Handled by the LostFocus/TextChanged logic if we add it, but for now bindings cover most)
+                
+                e.Handled = true;
+            }
+        }
+
+        private void NumericLabel_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (_isDraggingLabel)
+            {
+                _isDraggingLabel = false;
+                if (sender is FrameworkElement label) label.ReleaseMouseCapture();
+                Mouse.OverrideCursor = null;
+                _associatedTextBox = null;
+                e.Handled = true;
+            }
+        }
+        #endregion
 
         private void ComponentHeader_DragSource_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -387,6 +476,14 @@ namespace MonoGameEditor.Views
                                     else if (memberType == typeof(double) && double.TryParse(textBox.Text, out double dVal)) fieldInfo.SetValue(script, dVal);
                                 };
                             }
+                            
+                            // Enable draggable label
+                            label.Tag = textBox;
+                            label.Cursor = Cursors.SizeWE;
+                            label.PreviewMouseLeftButtonDown += NumericLabel_PreviewMouseLeftButtonDown;
+                            label.PreviewMouseMove += NumericLabel_PreviewMouseMove;
+                            label.PreviewMouseLeftButtonUp += NumericLabel_PreviewMouseLeftButtonUp;
+
                             control = textBox;
                         }
                         else if (memberType == typeof(int))
@@ -411,6 +508,14 @@ namespace MonoGameEditor.Views
                                     if (int.TryParse(textBox.Text, out int val)) fieldInfo.SetValue(script, val);
                                 };
                             }
+
+                            // Enable draggable label
+                            label.Tag = textBox;
+                            label.Cursor = Cursors.SizeWE;
+                            label.PreviewMouseLeftButtonDown += NumericLabel_PreviewMouseLeftButtonDown;
+                            label.PreviewMouseMove += NumericLabel_PreviewMouseMove;
+                            label.PreviewMouseLeftButtonUp += NumericLabel_PreviewMouseLeftButtonUp;
+
                             control = textBox;
                         }
                         else if (memberType == typeof(bool))

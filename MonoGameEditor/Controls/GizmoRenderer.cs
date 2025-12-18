@@ -12,12 +12,14 @@ namespace MonoGameEditor.Controls
         private GraphicsDevice _graphicsDevice;
         private BasicEffect _effect;
         private Core.Gizmos.DirectionalLightGizmo _dirLightGizmo;
+        private ColliderGizmoRenderer _colliderGizmoRenderer;
 
         public void Initialize(GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
             CreateEffect();
             _dirLightGizmo = new Core.Gizmos.DirectionalLightGizmo(graphicsDevice);
+            _colliderGizmoRenderer = new ColliderGizmoRenderer(graphicsDevice);
         }
 
         private void CreateEffect()
@@ -44,6 +46,7 @@ namespace MonoGameEditor.Controls
 
             foreach (var go in SceneManager.Instance.RootObjects)
             {
+                if (!go.IsActive) continue;
                 DrawGameObjectGizmo(graphicsDevice, go, camera);
                 DrawChildren(graphicsDevice, go, camera);
             }
@@ -53,6 +56,7 @@ namespace MonoGameEditor.Controls
         {
             foreach (var child in parent.Children)
             {
+                if (!child.IsActive) continue;
                 DrawGameObjectGizmo(graphicsDevice, child, camera);
                 DrawChildren(graphicsDevice, child, camera);
             }
@@ -72,11 +76,33 @@ namespace MonoGameEditor.Controls
                     break;
             }
 
+            // Draw Colliders
+            DrawColliderGizmos(go, camera);
+
             // Draw selection outline if selected
             if (go.IsSelected)
             {
                 DrawSelectionGizmo(graphicsDevice, go);
             }
+        }
+
+        private void DrawColliderGizmos(GameObject go, EditorCamera camera)
+        {
+            if (_colliderGizmoRenderer == null) return;
+
+            var world = go.Transform.WorldMatrix;
+
+            // Box
+            var box = go.GetComponent<MonoGameEditor.Core.Components.BoxColliderComponent>();
+            if (box != null) _colliderGizmoRenderer.DrawBox(camera, world, box.Center, box.Size);
+
+            // Sphere
+            var sphere = go.GetComponent<MonoGameEditor.Core.Components.SphereColliderComponent>();
+            if (sphere != null) _colliderGizmoRenderer.DrawSphere(camera, world, sphere.Center, sphere.Radius);
+
+            // Capsule
+            var capsule = go.GetComponent<MonoGameEditor.Core.Components.CapsuleColliderComponent>();
+            if (capsule != null) _colliderGizmoRenderer.DrawCapsule(camera, world, capsule.Center, capsule.Radius, capsule.Height, capsule.Direction);
         }
 
         private void DrawCameraGizmo(GraphicsDevice graphicsDevice, GameObject go)
@@ -223,6 +249,7 @@ namespace MonoGameEditor.Controls
         {
             _effect?.Dispose();
             _dirLightGizmo?.Dispose();
+            _colliderGizmoRenderer?.Dispose();
         }
     }
 }

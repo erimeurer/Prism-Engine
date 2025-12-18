@@ -35,7 +35,7 @@ namespace MonoGameEditor.Controls
 
         public void RenderOutline(GameObject selectedObject, Matrix view, Matrix projection)
         {
-            if (_lineEffect == null || _graphicsDevice == null || selectedObject == null)
+            if (_lineEffect == null || _graphicsDevice == null || selectedObject == null || !selectedObject.IsActive)
                 return;
 
             // Get object bounds
@@ -93,9 +93,8 @@ namespace MonoGameEditor.Controls
 
         private void CollectBounds(GameObject obj, ref BoundingBox? totalBounds)
         {
-            // Get renderer and use cached mesh bounds
             var renderer = obj.GetComponent<Core.Components.ModelRendererComponent>();
-            if (renderer != null)
+            if (renderer != null && obj.IsActive)
             {
                 var meshData = renderer.GetMeshData();
                 if (meshData != null && meshData.LocalBounds != default(BoundingBox))
@@ -145,7 +144,8 @@ namespace MonoGameEditor.Controls
             // Recursively check children
             foreach (var child in obj.Children)
             {
-                CollectBounds(child, ref totalBounds);
+                if (child.IsActive)
+                    CollectBounds(child, ref totalBounds);
             }
         }
     }
