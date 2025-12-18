@@ -65,11 +65,27 @@ namespace MonoGameEditor.Core
             return null;
         }
 
+        public List<T> GetComponents<T>() where T : Component
+        {
+            var list = new List<T>();
+            foreach (var c in Components)
+                if (c is T comp) list.Add(comp);
+            return list;
+        }
+
         public Component? GetComponent(Type type)
         {
             foreach (var c in Components)
                 if (type.IsAssignableFrom(c.GetType())) return c;
             return null;
+        }
+
+        public List<Component> GetComponents(Type type)
+        {
+            var list = new List<Component>();
+            foreach (var c in Components)
+                if (type.IsAssignableFrom(c.GetType())) list.Add(c);
+            return list;
         }
 
         public string Name

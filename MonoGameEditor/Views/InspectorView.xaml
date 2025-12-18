@@ -160,14 +160,17 @@
 
         <!-- CameraComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:CameraComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Camera" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Camera" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -255,14 +258,17 @@
         
         <!-- ScriptComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:ScriptComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding ComponentName}" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding ComponentName}" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -278,14 +284,17 @@
         
         <!-- LightComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:LightComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Light" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Light" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -408,14 +417,17 @@
 
         <!-- BoxColliderComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:BoxColliderComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Box Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Box Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -470,14 +482,17 @@
 
         <!-- SphereColliderComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:SphereColliderComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Sphere Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Sphere Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -525,14 +540,17 @@
 
         <!-- CapsuleColliderComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:CapsuleColliderComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Capsule Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Capsule Collider" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -599,16 +617,92 @@
             </Expander>
         </DataTemplate>
 
-        <!-- Model Renderer Component Template -->
-        <DataTemplate DataType="{x:Type components:ModelRendererComponent}">
-            <Expander IsExpanded="True" Margin="0,0,0,4">
+        <!-- PhysicsBodyComponent Template -->
+        <DataTemplate DataType="{x:Type components:PhysicsBodyComponent}">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                 <Expander.Header>
                     <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Model Renderer" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Physics Body" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                    <StackPanel>
+                        <!-- Mass -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Mass" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=MassTb}"/>
+                            <TextBox x:Name="MassTb" Grid.Column="1" Text="{Binding Mass, StringFormat={}{0:F3}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}" Width="60" HorizontalAlignment="Left"/>
+                        </Grid>
+                        
+                        <!-- Drag -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Drag" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=DragTb}"/>
+                            <TextBox x:Name="DragTb" Grid.Column="1" Text="{Binding Drag, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}" Width="60" HorizontalAlignment="Left"/>
+                        </Grid>
+
+                        <!-- Angular Drag -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Angular Drag" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=AngDragTb}"/>
+                            <TextBox x:Name="AngDragTb" Grid.Column="1" Text="{Binding AngularDrag, StringFormat={}{0:F2}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}" Width="60" HorizontalAlignment="Left"/>
+                        </Grid>
+
+                        <!-- Gravity and Kinematic -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Use Gravity" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding UseGravity}" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Is Kinematic" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <CheckBox Grid.Column="1" IsChecked="{Binding IsKinematic}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+
+        <!-- Model Renderer Component Template -->
+        <DataTemplate DataType="{x:Type components:ModelRendererComponent}">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Model Renderer" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
                         <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
                                 Background="Transparent" BorderThickness="0" Foreground="#888888"
                                 ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
@@ -793,7 +887,7 @@
                     </Border>
                     
                     <!-- Transform Component -->
-                    <Expander IsExpanded="True" Margin="0,0,0,4">
+                    <Expander IsExpanded="{Binding Transform.IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
                         <Expander.Header>
                             <TextBlock Text="Transform" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12"/>
                         </Expander.Header>

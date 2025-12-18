@@ -316,6 +316,7 @@ namespace MonoGameEditor.Controls
             if (ViewModels.MainViewModel.Instance?.IsPlaying == true)
             {
                 var gameTime = new GameTime(currentTime, TimeSpan.FromSeconds(deltaTime));
+                PhysicsManager.Instance.Update(gameTime);
                 ScriptManager.Instance.UpdateScripts(gameTime);
             }
             

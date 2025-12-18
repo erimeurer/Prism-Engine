@@ -108,6 +108,11 @@ namespace MonoGameEditor.Views
             var capsuleColliderItem = new MenuItem { Header = "Capsule Collider" };
             capsuleColliderItem.Click += (s, args) => selectedObject.AddComponent(new CapsuleColliderComponent());
             
+            var physicsBodyItem = new MenuItem { Header = "Physics Body" };
+            physicsBodyItem.Click += (s, args) => selectedObject.AddComponent(new PhysicsBodyComponent());
+            
+            physicsItem.Items.Add(physicsBodyItem);
+            physicsItem.Items.Add(new Separator());
             physicsItem.Items.Add(boxColliderItem);
             physicsItem.Items.Add(sphereColliderItem);
             physicsItem.Items.Add(capsuleColliderItem);

@@ -25,6 +25,8 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         internal void InternalUpdate(GameTime gameTime)
         {
+            if (!IsEnabled) return;
+
             try
             {
                 if (!_started)

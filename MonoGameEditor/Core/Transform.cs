@@ -13,8 +13,22 @@ namespace MonoGameEditor.Core
         private Vector3 _localPosition = Vector3.Zero;
         private Vector3 _localRotation = Vector3.Zero; 
         private Vector3 _localScale = Vector3.One;
+        private bool _isUIExpanded = true;
         
         public GameObject? GameObject { get; set; }
+
+        public bool IsUIExpanded
+        {
+            get => _isUIExpanded;
+            set
+            {
+                if (_isUIExpanded != value)
+                {
+                    _isUIExpanded = value;
+                    OnPropertyChanged(nameof(IsUIExpanded));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

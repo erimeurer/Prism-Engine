@@ -10,6 +10,7 @@ namespace MonoGameEditor.Core
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private bool _isEnabled = true;
+        private bool _isUIExpanded = true;
 
         /// <summary>
         /// Whether this component is currently enabled and active
@@ -23,6 +24,22 @@ namespace MonoGameEditor.Core
                 {
                     _isEnabled = value;
                     OnPropertyChanged(nameof(IsEnabled));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Whether the component UI is expanded in the inspector
+        /// </summary>
+        public bool IsUIExpanded
+        {
+            get => _isUIExpanded;
+            set
+            {
+                if (_isUIExpanded != value)
+                {
+                    _isUIExpanded = value;
+                    OnPropertyChanged(nameof(IsUIExpanded));
                 }
             }
         }

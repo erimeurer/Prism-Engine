@@ -94,25 +94,27 @@ namespace MonoGameEditor.Controls
 
             // Box
             var box = go.GetComponent<MonoGameEditor.Core.Components.BoxColliderComponent>();
-            if (box != null) _colliderGizmoRenderer.DrawBox(camera, world, box.Center, box.Size);
+            if (box != null && box.IsEnabled) _colliderGizmoRenderer.DrawBox(camera, world, box.Center, box.Size);
 
             // Sphere
             var sphere = go.GetComponent<MonoGameEditor.Core.Components.SphereColliderComponent>();
-            if (sphere != null) _colliderGizmoRenderer.DrawSphere(camera, world, sphere.Center, sphere.Radius);
+            if (sphere != null && sphere.IsEnabled) _colliderGizmoRenderer.DrawSphere(camera, world, sphere.Center, sphere.Radius);
 
             // Capsule
             var capsule = go.GetComponent<MonoGameEditor.Core.Components.CapsuleColliderComponent>();
-            if (capsule != null) _colliderGizmoRenderer.DrawCapsule(camera, world, capsule.Center, capsule.Radius, capsule.Height, capsule.Direction);
+            if (capsule != null && capsule.IsEnabled) _colliderGizmoRenderer.DrawCapsule(camera, world, capsule.Center, capsule.Radius, capsule.Height, capsule.Direction);
         }
 
         private void DrawCameraGizmo(GraphicsDevice graphicsDevice, GameObject go)
         {
             var pos = go.Transform.Position;
             var component = go.GetComponent<MonoGameEditor.Core.Components.CameraComponent>();
+            if (component == null || !component.IsEnabled) return;
+
             var color = new Color(100, 149, 237); // Cornflower blue
 
             // 1. Draw Frustum if CameraComponent exists and object is selected
-            if (component != null && go.IsSelected)
+            if (go.IsSelected)
             {
                 // Calculate frustum corners based on camera properties
                 float fov = MathHelper.ToRadians(component.FieldOfView);
@@ -191,7 +193,7 @@ namespace MonoGameEditor.Controls
         private void DrawLightGizmo(GraphicsDevice graphicsDevice, GameObject go, EditorCamera camera)
         {
             var lightComp = go.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
-            if (lightComp == null) return;
+            if (lightComp == null || !lightComp.IsEnabled) return;
 
             if (lightComp.LightType == MonoGameEditor.Core.Components.LightType.Directional && _dirLightGizmo != null)
             {

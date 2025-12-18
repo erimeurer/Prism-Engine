@@ -940,8 +940,8 @@ namespace MonoGameEditor.Core.Components
         public virtual void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition, 
             Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
-            // Check for disposed device
-            if (device == null || device.IsDisposed) return;
+            // Check for disposed device or if disabled
+            if (device == null || device.IsDisposed || !IsEnabled) return;
 
 
             // Support both multi-mesh and legacy single-mesh
@@ -1427,6 +1427,7 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         public virtual void DrawWithCustomEffect(Effect customEffect, Matrix lightViewProj)
         {
+            if (!IsEnabled) return;
             // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] Request Draw {GameObject.Name}");
 
             var device = customEffect.GraphicsDevice;

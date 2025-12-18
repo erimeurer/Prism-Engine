@@ -143,4 +143,51 @@ namespace MonoGameEditor.Core.Components
             set { _direction = value; OnPropertyChanged(nameof(Direction)); }
         }
     }
+
+    /// <summary>
+    /// Physics Body component (Rigidbody equivalent)
+    /// </summary>
+    public class PhysicsBodyComponent : Component
+    {
+        private float _mass = 1.0f;
+        private float _drag = 0.0f;
+        private float _angularDrag = 0.05f;
+        private bool _useGravity = true;
+        private bool _isKinematic = false;
+
+        public Vector3 Velocity { get; set; } = Vector3.Zero;
+        public Vector3 AngularVelocity { get; set; } = Vector3.Zero;
+
+        public override string ComponentName => "Physics Body";
+
+        public float Mass
+        {
+            get => _mass;
+            set { _mass = Math.Max(0.0001f, value); OnPropertyChanged(nameof(Mass)); }
+        }
+
+        public float Drag
+        {
+            get => _drag;
+            set { _drag = Math.Max(0, value); OnPropertyChanged(nameof(Drag)); }
+        }
+
+        public float AngularDrag
+        {
+            get => _angularDrag;
+            set { _angularDrag = Math.Max(0, value); OnPropertyChanged(nameof(AngularDrag)); }
+        }
+
+        public bool UseGravity
+        {
+            get => _useGravity;
+            set { _useGravity = value; OnPropertyChanged(nameof(UseGravity)); }
+        }
+
+        public bool IsKinematic
+        {
+            get => _isKinematic;
+            set { _isKinematic = value; OnPropertyChanged(nameof(IsKinematic)); }
+        }
+    }
 }

@@ -1,0 +1,212 @@
+=== Prism Engine Debug Log Started: 18/12/2025 15:43:19 ===
+15:43:19.265 [ℹ] [ShaderCompiler] Starting automatic shader compilation service...
+15:43:19.268 [ℹ] [ShaderCompiler] Watching: D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows\Content\Shaders
+15:43:19.268 [ℹ] [ShaderCompiler] Watching: D:\ProjetosMono\Teste3\Assets
+15:43:19.268 [ℹ] [ShaderCompiler] Found 1 shader(s) to compile
+15:43:19.270 [ℹ] [ScriptFixer] Found 2 script file(s)
+15:43:19.272 [ℹ] [ScriptFixer] PlayerTest.cs - already correct
+15:43:19.272 [ℹ] [ScriptFixer] TesteScript.cs - already correct
+15:43:19.272 [ℹ] [ScriptFixer] Fixed 0 script(s). Restart editor to recompile.
+15:43:19.272 [ℹ] [ScriptManager] Found 2 script file(s) in D:\ProjetosMono\Teste3\Assets\Scripts
+15:43:19.962 [ℹ] [ScriptManager] Successfully compiled 2 script(s)
+15:43:19.963 [ℹ] [ScriptManager] Registered script: PlayerTest
+15:43:19.963 [ℹ] [ScriptManager] Registered script: TesteScript
+15:43:19.964 [ℹ] [ScriptManager] Starting hot-reload of scripts in scene...
+15:43:19.964 [ℹ] [ScriptManager] No script instances to reload
+15:43:19.997 [ℹ] [SceneLoader] Loaded Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc) at position {X:0 Y:50 Z:0}
+15:43:19.997 [ℹ] [SceneLoader] Created instance of LightComponent
+15:43:20.021 [ℹ] [SceneLoader] Added LightComponent to Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc)
+15:43:20.021 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543) at position {X:-0,95017 Y:2,2422411 Z:4,2211685}
+15:43:20.021 [ℹ] [SceneLoader] Type.GetType failed for 'PlayerTest', trying ScriptManager assembly
+15:43:20.021 [ℹ] [SceneLoader] Created instance of PlayerTest
+15:43:20.026 [ℹ] [SceneLoader] Added PlayerTest to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+15:43:20.026 [ℹ] [SceneLoader] Type.GetType failed for 'TesteScript', trying ScriptManager assembly
+15:43:20.026 [ℹ] [SceneLoader] Created instance of TesteScript
+15:43:20.028 [ℹ] [SceneLoader] Added TesteScript to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+15:43:20.028 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) at position {X:0 Y:0 Z:0}
+15:43:20.036 [ℹ] [SceneLoader] Created instance of SkinnedModelRendererComponent
+15:43:20.044 [ℹ] [ModelRenderer] MaterialPath CHANGED: '' → 'Assets\Mat10.mat'
+15:43:20.045 [ℹ] [ModelRenderer] Loading Material: Assets\Mat10.mat
+15:43:20.045 [ℹ] [ModelRenderer] JSON Preview: {
+  "name": "NewMaterial1",
+  "albedoColor": [
+    0.7058824,
+    0.7058824,
+    0.7058824
+  ],
+  "metallic": 0,
+  "roughness": 0.5,
+  "ambie...
+15:43:20.051 [ℹ] [ModelRenderer] Deserialized: Metallic=0, Roughness=0,5, AlbedoLen=3
+15:43:20.051 [ℹ] [ModelRenderer] Set AlbedoColor: {R:180 G:180 B:180 A:255}
+15:43:20.052 [ℹ] [ModelRenderer] Stored 1 texture paths for lazy loading
+15:43:20.052 [ℹ] [ModelRenderer] Loaded Material 'NewMaterial1' from Assets\Mat10.mat
+15:43:20.055 [ℹ] [SceneLoader] Added SkinnedModelRendererComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+15:43:20.055 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh - scene is loading
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) at position {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) at position {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) at position {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) at position {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) at position {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) at position {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) at position {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) at position {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) at position {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) at position {X:0 Y:0,0556635 Z:-0,0014606453}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) at position {X:0 Y:0,06496308 Z:-4,524171E-12}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) at position {X:0 Y:0,07424357 Z:-1,3589962E-12}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) at position {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+15:43:20.056 [ℹ] [SceneLoader] Loaded mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) at position {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) at position {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) at position {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) at position {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) at position {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) at position {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) at position {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) at position {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) at position {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) at position {X:0 Y:0,08352399 Z:-2,1309339E-09}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) at position {X:0 Y:0,040507227 Z:0,015411837}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) at position {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) at position {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) at position {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) at position {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) at position {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) at position {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) at position {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) at position {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) at position {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) at position {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+15:43:20.057 [ℹ] [SceneLoader] Loaded Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6) at position {X:-0,23436737 Y:-0,066179276 Z:5,404556}
+15:43:20.057 [ℹ] [SceneLoader] Loaded Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) at position {X:0 Y:0 Z:0}
+15:43:20.057 [ℹ] [SceneLoader] Created instance of ModelRendererComponent
+15:43:20.105 [ℹ] [SceneLoader] Added ModelRendererComponent to Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9)
+15:43:20.105 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for Plane - scene is loading
+15:43:20.105 [ℹ] [SceneLoader] Loaded Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587) at position {X:5,9604645E-08 Y:5 Z:12}
+15:43:20.105 [ℹ] [SceneLoader] Created instance of CameraComponent
+15:43:20.115 [ℹ] [SceneLoader] Added CameraComponent to Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587)
+15:43:20.221 [ℹ] [SceneLoader] Initializing 40 objects post-load
+15:43:20.221 [ℹ] [SceneLoader] Reinitializing renderer for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+15:43:20.222 [ℹ] [ModelRenderer] Post-scene-load init for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+15:43:20.223 [ℹ] [ModelRenderer] Reloading mesh data only for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+15:43:20.224 [ℹ] [SceneLoader] Reinitializing renderer for Plane
+15:43:20.224 [ℹ] [ModelRenderer] Post-scene-load init for Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9)
+15:43:20.224 [ℹ] [ModelRenderer] Reloading mesh data only for Plane
+15:43:20.225 [ℹ] [SceneLoader] Resolving 1 object references
+15:43:20.231 [ℹ] Scene Loaded: D:\ProjetosMono\Teste3\Assets\Scenes\NewScene.world
+15:43:20.232 [ℹ] Project Opened: D:\ProjetosMono\Teste3
+15:43:20.241 [ℹ] [ShaderCompiler] Compiling: NewShader.fx
+15:43:20.510 [ℹ] [MaterialAssets] Found 14 materials in project
+15:43:20.796 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=138658. Total devices: 1
+15:43:20.821 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+15:43:20.824 [ℹ] [MonoGameControl] Resized RenderTarget: 200x100 (MSAA: 8x)
+15:43:21.013 [ℹ] [ShaderCompiler] ❌ Exception: An error occurred trying to start process 'mgfxc' with working directory 'D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows'. O sistema não pode encontrar o arquivo especificado.
+15:43:21.015 [ℹ] [ModelRenderer] Mesh data reloaded for 'Plane'
+15:43:21.044 [ℹ] [MonoGameControl] Resized RenderTarget: 790x374 (MSAA: 8x)
+15:43:21.053 [ℹ] [ModelRenderer] CreateResourcesForDevice for Plane
+15:43:21.053 [ℹ] [ModelRenderer] Attempting PBR shader load...
+15:43:21.054 [ℹ] [ModelRenderer] ✅ Using PBR Effect for Plane
+15:43:21.067 [ℹ] [ModelRenderer] CreateResourcesForDevice for Plane
+15:43:21.068 [ℹ] [ModelRenderer] Attempting PBR shader load...
+15:43:21.068 [ℹ] [ModelRenderer] ✅ Using PBR Effect for Plane
+15:43:23.410 [ℹ] [ModelRenderer] Mesh data reloaded for 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+15:43:23.410 [ℹ] [ModelRenderer] Attempting to reconnect bones for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+15:43:23.410 [ℹ] [ModelRenderer] GameObject position: {X:0 Y:0 Z:0}
+15:43:23.410 [ℹ] [ModelRenderer] Searching in 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' which has 2 children
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftUpLeg at local pos {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftLeg at local pos {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftFoot at local pos {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftToeBase at local pos {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex1 at local pos {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightArm at local pos {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightForeArm at local pos {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHand at local pos {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex2 at local pos {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightUpLeg at local pos {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightLeg at local pos {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightFoot at local pos {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightToeBase at local pos {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine2 at local pos {X:0 Y:0,07424357 Z:-1,3589962E-12}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftShoulder at local pos {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftArm at local pos {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHand at local pos {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftForeArm at local pos {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex1 at local pos {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex2 at local pos {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine at local pos {X:0 Y:0,0556635 Z:-0,0014606453}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:Hips at local pos {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:Neck at local pos {X:0 Y:0,08352399 Z:-2,1309339E-09}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:Head at local pos {X:0 Y:0,040507227 Z:0,015411837}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightShoulder at local pos {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine1 at local pos {X:0 Y:0,06496308 Z:-4,524171E-12}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex3 at local pos {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex3 at local pos {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb1 at local pos {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb1 at local pos {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb3 at local pos {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb2 at local pos {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb2 at local pos {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb3 at local pos {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+15:43:23.411 [ℹ] [ModelRenderer] Reconnecting 34 bones for skinned mesh
+15:43:23.412 [ℹ] [SkinnedRenderer] Set 34 bones with bind pose captured
+15:43:23.599 [⚠] [SkinnedRenderer] Using ContentManager (cached) for device 33018140
+15:43:23.749 [⚠] [SkinnedRenderer] Using ContentManager (cached) for device 33018140
+15:43:23.755 [ℹ] [ShaderLoader] Loaded shader via isolated ContentManager: Shaders/PBREffect
+15:43:23.756 [ℹ] [ShaderAsset] Discovering properties from effect with 27 parameters
+15:43:23.757 [ℹ] [ShaderAsset] Param: World, Class: Matrix, Type: Single
+15:43:23.757 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+15:43:23.757 [ℹ] [ShaderAsset] Param: View, Class: Matrix, Type: Single
+15:43:23.757 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+15:43:23.757 [ℹ] [ShaderAsset] Param: Projection, Class: Matrix, Type: Single
+15:43:23.757 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+15:43:23.757 [ℹ] [ShaderAsset] Param: CameraPosition, Class: Vector, Type: Single
+15:43:23.757 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+15:43:23.757 [ℹ] [ShaderAsset] Param: LightDirection, Class: Vector, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Vector3 (Default: {X:-0,5773 Y:-0,5773 Z:-0,5773})
+15:43:23.758 [ℹ] [ShaderAsset] Param: LightColor, Class: Vector, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Vector3 (Default: {X:1 Y:1 Z:1})
+15:43:23.758 [ℹ] [ShaderAsset] Param: LightIntensity, Class: Scalar, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Float (Default: 1)
+15:43:23.758 [ℹ] [ShaderAsset] Param: AlbedoColor, Class: Vector, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Color (Default: {X:1 Y:1 Z:1 W:1})
+15:43:23.758 [ℹ] [ShaderAsset] Param: Metallic, Class: Scalar, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+15:43:23.758 [ℹ] [ShaderAsset] Param: Roughness, Class: Scalar, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0,5)
+15:43:23.758 [ℹ] [ShaderAsset] Param: AO, Class: Scalar, Type: Single
+15:43:23.758 [ℹ] [ShaderAsset]   -> Added as Float (Default: 1)
+15:43:23.759 [ℹ] [ShaderAsset] Param: LightViewProjection, Class: Matrix, Type: Single
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Matrix (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Param: UseShadows, Class: Scalar, Type: Bool
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+15:43:23.759 [ℹ] [ShaderAsset] Param: ShadowQuality, Class: Scalar, Type: Int32
+15:43:23.759 [ℹ] [ShaderAsset]   -> Skipped (unsupported type)
+15:43:23.759 [ℹ] [ShaderAsset] Param: ShadowStrength, Class: Scalar, Type: Single
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+15:43:23.759 [ℹ] [ShaderAsset] Param: ShadowBias, Class: Scalar, Type: Single
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+15:43:23.759 [ℹ] [ShaderAsset] Param: UseAlbedoMap, Class: Scalar, Type: Bool
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+15:43:23.759 [ℹ] [ShaderAsset] Param: UseNormalMap, Class: Scalar, Type: Bool
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+15:43:23.759 [ℹ] [ShaderAsset] Param: UseMetallicMap, Class: Scalar, Type: Bool
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+15:43:23.759 [ℹ] [ShaderAsset] Param: UseRoughnessMap, Class: Scalar, Type: Bool
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+15:43:23.759 [ℹ] [ShaderAsset] Param: UseAOMap, Class: Scalar, Type: Bool
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+15:43:23.759 [ℹ] [ShaderAsset] Param: AlbedoTexture, Class: Object, Type: Texture2D
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Param: NormalTexture, Class: Object, Type: Texture2D
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Param: MetallicTexture, Class: Object, Type: Texture2D
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Param: RoughnessTexture, Class: Object, Type: Texture2D
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Param: AOTexture, Class: Object, Type: Texture2D
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Param: ShadowMap, Class: Object, Type: Texture2D
+15:43:23.759 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+15:43:23.759 [ℹ] [ShaderAsset] Discovered 22 properties
+15:43:26.267 [ℹ] [MonoGameControl] Resized RenderTarget: 1360x654 (MSAA: 8x)
+15:43:34.424 [ℹ] [MonoGameControl] Resized RenderTarget: 790x374 (MSAA: 8x)

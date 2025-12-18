@@ -331,8 +331,9 @@ namespace MonoGameEditor.ViewModels
                     ConsoleViewModel.LogInfo("Scene transforms restored");
                 }
                 
-                // Reset all scripts when exiting Play mode
+                // Reset all scripts and physics when exiting Play mode
                 Core.ScriptManager.Instance.ResetAllScripts();
+                Core.PhysicsManager.Instance.ResetPhysics();
             }
             else
             {
@@ -359,6 +360,10 @@ namespace MonoGameEditor.ViewModels
             IsPlaying = false;
             IsPaused = false;
             ActiveDocument = Scene; // Switch back to Scene on Stop
+            
+            Core.ScriptManager.Instance.ResetAllScripts();
+            Core.PhysicsManager.Instance.ResetPhysics();
+            
             ConsoleViewModel.Log("Play Mode Stopped");
         }
 

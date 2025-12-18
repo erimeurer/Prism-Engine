@@ -17,8 +17,11 @@ namespace MonoGameEditor.Controls
     public class GameControl : WinForms.Panel
     {
         private GraphicsDeviceService? _graphicsService;
-        private bool _initialized;
+        private bool _initialized = false;
         private WinForms.Timer _renderTimer;
+        private DateTime _lastFrameTime;
+
+        public ProceduralSkybox? Skybox => _skybox;
         private ProceduralSkybox? _skybox;
         private RenderTarget2D? _hdrRenderTarget;
 
@@ -84,27 +87,33 @@ namespace MonoGameEditor.Controls
              if (enabled && Visible) _renderTimer.Start();
              else _renderTimer.Stop();
         }
-
         private void RenderTimer_Tick(object? sender, EventArgs e)
         {
             if (!_initialized || GraphicsDevice == null || !Visible) return;
-            
+
+            // Calculate Delta Time
+            var currentTime = DateTime.Now;
+            double deltaTime = (currentTime - _lastFrameTime).TotalSeconds;
+            _lastFrameTime = currentTime;
+
+            // Cap delta time to avoid huge spikes on tab switching/debugging
+            deltaTime = Math.Min(deltaTime, 0.1);
+
             // Check Play Mode and Run Game Loop
             var vm = ViewModels.MainViewModel.Instance;
             if (vm != null && vm.IsPlaying && !vm.IsPaused)
             {
-                UpdateGame();
+                UpdateGame(new GameTime(TimeSpan.Zero, TimeSpan.FromSeconds(deltaTime)));
             }
 
             // Always render
             Invalidate();
         }
 
-        private void UpdateGame()
+        private void UpdateGame(GameTime gameTime)
         {
-            // Placeholder: This is where scripts/physics would update
-            // For now we just acknowledge the loop exists.
-            // ConsoleViewModel.Log("Game Updating..."); // Throttled log logic would be needed
+            PhysicsManager.Instance.Update(gameTime);
+            ScriptManager.Instance.UpdateScripts(gameTime);
         }
 
         protected override void OnPaint(WinForms.PaintEventArgs e)
@@ -157,7 +166,7 @@ namespace MonoGameEditor.Controls
                     var comps = go.Components;
                     for(int j=0; j<comps.Count; j++)
                     {
-                        if (comps[j] is CameraComponent cam && cam.IsMainCamera)
+                        if (comps[j] is CameraComponent cam && cam.IsMainCamera && cam.IsEnabled)
                         {
                             mainCamera = cam;
                             break;
@@ -352,7 +361,7 @@ namespace MonoGameEditor.Controls
                  var comps = node.Components;
                  for(int j=0; j<comps.Count; j++)
                  {
-                     if(comps[j] is CameraComponent cam && cam.IsMainCamera) return cam;
+                     if(comps[j] is CameraComponent cam && cam.IsMainCamera && cam.IsEnabled) return cam;
                  }
                  
                  var found = FindMainCameraRecursive(node.Children);
@@ -376,7 +385,7 @@ namespace MonoGameEditor.Controls
 
                 // Render ModelRendererComponent if exists
                 var modelRenderer = node.GetComponent<ModelRendererComponent>();
-                if (modelRenderer != null)
+                if (modelRenderer != null && modelRenderer.IsEnabled)
                 {
                     // SKIP if ShadowsOnly (invisible to main cam)
                     if (modelRenderer.CastShadows == ShadowMode.ShadowsOnly) continue;
@@ -395,7 +404,7 @@ namespace MonoGameEditor.Controls
             if (!node.IsActive) return;
 
              var modelRenderer = node.GetComponent<ModelRendererComponent>();
-             if (modelRenderer != null && _shadowRenderer != null)
+             if (modelRenderer != null && modelRenderer.IsEnabled && _shadowRenderer != null)
              {
                  _shadowRenderer.DrawObject(node, modelRenderer);
              }
@@ -413,7 +422,9 @@ namespace MonoGameEditor.Controls
         {
              foreach(var node in nodes)
              {
-                 var light = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.LightComponent && ((MonoGameEditor.Core.Components.LightComponent)c).LightType == MonoGameEditor.Core.Components.LightType.Directional);
+                 if (!node.IsActive) continue;
+
+                 var light = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.LightComponent lc && lc.IsEnabled && lc.LightType == MonoGameEditor.Core.Components.LightType.Directional);
                  if (light != null) return node;
                  
                  var childResult = FindFirstLight(node.Children);
