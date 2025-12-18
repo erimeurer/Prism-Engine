@@ -25,12 +25,18 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         internal void InternalUpdate(GameTime gameTime)
         {
-            if (!_started)
+            try
             {
-                Start();
-                _started = true;
+                if (!_started)
+                {
+                    Start();
+                    _started = true;
+                }
+                Update(gameTime);
+            } catch (System.Exception ex)
+            {
+                System.Console.WriteLine($"Exception in ScriptComponent '{GetType().Name}': {ex}");
             }
-            Update(gameTime);
         }
 
         /// <summary>
@@ -77,28 +83,36 @@ namespace MonoGameEditor.Core.Components
         }
 
         /// <summary>
-        /// Get all public editable properties for this script
+        /// Get all public editable members (properties and fields) for this script
         /// </summary>
-        public System.Collections.Generic.List<System.Reflection.PropertyInfo> GetEditableProperties()
+        public System.Collections.Generic.List<System.Reflection.MemberInfo> GetEditableMembers()
         {
-            var props = new System.Collections.Generic.List<System.Reflection.PropertyInfo>();
+            var members = new System.Collections.Generic.List<System.Reflection.MemberInfo>();
             var type = GetType();
             
-            // Get all public instance properties
-            foreach (var prop in type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            // Get all public instance members
+            var bindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+            
+            // Get properties
+            foreach (var prop in type.GetProperties(bindingFlags))
             {
-                // Exclude inherited properties from Component and ScriptComponent
                 if (prop.DeclaringType == typeof(Component) || prop.DeclaringType == typeof(ScriptComponent))
                     continue;
                     
-                // Only include properties with both getter and setter
                 if (prop.CanRead && prop.CanWrite)
-                {
-                    props.Add(prop);
-                }
+                    members.Add(prop);
             }
             
-            return props;
+            // Get fields
+            foreach (var field in type.GetFields(bindingFlags))
+            {
+                if (field.DeclaringType == typeof(Component) || field.DeclaringType == typeof(ScriptComponent))
+                    continue;
+                    
+                members.Add(field);
+            }
+            
+            return members;
         }
     }
 }

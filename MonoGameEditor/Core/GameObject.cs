@@ -65,6 +65,13 @@ namespace MonoGameEditor.Core
             return null;
         }
 
+        public Component? GetComponent(Type type)
+        {
+            foreach (var c in Components)
+                if (type.IsAssignableFrom(c.GetType())) return c;
+            return null;
+        }
+
         public string Name
         {
             get => _name;

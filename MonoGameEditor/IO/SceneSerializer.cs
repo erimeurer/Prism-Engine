@@ -147,10 +147,7 @@ namespace MonoGameEditor.IO
                 var props = component.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                 foreach (var prop in props)
                 {
-                    // Skip properties we can't read or that are complex types we can't serialize easily
                     if (!prop.CanRead || !prop.CanWrite) continue;
-                    
-                    // Skip ComponentName and GameObject (runtime-only properties)
                     if (prop.Name == "ComponentName" || prop.Name == "GameObject") continue;
 
                     try
@@ -158,14 +155,51 @@ namespace MonoGameEditor.IO
                         var value = prop.GetValue(component);
                         if (value != null)
                         {
-                            // Convert to string for JSON serialization
-                            compData.Properties[prop.Name] = JsonSerializer.Serialize(value, _options);
+                            if (typeof(GameObject).IsAssignableFrom(prop.PropertyType))
+                            {
+                                var targetGo = value as GameObject;
+                                compData.Properties[prop.Name] = $"\"GUID:{targetGo?.Id.ToString() ?? "null"}\"";
+                            }
+                            else if (typeof(Component).IsAssignableFrom(prop.PropertyType))
+                            {
+                                var targetComp = value as Component;
+                                compData.Properties[prop.Name] = $"\"GUID_COMP:{targetComp?.GameObject?.Id.ToString() ?? "null"}:{targetComp?.GetType().FullName ?? "null"}\"";
+                            }
+                            else
+                            {
+                                compData.Properties[prop.Name] = JsonSerializer.Serialize(value, _options);
+                            }
                         }
                     }
-                    catch
+                    catch { }
+                }
+
+                // Serialize public fields
+                var fields = component.GetType().GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                foreach (var field in fields)
+                {
+                    try
                     {
-                        // Skip properties that fail to serialize
+                        var value = field.GetValue(component);
+                        if (value != null)
+                        {
+                            if (typeof(GameObject).IsAssignableFrom(field.FieldType))
+                            {
+                                var targetGo = value as GameObject;
+                                compData.Properties[field.Name] = $"\"GUID:{targetGo?.Id.ToString() ?? "null"}\"";
+                            }
+                            else if (typeof(Component).IsAssignableFrom(field.FieldType))
+                            {
+                                var targetComp = value as Component;
+                                compData.Properties[field.Name] = $"\"GUID_COMP:{targetComp?.GameObject?.Id.ToString() ?? "null"}:{targetComp?.GetType().FullName ?? "null"}\"";
+                            }
+                            else
+                            {
+                                compData.Properties[field.Name] = JsonSerializer.Serialize(value, _options);
+                            }
+                        }
                     }
+                    catch { }
                 }
 
                 goData.Components.Add(compData);
@@ -231,6 +265,9 @@ namespace MonoGameEditor.IO
             // 1. Recreate Objects from Data
             var idToObjMap = new Dictionary<Guid, GameObject>();
             var parentIds = new Dictionary<Guid, Guid>();
+            
+            // Track object references for post-load resolution
+            var pendingReferences = new List<(object Owner, System.Reflection.MemberInfo Member, string RefData)>();
 
             foreach (var objData in sceneData.Objects)
             {
@@ -299,22 +336,42 @@ namespace MonoGameEditor.IO
                     {
                         var componentType = comp.GetType();
                         
-                        // Restore properties
+                        // Restore properties and fields
                         foreach (var kvp in compData.Properties)
                         {
                             var propInfo = componentType.GetProperty(kvp.Key);
-                            if (propInfo != null && propInfo.CanWrite)
+                            var fieldInfo = componentType.GetField(kvp.Key);
+                            
+                            Type? memberType = propInfo?.PropertyType ?? fieldInfo?.FieldType;
+                            System.Reflection.MemberInfo? member = (System.Reflection.MemberInfo?)propInfo ?? fieldInfo;
+
+                            if (member != null)
                             {
-                                try
+                                // SPECIAL HANDLING: Check if it's a GUID reference
+                                string rawJson = kvp.Value.Trim('"');
+                                if (rawJson.StartsWith("GUID:"))
                                 {
-                                    // Deserialize value from JSON
-                                    var value = JsonSerializer.Deserialize(kvp.Value, propInfo.PropertyType, _options);
-                                    propInfo.SetValue(comp, value);
-                                    System.Diagnostics.Debug.WriteLine($"Restored {componentType.Name}.{kvp.Key} = {value}");
+                                    pendingReferences.Add((comp, member, rawJson));
                                 }
-                                catch (Exception ex)
+                                else if (rawJson.StartsWith("GUID_COMP:"))
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"Failed to restore property {kvp.Key}: {ex.Message}");
+                                    pendingReferences.Add((comp, member, rawJson));
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        // Deserialize value from JSON
+                                        var value = JsonSerializer.Deserialize(kvp.Value, memberType, _options);
+                                        if (propInfo != null && propInfo.CanWrite) propInfo.SetValue(comp, value);
+                                        else if (fieldInfo != null) fieldInfo.SetValue(comp, value);
+                                        
+                                        System.Diagnostics.Debug.WriteLine($"Restored {componentType.Name}.{kvp.Key} = {value}");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"Failed to restore property/field {kvp.Key}: {ex.Message}");
+                                    }
                                 }
                             }
                         }
@@ -392,6 +449,55 @@ namespace MonoGameEditor.IO
                         _ = renderer.InitializeAfterSceneLoad();
                     }
                 }
+            }
+            
+            // 4. Resolve Object References
+            MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Resolving {pendingReferences.Count} object references");
+            foreach (var (owner, member, refData) in pendingReferences)
+            {
+                try
+                {
+                    if (refData.StartsWith("GUID:"))
+                    {
+                        string guidStr = refData.Substring(5);
+                        if (guidStr != "null" && Guid.TryParse(guidStr, out Guid targetId))
+                        {
+                            if (idToObjMap.TryGetValue(targetId, out var targetGo))
+                            {
+                                SetMemberValue(owner, member, targetGo);
+                            }
+                        }
+                    }
+                    else if (refData.StartsWith("GUID_COMP:"))
+                    {
+                        string[] parts = refData.Substring(10).Split(':');
+                        if (parts.Length >= 2 && parts[0] != "null" && Guid.TryParse(parts[0], out Guid targetGoId))
+                        {
+                            if (idToObjMap.TryGetValue(targetGoId, out var targetGo))
+                            {
+                                string compType = parts[1];
+                                var targetComp = targetGo.Components.FirstOrDefault(c => c.GetType().FullName == compType);
+                                SetMemberValue(owner, member, targetComp);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MonoGameEditor.ViewModels.ConsoleViewModel.LogWarning($"[SceneLoader] Failed to resolve reference {member.Name}: {ex.Message}");
+                }
+            }
+        }
+
+        private static void SetMemberValue(object owner, System.Reflection.MemberInfo member, object? value)
+        {
+            if (member is System.Reflection.PropertyInfo prop)
+            {
+                if (prop.CanWrite) prop.SetValue(owner, value);
+            }
+            else if (member is System.Reflection.FieldInfo field)
+            {
+                field.SetValue(owner, value);
             }
         }
     

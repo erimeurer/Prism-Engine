@@ -68,9 +68,9 @@ namespace MonoGameEditor.Views
             _isDragging = true;
             _internalDragObject = tree.SelectedItem as GameObject;
             
-            // We still need a DataObject to initiate the drag events, but we put a dummy string or keep it simple
-            DataObject data = new DataObject("GameObject", "InternalDrag"); 
-            System.Windows.DragDrop.DoDragDrop(tree, data, System.Windows.DragDropEffects.Move);
+            // We still need a DataObject to initiate the drag events
+            System.Windows.DataObject data = new System.Windows.DataObject("GameObject", tree.SelectedItem); 
+            System.Windows.DragDrop.DoDragDrop(tree, data, System.Windows.DragDropEffects.Move | System.Windows.DragDropEffects.Link);
             
             _isDragging = false;
             _internalDragObject = null;
