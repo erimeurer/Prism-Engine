@@ -9,6 +9,24 @@ namespace MonoGameEditor.Core
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private bool _isEnabled = true;
+
+        /// <summary>
+        /// Whether this component is currently enabled and active
+        /// </summary>
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    OnPropertyChanged(nameof(IsEnabled));
+                }
+            }
+        }
+
         /// <summary>
         /// The GameObject this component is attached to
         /// </summary>
