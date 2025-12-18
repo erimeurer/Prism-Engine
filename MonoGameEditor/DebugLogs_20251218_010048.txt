@@ -1,0 +1,2294 @@
+=== Prism Engine Debug Log Started: 18/12/2025 01:00:48 ===
+01:00:48.326 [ℹ] [ShaderCompiler] Starting automatic shader compilation service...
+01:00:48.328 [ℹ] [ShaderCompiler] Watching: D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows\Content\Shaders
+01:00:48.328 [ℹ] [ShaderCompiler] Watching: D:\ProjetosMono\Teste3\Assets
+01:00:48.328 [ℹ] [ShaderCompiler] Found 1 shader(s) to compile
+01:00:48.330 [ℹ] [ScriptFixer] Found 2 script file(s)
+01:00:48.332 [ℹ] [ScriptFixer] PlayerTest.cs - already correct
+01:00:48.332 [ℹ] [ScriptFixer] TesteScript.cs - already correct
+01:00:48.332 [ℹ] [ScriptFixer] Fixed 0 script(s). Restart editor to recompile.
+01:00:48.333 [ℹ] [ScriptManager] Found 2 script file(s) in D:\ProjetosMono\Teste3\Assets\Scripts
+01:00:49.073 [ℹ] [ScriptManager] Successfully compiled 2 script(s)
+01:00:49.074 [ℹ] [ScriptManager] Registered script: PlayerTest
+01:00:49.074 [ℹ] [ScriptManager] Registered script: TesteScript
+01:00:49.075 [ℹ] [ScriptManager] Starting hot-reload of scripts in scene...
+01:00:49.075 [ℹ] [ScriptManager] No script instances to reload
+01:00:49.079 [ℹ] Project Opened: D:\ProjetosMono\Teste3
+01:00:49.080 [ℹ] [ShaderCompiler] Compiling: NewShader.fx
+01:00:49.387 [ℹ] [MaterialAssets] Found 14 materials in project
+01:00:49.723 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=1050692. Total devices: 1
+01:00:49.743 [ℹ] [ToneMapRenderer] Warning: ToneMap.mgfxo not found. HDR visuals may be incorrect.
+01:00:49.744 [ℹ] [MonoGameControl] Created own ContentManager for shadows
+01:00:49.753 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+01:00:49.754 [ℹ] [MonoGameControl] ✅ Shadow renderer initialized!
+01:00:49.754 [ℹ] [MonoGameControl] ✅ Selection box initialized!
+01:00:49.755 [ℹ] [MonoGameControl] Created HDR Target 200x100 (HalfVector4)
+01:00:49.948 [ℹ] [MonoGameControl] Device Reset to 790x374
+01:00:49.949 [ℹ] [MonoGameControl] 🌑 Shadow pass executing!
+01:00:49.966 [ℹ] [MonoGameControl] Created HDR Target 790x374 (HalfVector4)
+01:00:50.105 [ℹ] [ShaderCompiler] ❌ Exception: An error occurred trying to start process 'mgfxc' with working directory 'D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows'. O sistema não pode encontrar o arquivo especificado.
+01:00:51.529 [ℹ] [MonoGameControl] Device Reset to 1360x654
+01:00:51.529 [ℹ] [MonoGameControl] Created HDR Target 1360x654 (HalfVector4)
+01:00:54.286 [ℹ] [GameControl] OnCreateControl: Handle=1518962
+01:00:54.357 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=1518962. Total devices: 2
+01:00:54.358 [ℹ] [ToneMapRenderer] Warning: ToneMap.mgfxo not found. HDR visuals may be incorrect.
+01:00:54.360 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+01:00:54.378 [ℹ] [GameControl] Device Reset to 1360x684
+01:00:56.679 [ℹ] [MonoGameControl] DragDrop received file: D:\ProjetosMono\Teste3\Assets\Agora sim\Player.fbx
+01:00:59.462 [ℹ] [MonoGameControl] TRACE: About to create 1 mesh children
+01:00:59.463 [ℹ] [MonoGameControl] Using SkinnedModelRenderer for 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+01:00:59.463 [ℹ] SetMeshData called for mesh 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' from 'D:\ProjetosMono\Teste3\Assets\Agora sim\Player.fbx'
+01:00:59.463 [ℹ] [MonoGameControl] Model 'Player' has 34 bones
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:LeftUpLeg at {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:LeftLeg at {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:LeftFoot at {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:LeftToeBase at {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandIndex1 at {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightArm at {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightForeArm at {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightHand at {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandIndex2 at {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightUpLeg at {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightLeg at {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightFoot at {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:RightToeBase at {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+01:00:59.465 [ℹ] [MonoGameControl] Bone: mixamorig:Spine2 at {X:0 Y:0,07424357 Z:-1,3589962E-12}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftShoulder at {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftArm at {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHand at {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftForeArm at {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandIndex1 at {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandIndex2 at {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:Spine at {X:0 Y:0,0556635 Z:-0,0014606453}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:Hips at {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:Neck at {X:0 Y:0,08352399 Z:-2,1309339E-09}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:Head at {X:0 Y:0,040507227 Z:0,015411837}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:RightShoulder at {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:Spine1 at {X:0 Y:0,06496308 Z:-4,524171E-12}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandIndex3 at {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandIndex3 at {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandThumb1 at {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandThumb1 at {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandThumb3 at {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandThumb2 at {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandThumb2 at {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandThumb3 at {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+01:00:59.466 [ℹ] [MonoGameControl] === Bone Hierarchy Built - Bind Pose Applied ===
+01:00:59.466 [ℹ] [MonoGameControl] Bone[0] 'mixamorig:LeftUpLeg': BindPose={X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+01:00:59.466 [ℹ] [MonoGameControl] Bone[1] 'mixamorig:LeftLeg': BindPose={X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+01:00:59.466 [ℹ] [MonoGameControl] Bone[2] 'mixamorig:LeftFoot': BindPose={X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+01:00:59.466 [ℹ] [MonoGameControl] Created bone hierarchy with 34 bones
+01:00:59.468 [⚠] [SetBones] Component:45934497, Hash:425676115, Bone[0]:a20565a0, Bone[1]:5206ec71, Bone[2]:aee28b0a
+01:00:59.468 [ℹ] [SkinnedRenderer] Set 34 bones with bind pose captured
+01:00:59.468 [ℹ] [MonoGameControl] Connected 34 bones to renderer
+01:00:59.469 [ℹ] [MonoGameControl] Successfully created 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' with 1 mesh(es) and 34 bone(s)
+01:00:59.505 [❌] [CalculateBone] OFFSET HASH CHANGED! Was 0, now 425676115 - GameObject 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+01:00:59.505 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:00:59.505 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:00:59.507 [⚠] [SkinnedRenderer] CreateResources: device=29441793, isGame=False, isScene=True
+01:00:59.655 [⚠] [SkinnedRenderer] Using ContentManager (cached) for device 29441793
+01:00:59.655 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:00:59.655 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:00:59.655 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:00:59.655 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:00:59.657 [⚠] [SkinnedRenderer] CreateResources: device=29441793, isGame=False, isScene=True
+01:00:59.791 [⚠] [SkinnedRenderer] Using ContentManager (cached) for device 29441793
+01:00:59.791 [ℹ] [ModelRenderer] Auto-created default material for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:00:59.794 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:00:59.794 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:00:59.794 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:00:59.794 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:00:59.800 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:00:59.800 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:00:59.800 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:00:59.800 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:00:59.800 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:00:59.800 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:00:59.800 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:00:59.800 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:00:59.800 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:00:59.800 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:00:59.999 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.000 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.000 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.000 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.000 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.000 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.000 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.000 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.000 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.000 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.022 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.022 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.022 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.022 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.022 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.022 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.022 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.022 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.022 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.022 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.049 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.049 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.049 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.049 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.049 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.049 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.050 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.050 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.050 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.050 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.074 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.074 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.074 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.075 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.075 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.075 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.075 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.075 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.075 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.075 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.076 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.076 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.076 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.076 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.076 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.076 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.077 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.077 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.077 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.077 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.104 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.105 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.105 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.105 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.105 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.105 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.105 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.105 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.105 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.105 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.107 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.107 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.107 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.107 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.107 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.107 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.108 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.108 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.108 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.108 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.136 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.136 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.136 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.136 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.136 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.136 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.136 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.136 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.136 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.136 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.139 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.139 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.139 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.139 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.139 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.139 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.139 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.166 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.166 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.166 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.166 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.166 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.167 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.167 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.167 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.167 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.167 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.168 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.168 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.169 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.169 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.169 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.169 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.169 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.169 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.169 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.169 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.197 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.197 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.197 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.197 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.197 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.197 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.197 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.197 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.197 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.197 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.201 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.201 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.201 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.201 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.201 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.201 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.201 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.201 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.201 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.201 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.228 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.228 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.228 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.228 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.228 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.228 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.228 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.228 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.228 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.228 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.231 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.231 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.231 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.231 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.231 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.231 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.231 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.231 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.232 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.232 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.258 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.259 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.259 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.259 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.259 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.259 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.259 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.259 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.259 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.259 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.274 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.274 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.275 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.275 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.275 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.275 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.275 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.275 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.275 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.275 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.283 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.283 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.283 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.283 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.283 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.283 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.283 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.283 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.283 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.283 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.304 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.304 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.304 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.304 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.304 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.304 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.304 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.304 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.304 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.304 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.311 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.311 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.311 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.311 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.311 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.311 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.311 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.311 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.311 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.311 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.334 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.335 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.335 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.335 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.335 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.335 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.335 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.335 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.335 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.335 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.343 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.343 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.343 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.343 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.343 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.343 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.343 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.343 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.343 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.343 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.367 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.367 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.367 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.367 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.367 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.367 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.367 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.367 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.367 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.367 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.376 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.376 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.376 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.376 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.376 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.376 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.376 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.376 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.376 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.376 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.399 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.399 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.399 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.399 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.399 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.399 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.399 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.399 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.399 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.399 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.406 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.406 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.406 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.406 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.406 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.406 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.406 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.406 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.407 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.407 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.429 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.429 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.429 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.429 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.429 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.429 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.429 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.429 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.429 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.429 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.437 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.438 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.438 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.438 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.438 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.438 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.438 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.438 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.438 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.438 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.459 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.460 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.460 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.460 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.460 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.460 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.460 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.460 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.460 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.460 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.468 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.468 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.468 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.468 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.468 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.468 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.468 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.468 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.468 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.468 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.490 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.490 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.490 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.490 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.490 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.490 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.491 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.491 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.491 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.491 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.497 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.497 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.497 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.497 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.497 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.497 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.497 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.497 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.497 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.497 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.521 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.521 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.521 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.521 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.521 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.521 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.521 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.521 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.521 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.521 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.529 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.529 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.529 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.529 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.529 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.529 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.529 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.529 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.529 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.529 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.551 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.551 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.551 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.551 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.551 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.551 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.551 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.552 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.552 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.552 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.566 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.566 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.566 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.566 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.567 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.567 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.567 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.567 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.567 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.567 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.582 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.583 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.583 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.583 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.583 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.583 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.583 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.583 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.583 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.583 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.597 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.597 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.597 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.597 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.597 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.597 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.597 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.597 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.597 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.597 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.613 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.613 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.613 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.613 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.613 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.613 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.613 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.613 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.613 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.613 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.628 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.628 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.628 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.629 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.629 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.629 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.629 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.629 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.629 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.629 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.644 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.644 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.644 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.644 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.644 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.644 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.644 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.644 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.645 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.645 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.653 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.653 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.653 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.653 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.653 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.653 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.653 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.653 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.653 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.653 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.675 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.675 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.676 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.676 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.676 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.676 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.676 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.676 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.676 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.676 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.685 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.685 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.685 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.685 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.685 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.685 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.685 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.685 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.686 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.686 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.706 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.706 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.706 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.706 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.706 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.706 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.706 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.706 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.706 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.707 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.721 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.721 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.722 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.722 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.722 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.722 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.722 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.722 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.722 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.722 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.737 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.737 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.737 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.738 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.738 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.738 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.738 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.738 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.738 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.738 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.753 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.753 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.753 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.753 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.753 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.753 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.753 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.753 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.754 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.754 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.768 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.768 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.768 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.768 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.768 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.768 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.768 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.769 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.769 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.769 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.784 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.784 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.784 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.784 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.784 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.784 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.784 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.784 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.784 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.784 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.800 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.800 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.800 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.800 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.800 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.800 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.800 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.800 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.800 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.800 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.814 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.815 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.815 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.815 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.815 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.815 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.815 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.815 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.815 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.815 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.830 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.830 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.830 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.830 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.830 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.830 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.830 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.830 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.830 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.830 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.846 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.846 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.846 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.846 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.846 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.846 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.846 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.846 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.846 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.846 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.861 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.861 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.861 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.861 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.862 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.862 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.862 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.862 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.862 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.862 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.877 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.877 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.878 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.878 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.878 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.878 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.878 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.878 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.878 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.878 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.892 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.892 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.893 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.893 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.893 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.893 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.893 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.893 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.893 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.893 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.904 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.904 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.904 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.904 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.904 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.904 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.905 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.905 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.905 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.905 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.924 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.925 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.925 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.925 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.925 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.925 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.925 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.925 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.925 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.925 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.940 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.940 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.940 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.940 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.940 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.940 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.940 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.940 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.940 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.940 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.955 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.955 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.955 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.955 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.955 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.955 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.955 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.955 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.955 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.955 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.971 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.971 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.971 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.971 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.971 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.971 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.971 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.971 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.971 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.971 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:00.986 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.986 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.986 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:00.986 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:00.986 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.986 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.986 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:00.986 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:00.986 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:00.986 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.001 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.002 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.002 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.002 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.002 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.002 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.002 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.002 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.002 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.002 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.015 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.015 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.015 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.015 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.015 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.015 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.015 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.015 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.015 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.015 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.017 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.017 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.017 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.017 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.017 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.017 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.017 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.017 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.017 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.017 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.033 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.033 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.033 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.033 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.033 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.033 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.033 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.033 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.033 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.033 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.045 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.045 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.045 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.045 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.045 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.045 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.045 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.045 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.045 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.045 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.046 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.046 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.046 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.047 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.047 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.047 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.047 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.047 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.047 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.047 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.064 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.064 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.064 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.064 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.064 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.064 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.064 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.064 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.064 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.065 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.067 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.067 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.067 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.067 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.067 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.067 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.067 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.067 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.067 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.067 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.079 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.079 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.079 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.079 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.079 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.079 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.079 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.079 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.079 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.079 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.095 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.095 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.095 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.095 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.095 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.095 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.095 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.095 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.095 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.095 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.109 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.109 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.109 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.109 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.110 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.110 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.110 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.110 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.110 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.110 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.118 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.118 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.118 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.118 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.118 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.118 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.118 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.118 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.118 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.118 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.126 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.126 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.126 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.126 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.126 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.126 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.126 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.126 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.126 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.126 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.140 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.140 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.140 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.140 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.140 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.140 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.140 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.140 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.140 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.155 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.155 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.155 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.155 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.155 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.155 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.155 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.155 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.155 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.155 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.160 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.160 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.160 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.160 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.160 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.160 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.160 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.160 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.160 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.160 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.169 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.169 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.169 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.169 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.169 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.169 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.169 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.169 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.169 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.169 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.186 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.186 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.186 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.186 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.186 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.186 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.186 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.186 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.186 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.187 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.202 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.202 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.202 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.203 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.203 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.203 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.203 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.203 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.203 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.203 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.218 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.218 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.218 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.218 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.218 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.218 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.218 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.218 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.218 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.218 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.234 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.234 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.234 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.234 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.234 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.234 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.234 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.234 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.234 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.234 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.250 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.250 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.250 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.250 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.250 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.250 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.250 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.251 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.251 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.251 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.265 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.265 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.265 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.265 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.265 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.265 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.265 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.265 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.265 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.265 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.269 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.269 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.269 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.269 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.269 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.269 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.269 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.269 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.269 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.269 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.280 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.281 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.281 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.281 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.281 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.281 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.281 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.281 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.281 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.281 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.282 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.283 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.283 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.283 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.283 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.283 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.283 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.283 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.283 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.283 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.296 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.296 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.296 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.296 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.296 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.296 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.296 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.296 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.296 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.296 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.299 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.299 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.299 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.299 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.299 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.299 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.299 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.299 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.299 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.299 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.312 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.312 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.312 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.312 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.312 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.312 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.312 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.312 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.312 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.312 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.320 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.320 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.320 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.320 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.320 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.320 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.320 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.320 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.320 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.320 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.328 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.328 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.328 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.328 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.328 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.328 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.328 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.328 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.328 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.328 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.343 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.344 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.344 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.344 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.344 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.344 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.344 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.344 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.344 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.344 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.358 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.359 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.359 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.359 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.359 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.359 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.359 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.359 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.359 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.359 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.373 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.374 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.374 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.374 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.374 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.374 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.374 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.374 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.374 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.374 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.388 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.389 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.389 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.389 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.389 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.389 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.389 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.389 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.389 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.389 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.404 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.404 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.404 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.404 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.404 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.404 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.404 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.404 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.404 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.405 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.419 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.419 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.419 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.419 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.419 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.419 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.419 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.419 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.419 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.419 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.434 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.435 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.435 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.435 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.435 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.435 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.435 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.435 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.435 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.435 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.450 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.451 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.451 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.451 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.451 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.451 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.451 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.451 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.451 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.451 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.464 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.464 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.464 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.464 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.464 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.464 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.464 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.465 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.465 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.465 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.466 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.467 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.467 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.467 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.467 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.467 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.467 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.467 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.467 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.467 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.483 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.483 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.483 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.483 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.483 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.483 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.483 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.484 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.484 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.484 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.485 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.485 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.485 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.485 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.485 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.485 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.486 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.486 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.486 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.486 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.512 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.512 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.512 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.512 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.512 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.512 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.512 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.512 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.512 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.512 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.514 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.514 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.514 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.514 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.514 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.514 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.514 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.514 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.514 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.514 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.542 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.542 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.542 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.542 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.542 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.542 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.542 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.542 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.542 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.542 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.544 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.544 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.544 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.544 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.544 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.544 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.545 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.545 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.545 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.545 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.553 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.553 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.553 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.553 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.553 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.553 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.553 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.553 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.553 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.553 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.574 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.574 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.574 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.574 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.574 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.574 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.574 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.574 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.574 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.574 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.576 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.576 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.576 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.576 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.576 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.576 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.577 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.577 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.577 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.577 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.583 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.583 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.583 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.583 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.583 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.583 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.583 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.583 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.583 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.583 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.604 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.604 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.604 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.604 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.604 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.604 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.604 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.604 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.604 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.604 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.619 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.619 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.619 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.619 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.620 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.620 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.620 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.620 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.620 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.620 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.622 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.622 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.622 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.622 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.622 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.622 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.622 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.622 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.622 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.622 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.650 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.650 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.651 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.651 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.651 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.651 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.651 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.651 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.651 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.651 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.667 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.667 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.667 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.667 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.667 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.667 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.667 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.667 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.667 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.667 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.669 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.670 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.670 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.670 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.670 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.670 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.670 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.670 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.670 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.670 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.688 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.688 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.688 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.688 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.688 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.688 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.688 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.688 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.688 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.688 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.706 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.706 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.706 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.706 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.735 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.735 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.735 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.735 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.735 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.735 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.738 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.738 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.738 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.738 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.738 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.738 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.738 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.738 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.738 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.738 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.748 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.748 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.748 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.749 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.749 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.749 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.749 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.749 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.749 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.749 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.768 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.768 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.768 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.768 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.768 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.768 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.768 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.768 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.768 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.768 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.785 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.785 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.785 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.785 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.785 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.785 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.785 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.785 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.785 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.785 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.797 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.797 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.797 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.797 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.797 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.797 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.797 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.797 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.797 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.797 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.810 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.810 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.810 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.810 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.810 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.810 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.810 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.810 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.810 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.810 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.840 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.840 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.840 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.840 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.840 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.840 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.840 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.840 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.840 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.840 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.842 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.842 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.842 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.842 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.842 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.842 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.842 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.842 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.842 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.842 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.870 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.870 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.870 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.870 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.870 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.870 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.870 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.870 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.870 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.870 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.873 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.873 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.873 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.873 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.873 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.873 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.873 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.873 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.873 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.873 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.900 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.900 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.901 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.901 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.901 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.901 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.901 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.901 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.901 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.901 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.906 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.906 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.906 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.906 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.906 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.906 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.906 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.906 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.906 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.907 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.931 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.931 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.931 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.931 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.931 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.931 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.931 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.931 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.931 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.932 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.935 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.935 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.935 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.935 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.935 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.936 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.936 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.936 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.936 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.936 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.960 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.960 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.960 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.960 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.960 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.960 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.960 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.960 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.960 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.960 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.977 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.977 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.977 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.977 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.977 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.977 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.977 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.977 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.977 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.977 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:01.993 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.993 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.993 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:01.993 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:01.993 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.993 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.993 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:01.993 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:01.993 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:01.993 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.003 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.003 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.003 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.003 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.003 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.003 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.003 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.003 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.003 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.003 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.025 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.026 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.026 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.026 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.026 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.026 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.026 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.026 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.026 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.026 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.028 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.028 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.028 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.028 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.028 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.028 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.028 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.028 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.028 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.028 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.056 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.056 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.056 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.056 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.056 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.056 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.056 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.056 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.056 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.056 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.061 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.061 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.061 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.061 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.061 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.061 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.061 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.061 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.061 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.061 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.087 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.087 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.087 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.087 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.087 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.087 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.087 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.087 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.087 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.087 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.101 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.101 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.101 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.101 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.101 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.101 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.102 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.102 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.102 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.102 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.110 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.110 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.111 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.111 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.111 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.111 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.111 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.111 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.111 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.111 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.134 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.134 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.134 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.134 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.134 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.134 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.134 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.134 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.134 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.135 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.141 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.141 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.141 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.141 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.142 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.142 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.142 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.142 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.142 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.142 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.164 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.164 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.164 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.164 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.164 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.164 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.164 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.164 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.164 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.164 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.179 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.179 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.179 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.179 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.179 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.179 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.179 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.179 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.179 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.179 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.187 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.188 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.188 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.188 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.188 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.188 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.188 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.188 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.188 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.188 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.210 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.210 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.210 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.210 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.210 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.210 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.210 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.210 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.211 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.211 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.219 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.219 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.219 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.219 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.219 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.219 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.219 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.219 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.219 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.219 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.242 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.242 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.242 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.242 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.242 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.243 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.243 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.243 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.243 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.243 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.251 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.251 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.251 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.251 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.252 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.252 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.252 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.252 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.252 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.252 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.273 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.274 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.274 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.274 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.274 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.274 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.274 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.274 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.274 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.274 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.282 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.282 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.282 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.282 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.282 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.282 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.282 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.282 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.282 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.282 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.303 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.304 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.304 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.304 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.304 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.304 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.304 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.304 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.304 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.304 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.312 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.312 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.312 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.312 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.312 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.312 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.312 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.312 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.312 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.312 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.335 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.335 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.335 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.335 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.335 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.335 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.335 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.335 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.335 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.335 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.342 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.342 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.343 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.343 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.343 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.343 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.343 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.343 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.343 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.343 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.365 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.365 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.365 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.365 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.365 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.365 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.366 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.366 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.366 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.366 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.373 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.373 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.373 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.373 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.373 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.373 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.373 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.373 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.373 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.374 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.396 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.396 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.396 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.396 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.396 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.396 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.396 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.396 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.396 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.396 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.411 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.411 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.411 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.411 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.411 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.411 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.411 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.411 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.411 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.411 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.427 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.427 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.427 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.427 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.427 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.428 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.428 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.428 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.428 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.428 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.436 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.436 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.436 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.436 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.436 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.436 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.436 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.436 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.437 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.437 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.451 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.451 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.451 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.451 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.451 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.451 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.451 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.451 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.451 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.451 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.473 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.473 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.473 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.473 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.473 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.473 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.473 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.473 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.473 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.473 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.488 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.488 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.488 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.488 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.488 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.489 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.489 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.489 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.489 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.489 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.499 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.499 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.499 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.499 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.499 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.499 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.499 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.499 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.499 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.499 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.519 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.519 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.520 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.520 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.520 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.520 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.520 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.520 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.520 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.520 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.529 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.529 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.529 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.529 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.529 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.529 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.529 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.529 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.529 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.529 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.551 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.551 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.551 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.551 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.551 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.551 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.552 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.552 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.552 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.552 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.561 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.561 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.562 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.562 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.562 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.562 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.562 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.562 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.562 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.562 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.581 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.581 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.581 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.582 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.582 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.582 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.582 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.582 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.582 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.582 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.597 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.597 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.597 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.598 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.598 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.598 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.598 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.598 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.598 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.598 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.612 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.612 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.612 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.612 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.612 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.612 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.612 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.612 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.613 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.613 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.628 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.628 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.628 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.628 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.628 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.628 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.628 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.628 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.628 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.628 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.642 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.642 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.642 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.642 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.642 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.642 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.643 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.643 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.643 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.643 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.653 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.654 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.654 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.654 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.654 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.654 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.654 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.654 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.654 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.654 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.673 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.673 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.673 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.673 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.673 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.673 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.673 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.673 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.673 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.673 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.688 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.688 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.688 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.688 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.688 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.688 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.688 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.688 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.688 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.688 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.704 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.705 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.705 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.705 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.705 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.705 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.705 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.705 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.705 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.705 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.719 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.719 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.719 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.719 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.719 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.719 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.719 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.719 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.719 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.719 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.736 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.736 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.736 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.736 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.736 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.736 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.736 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.736 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.737 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.737 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.750 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.750 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.750 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.750 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.750 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.750 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.750 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.750 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.750 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.751 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.766 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.766 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.767 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.767 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.767 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.767 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.767 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.767 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.767 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.767 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.781 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.781 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.782 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.782 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.782 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.782 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.782 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.782 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.782 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.782 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.797 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.798 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.798 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.798 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.798 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.798 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.798 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.798 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.798 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.798 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.812 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.813 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.813 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.813 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.813 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.813 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.813 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.813 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.813 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.813 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.828 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.828 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.828 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.828 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.828 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.828 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.828 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.828 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.828 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.828 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.843 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.843 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.844 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.844 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.844 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.844 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.844 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.844 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.844 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.844 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.859 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.859 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.859 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.859 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.859 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.859 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.859 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.859 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.859 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.859 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.875 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.875 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.875 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.875 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.875 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.875 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.875 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.875 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.875 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.875 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.890 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.890 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.890 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.890 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.890 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.890 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.890 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.890 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.891 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.891 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.906 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.906 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.906 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.906 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.906 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.906 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.907 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.907 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.907 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.907 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.922 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.922 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.922 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.923 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.923 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.923 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.923 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.923 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.923 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.923 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.937 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.937 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.938 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.938 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.938 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.938 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.938 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.938 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.938 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.938 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.952 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.953 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.953 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.953 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.953 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.953 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.953 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.953 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.953 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.953 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.969 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.969 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.969 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.969 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.969 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.969 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.969 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.969 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.969 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.970 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:02.985 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.986 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.986 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:02.986 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:02.986 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.986 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.986 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:02.986 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:02.986 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:02.986 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.000 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.000 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.000 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.001 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.001 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.001 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.001 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.001 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.001 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.001 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.015 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.015 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.015 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.015 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.015 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.015 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.016 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.016 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.016 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.016 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.031 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.031 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.031 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.031 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.031 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.032 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.032 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.032 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.032 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.032 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.044 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.044 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.044 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.044 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.044 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.044 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.045 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.045 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.045 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.045 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.062 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.062 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.062 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.062 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.062 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.062 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.063 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.063 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.063 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.063 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.077 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.077 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.077 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.078 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.078 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.078 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.078 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.078 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.078 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.078 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.093 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.093 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.093 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.093 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.093 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.093 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.093 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.093 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.093 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.093 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.109 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.109 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.109 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.109 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.109 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.109 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.109 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.109 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.110 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.110 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.126 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.127 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.127 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.127 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.127 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.127 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.127 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.127 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.127 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.127 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.139 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.139 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.139 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.139 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.139 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.139 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.140 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.140 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.154 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.154 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.154 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.154 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.154 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.154 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.155 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.155 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.155 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.155 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.169 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.170 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.170 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.170 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.170 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.170 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.170 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.170 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.170 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.170 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.186 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.186 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.186 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.186 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.186 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.187 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.187 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.187 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.187 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.187 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.201 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.201 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.201 [❌] [SkinnedDraw] CALLED! Device=29441793, GameObject=tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+01:01:03.201 [❌] [SkinnedDraw] Depth=DepthStencilState.Default, Blend=BlendState.Opaque, Viewport=1360x654
+01:01:03.201 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.201 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.201 [❌] [MatrixCalc] Offset[0]: M11=-0,00, M41=0,06
+01:01:03.202 [❌] [MatrixCalc] World[0]: M11=-0,99, M41=0,05
+01:01:03.202 [❌] [BoneMatrix] Bone[0]: M11=0,00, M41=-0,01, M42=0,00, M43=0,01
+01:01:03.202 [⚠] [SkinnedShader] View.M41=-0,00, Proj.M33=-1,00, Device=29441793
+01:01:03.364 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=592036. Total devices: 3
+01:01:03.367 [ℹ] [ToneMapRenderer] Warning: ToneMap.mgfxo not found. HDR visuals may be incorrect.
+01:01:03.367 [ℹ] [MonoGameControl] Using shared ContentManager for shadows
+01:01:03.367 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+01:01:03.367 [ℹ] [MonoGameControl] ✅ Selection box initialized!
+01:01:03.367 [ℹ] [MonoGameControl] Created HDR Target 1360x654 (HalfVector4)
+01:01:03.369 [ℹ] [GraphicsDeviceService] RELEASING device for Handle=592036. Total devices before: 3
+01:01:03.371 [ℹ] [GraphicsDeviceService] Total devices after: 2
+01:01:03.392 [ℹ] [GameControl] OnCreateControl: Handle=3812566
+01:01:03.466 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=3812566. Total devices: 3
+01:01:03.466 [ℹ] [ToneMapRenderer] Warning: ToneMap.mgfxo not found. HDR visuals may be incorrect.
+01:01:03.468 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+01:01:03.469 [ℹ] [GraphicsDeviceService] RELEASING device for Handle=3812566. Total devices before: 3
+01:01:03.503 [ℹ] [GraphicsDeviceService] Total devices after: 2

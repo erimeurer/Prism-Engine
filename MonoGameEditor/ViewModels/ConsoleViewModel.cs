@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using MonoGameEditor.Models;
+using System.IO;
 
 namespace MonoGameEditor.ViewModels
 {
@@ -14,6 +15,14 @@ namespace MonoGameEditor.ViewModels
 
         private ObservableCollection<LogMessage> _allMessages = new();
         private int _selectedTabIndex = 0;
+        
+        // Auto-save logs to project root (accessible, not in bin)
+        private static readonly string _logFilePath = Path.Combine(
+            Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) ?? "",
+            "..", "..", "..",
+            $"DebugLogs_{DateTime.Now:yyyyMMdd_HHmmss}.txt"
+        );
+        private static StreamWriter? _logWriter;
 
         public ObservableCollection<LogMessage> AllMessages 
         { 
@@ -49,6 +58,12 @@ namespace MonoGameEditor.ViewModels
 
         public ConsoleViewModel() : base("Console")
         {
+            try
+            {
+                _logWriter = new StreamWriter(_logFilePath, append: true) { AutoFlush = true };
+                _logWriter.WriteLine($"=== Prism Engine Debug Log Started: {DateTime.Now} ===");
+            }
+            catch { }
         }
 
         public static void Log(string message)
@@ -73,6 +88,19 @@ namespace MonoGameEditor.ViewModels
 
         private void AddMessage(string message, LogType type)
         {
+            // Write to file immediately
+            try
+            {
+                var prefix = type switch
+                {
+                    LogType.Warning => "[⚠]",
+                    LogType.Error => "[❌]",
+                    _ => "[ℹ]"
+                };
+                _logWriter?.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {prefix} {message}");
+            }
+            catch { }
+            
             System.Windows.Application.Current?.Dispatcher.Invoke(() =>
             {
                 var logMsg = new LogMessage(message, type);
@@ -162,6 +190,20 @@ namespace MonoGameEditor.ViewModels
             foreach (var msg in filtered)
             {
                 DisplayedMessages.Add(msg);
+            }
+        }
+        
+        public void CopyToClipboard()
+        {
+            try
+            {
+                var logs = string.Join(Environment.NewLine, AllMessages.Select(m => $"{m.Icon} {m.FormattedMessage}"));
+                System.Windows.Clipboard.SetText(logs);
+                LogInfo("📋 Logs copiados para clipboard!");
+            }
+            catch (Exception ex)
+            {
+                LogError($"Erro ao copiar: {ex.Message}");
             }
         }
 

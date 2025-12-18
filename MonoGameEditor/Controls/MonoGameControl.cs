@@ -97,8 +97,18 @@ namespace MonoGameEditor.Controls
         protected override void OnVisibleChanged(EventArgs e)
         {
             base.OnVisibleChanged(e);
-            if (Visible) _renderTimer?.Start();
-            else _renderTimer?.Stop();
+            
+            // CRITICAL FIX: Don't stop rendering when tab is not visible!
+            // This was causing bone transforms to freeze when switching tabs
+            // Comment out for now - render continuously
+            
+            // OLD BUGGED CODE:
+            // if (Visible) _renderTimer?.Start();
+            // else _renderTimer?.Stop(); // ← This freezes transforms!
+            
+            // NEW: Always keep rendering (may need optimization later)
+            if (_renderTimer != null && !_renderTimer.Enabled)
+                _renderTimer.Start();
         }
 
         protected override void OnCreateControl()

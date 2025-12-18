@@ -339,31 +339,70 @@ namespace MonoGameEditor.ViewModels
             ConsoleViewModel.Log("New Scene Created");
         }
 
-        private void OpenScene()
-        {
-            var dialog = new Microsoft.Win32.OpenFileDialog
+        private async void OpenScene()
             {
-                Filter = "World Files (*.world)|*.world|All Files (*.*)|*.*",
-                InitialDirectory = MonoGameEditor.Core.ProjectManager.Instance.ScenesPath
-            };
-
-            if (dialog.ShowDialog() == true)
-            {
-                OpenScene(dialog.FileName);
+                var dialog = new Microsoft.Win32.OpenFileDialog
+                {
+                    Filter = "World Files (*.world)|*.world|All Files (*.*)|*.*",
+                    InitialDirectory = MonoGameEditor.Core.ProjectManager.Instance.ScenesPath
+                };
+                
+                if (dialog.ShowDialog() == true)
+                {
+                    // Show loading overlay
+                    var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
+                    mainWindow?.ShowLoadingOverlay("Loading scene...");
+                    
+                    try
+                    {
+                        MonoGameEditor.Core.SceneManager.Instance.CreateDefaultScene();
+                        IO.SceneSerializer.LoadScene(dialog.FileName);
+                        _currentScenePath = dialog.FileName;
+                        
+                        // Update Settings
+                        MonoGameEditor.Core.ProjectManager.Instance.CurrentSettings.LastOpenedScene = _currentScenePath;
+                        MonoGameEditor.Core.ProjectManager.Instance.SaveSettings();
+                        
+                        UpdateTitle();
+                        ConsoleViewModel.Log($"Scene Loaded: {_currentScenePath}");
+                        
+                        // CRITICAL: Wait for async model loading to complete
+                        await System.Threading.Tasks.Task.Delay(2000);
+                    }
+                    finally
+                    {
+                        // Hide loading overlay
+                        mainWindow?.HideLoadingOverlay();
+                    }
+                }
             }
-        }
 
-        public void OpenScene(string path)
+        public async void OpenScene(string path)
         {
-             MonoGameEditor.IO.SceneSerializer.LoadScene(path);
-             _currentScenePath = path;
-             
-             // Update Settings
-             MonoGameEditor.Core.ProjectManager.Instance.CurrentSettings.LastOpenedScene = path;
-             MonoGameEditor.Core.ProjectManager.Instance.SaveSettings();
-             
-             UpdateTitle();
-             ConsoleViewModel.Log($"Scene Loaded: {_currentScenePath}");
+            // Show loading overlay
+            var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
+            mainWindow?.ShowLoadingOverlay("Loading scene...");
+            
+            try
+            {
+                 MonoGameEditor.IO.SceneSerializer.LoadScene(path);
+                 _currentScenePath = path;
+                 
+                 // Update Settings
+                 MonoGameEditor.Core.ProjectManager.Instance.CurrentSettings.LastOpenedScene = path;
+                 MonoGameEditor.Core.ProjectManager.Instance.SaveSettings();
+                 
+                 UpdateTitle();
+                 ConsoleViewModel.Log($"Scene Loaded: {_currentScenePath}");
+                 
+                 // CRITICAL: Wait for async model loading to complete
+                 await System.Threading.Tasks.Task.Delay(5000); // Increased to 5 seconds
+            }
+            finally
+            {
+                // Hide loading overlay
+                mainWindow?.HideLoadingOverlay();
+            }
         }
 
         private void SaveScene()

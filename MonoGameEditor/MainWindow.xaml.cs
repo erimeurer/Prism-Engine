@@ -48,5 +48,46 @@ namespace MonoGameEditor
         {
             Close();
         }
+        
+        public void ShowLoadingOverlay(string message = "Loading...")
+        {
+            System.Diagnostics.Debug.WriteLine($"[MainWindow] ShowLoadingOverlay called: {message}");
+            Dispatcher.Invoke(() =>
+            {
+                LoadingStatusText.Text = message;
+                LoadingOverlay.Visibility = Visibility.Visible;
+                
+                // CRITICAL: Hide the main content Grid to prevent 3D rendering over overlay
+                // DirectX controls ignore WPF ZIndex, so we must hide them
+                if (Content is Grid containerGrid && containerGrid.Children.Count > 0)
+                {
+                    var mainContentGrid = containerGrid.Children[0] as Grid;
+                    if (mainContentGrid != null)
+                    {
+                        mainContentGrid.Visibility = Visibility.Collapsed;
+                    }
+                }
+                
+                System.Diagnostics.Debug.WriteLine($"[MainWindow] Overlay visibility set to Visible");
+            });
+        }
+
+        public void HideLoadingOverlay()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                LoadingOverlay.Visibility = Visibility.Collapsed;
+                
+                // Restore main content visibility
+                if (Content is Grid containerGrid && containerGrid.Children.Count > 0)
+                {
+                    var mainContentGrid = containerGrid.Children[0] as Grid;
+                    if (mainContentGrid != null)
+                    {
+                        mainContentGrid.Visibility = Visibility.Visible;
+                    }
+                }
+            });
+        }
     }
 }

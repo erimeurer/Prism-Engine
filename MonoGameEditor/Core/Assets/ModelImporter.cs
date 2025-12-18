@@ -111,13 +111,34 @@ namespace MonoGameEditor.Core.Assets
             {
                 if (!File.Exists(path)) return null;
                 
-                // CHECK CACHE FIRST - instant return if already processed!
-                lock (_modelCache)
+                // CACHE DISABLED - Testing if cache causes corruption
+                if (false)
                 {
-                    if (_modelCache.TryGetValue(path, out ModelData cachedModel))
+                    // CHECK CACHE FIRST - instant return if already processed!
+                    lock (_modelCache)
                     {
-                        System.Diagnostics.Debug.WriteLine($"[ModelImporter] ✓ Cache HIT: {Path.GetFileName(path)} - instant!");
-                        return cachedModel;
+                        if (_modelCache.TryGetValue(path, out ModelData cachedModel))
+                        {
+                            // CRITICAL FIX: Check if cached data is complete
+                            // If this is an FBX with bones but cache has 0 bones, it was cached incompletely during tab switch
+                            bool isFbx = path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
+                            bool hasMeshes = cachedModel != null && cachedModel.Meshes.Count > 0;
+                            bool hasSkinnedMesh = hasMeshes && cachedModel.Meshes.Any(m => m.BoneWeights != null && m.BoneWeights.Any());
+                            bool hasBones = cachedModel.Bones != null && cachedModel.Bones.Count > 0;
+                            
+                            if (isFbx && hasSkinnedMesh && !hasBones)
+                            {
+                                // Cached data is INCOMPLETE - invalidate cache!
+                                System.Diagnostics.Debug.WriteLine($"[ModelImporter] ⚠ Cache INVALID: {Path.GetFileName(path)} - has skinned mesh but no bones! Reloading...");
+                                _modelCache.Remove(path);
+                                // Fall through to reload
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[ModelImporter] ✓ Cache HIT: {Path.GetFileName(path)} - instant!");
+                                return cachedModel;
+                            }
+                        }
                     }
                 }
                 
@@ -267,10 +288,14 @@ namespace MonoGameEditor.Core.Assets
                         // Extract bone hierarchy if present
                         ExtractBoneHierarchy(scene, modelData);
                         
-                        // CACHE IT - next time will be instant!
-                        lock (_modelCache)
+                        // CACHE DISABLED - Testing if cache causes corruption
+                        if (false)
                         {
-                            _modelCache[path] = modelData;
+                            // CACHE IT - next time will be instant!
+                            lock (_modelCache)
+                            {
+                                _modelCache[path] = modelData;
+                            }
                         }
 
                         return modelData;

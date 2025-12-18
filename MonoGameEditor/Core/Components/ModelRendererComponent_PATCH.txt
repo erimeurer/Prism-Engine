@@ -1,0 +1,32 @@
+PATCH: Add loading synchronization
+
+Step 1: Add after line 91 (after "private bool _propertiesLoaded = false;"):
+
+        // Static counter to track loading across all instances
+        private static int _loadingInstanceCount = 0;
+        public static bool IsAnyInstanceLoading => _loadingInstanceCount > 0;
+
+Step 2: In ReloadMeshDataOnly(), REPLACE line 276 ("_isLoading = true; // Set loading flag to prevent rendering during reload"):
+
+            _isLoading = true; // Set loading flag to prevent rendering during reload
+            System.Threading.Interlocked.Increment(ref _loadingInstanceCount); // Track globally
+
+Step 3: In ReloadMeshDataOnly(), in the finally block, REPLACE lines 366-368:
+
+            finally
+            {
+                _isLoading = false; // Clear loading flag
+                System.Threading.Interlocked.Decrement(ref _loadingInstanceCount); // Release global counter
+            }
+
+Step 4: In GameControl.cs, ADD AFTER line 181 ("// 2. Render to HDR Target"):
+
+                // CRITICAL FIX: Don't render if Scene tab is still loading models
+                // This prevents corruption when switching tabs during async loading
+                if (Core.Components.ModelRendererComponent.IsAnyInstanceLoading)
+                {
+                    // Just clear to a neutral color and return
+                    GraphicsDevice.Clear(Color.FromNonPremultiplied(45, 45, 48, 255));
+                    GraphicsDevice.Present();
+                    return;
+                }

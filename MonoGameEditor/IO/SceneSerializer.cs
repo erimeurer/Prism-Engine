@@ -182,28 +182,44 @@ namespace MonoGameEditor.IO
 
         public static void LoadScene(string filePath)
         {
-            if (!File.Exists(filePath)) return;
-
-            string json = File.ReadAllText(filePath);
-            var sceneData = JsonSerializer.Deserialize<SceneData>(json, _options);
-
-            if (sceneData == null) return;
-
-            // Set flag to prevent components from reloading assets during deserialization
-            _isLoadingScene = true;
+            // Show loading overlay
+            var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
+            mainWindow?.ShowLoadingOverlay("Loading scene...");
             
             try
             {
-                // Clear current scene
-                SceneManager.Instance.RootObjects.Clear();
-                SceneManager.Instance.SelectedObject = null;
+                if (!File.Exists(filePath)) return;
 
-                RestoreSceneFromData(sceneData);
+                string json = File.ReadAllText(filePath);
+                var sceneData = JsonSerializer.Deserialize<SceneData>(json, _options);
+
+                if (sceneData == null) return;
+
+                // CRITICAL FIX: Clear model cache to prevent bone corruption
+                // Cache shares same BoneData objects between Scene and Game tabs
+                MonoGameEditor.Core.Assets.ModelImporter.ClearCache();
+
+                // Set flag to prevent components from reloading assets during deserialization
+                _isLoadingScene = true;
+                
+                try
+                {
+                    // Clear current scene
+                    SceneManager.Instance.RootObjects.Clear();
+                    SceneManager.Instance.SelectedObject = null;
+
+                    RestoreSceneFromData(sceneData);
+                }
+                finally
+                {
+                    // Always reset flag when done loading
+                    _isLoadingScene = false;
+                }
             }
             finally
             {
-                // Always reset flag when done loading
-                _isLoadingScene = false;
+                // Hide loading overlay
+                mainWindow?.HideLoadingOverlay();
             }
         }
 
@@ -361,6 +377,9 @@ namespace MonoGameEditor.IO
             }
             
             // 3. Initialize components that need post-load setup
+            // CRITICAL: Wait a moment to ensure ALL GameObjects are in the scene before initializing
+            System.Threading.Thread.Sleep(100); // Small delay to ensure hierarchy is stable
+            
             MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Initializing {idToObjMap.Count} objects post-load");
             
             foreach (var obj in idToObjMap.Values)

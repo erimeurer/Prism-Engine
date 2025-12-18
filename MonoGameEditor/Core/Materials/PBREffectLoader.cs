@@ -39,11 +39,45 @@ namespace MonoGameEditor.Core.Materials
                     }
                 }
                 
-                // Try MonoGameControl's ContentManager (for SceneView)
-                var monoGameContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
-                if (monoGameContent != null)
+                // CRITICAL FIX: Match device to ContentManager
+                var gameDevice = MonoGameEditor.Controls.GameControl.SharedGraphicsDevice;
+                var sceneDevice = MonoGameEditor.Controls.MonoGameControl.SharedGraphicsDevice;
+                
+                Microsoft.Xna.Framework.Content.ContentManager contentToTry = null;
+                
+                if (device == sceneDevice)
                 {
-                    // Check cache
+                    contentToTry = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
+                }
+                else if (device == gameDevice)
+                {
+                    contentToTry = MonoGameEditor.Controls.GameControl.SharedContent;
+                }
+                
+                if (contentToTry != null)
+                {
+                    if (_effectCache.TryGetValue(contentToTry, out var cachedEffect) && !cachedEffect.IsDisposed)
+                    {
+                        return cachedEffect;
+                    }
+                    
+                    try
+                    {
+                        var effect = contentToTry.Load<Effect>("Shaders/PBREffect");
+                        _effectCache[contentToTry] = effect;
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] PBR shader loaded via matched ContentManager for device {device.GetHashCode()}!");
+                        return effect;
+                    }
+                    catch (Exception ex)
+                    {
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] Matched ContentManager load failed: {ex.Message}");
+                    }
+                }
+
+                // Fallback: Try MonoGameControl's ContentManager (if not already tried)
+                var monoGameContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
+                if (monoGameContent != null && monoGameContent != contentToTry)
+                {
                     if (_effectCache.TryGetValue(monoGameContent, out var cachedEffect) && !cachedEffect.IsDisposed)
                     {
                         return cachedEffect;
@@ -53,20 +87,16 @@ namespace MonoGameEditor.Core.Materials
                     {
                         var effect = monoGameContent.Load<Effect>("Shaders/PBREffect");
                         _effectCache[monoGameContent] = effect;
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] PBR shader loaded via MonoGameControl.OwnContentManager!");
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] PBR shader loaded via MonoGameControl.OwnContentManager (Fallback)!");
                         return effect;
                     }
-                    catch (Exception ex)
-                    {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] MonoGameControl ContentManager load failed: {ex.Message}");
-                    }
+                    catch { }
                 }
                 
-                // Try to use shared ContentManager from GameControl
+                // Fallback: Try shared ContentManager from GameControl (if not already tried)
                 var sharedContent = MonoGameEditor.Controls.GameControl.SharedContent;
-                if (sharedContent != null)
+                if (sharedContent != null && sharedContent != contentToTry)
                 {
-                    // Check cache for SharedContent
                     if (_effectCache.TryGetValue(sharedContent, out var cachedEffect) && !cachedEffect.IsDisposed)
                     {
                         return cachedEffect;
@@ -75,21 +105,14 @@ namespace MonoGameEditor.Core.Materials
                     try
                     {
                         var effect = sharedContent.Load<Effect>("Shaders/PBREffect");
-                        _effectCache[sharedContent] = effect; // Cache it
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] PBR shader loaded via SharedContent!");
+                        _effectCache[sharedContent] = effect;
+                        MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] PBR shader loaded via SharedContent (Fallback)!");
                         return effect;
                     }
-                    catch (Exception ex)
-                    {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] SharedContent load failed: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] SharedContent not available yet");
+                    catch { }
                 }
 
-                // Fallback: Try mgfxo format
+                // Last Resort: Try mgfxo format
                 string shaderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "Shaders", "PBREffect.mgfxo");
                 
                 if (File.Exists(shaderPath))
@@ -99,18 +122,12 @@ namespace MonoGameEditor.Core.Materials
                     MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] PBR shader loaded from mgfxo!");
                     return effect;
                 }
-                else
-                {
-                    MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] Shader not found at: {shaderPath}");
-                }
             }
             catch (Exception ex)
             {
                 MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[PBRLoader] Failed to load PBR shader: {ex.Message}");
             }
 
-            // Fallback: return null to use BasicEffect
-            MonoGameEditor.ViewModels.ConsoleViewModel.Log("[PBRLoader] Using BasicEffect fallback");
             return null;
         }
 

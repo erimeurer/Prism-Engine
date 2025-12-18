@@ -1,0 +1,48 @@
+diff --git a/MonoGameEditor/Core/Components/ModelRendererComponent.cs b/MonoGameEditor/Core/Components/ModelRendererComponent.cs
+index existing..new 100644
+--- a/MonoGameEditor/Core/Components/ModelRendererComponent.cs
++++ b/MonoGameEditor/Core/Components/ModelRendererComponent.cs
+@@ -89,6 +89,8 @@ namespace MonoGameEditor.Core.Components
+         private Core.Shaders.ShaderAsset _currentShader;
+         private object _propLock = new object();
+         private bool _propertiesLoaded = false;
++        private static int _loadingCount = 0;
++        public static bool IsAnyInstanceLoading => _loadingCount > 0;
+ 
+         public Materials.PBRMaterial? Material
+         {
+@@ -273,6 +275,7 @@ namespace MonoGameEditor.Core.Components
+             }
+             
+             _isLoading = true;
++            System.Threading.Interlocked.Increment(ref _loadingCount);
+             
+             try
+             {
+@@ -364,6 +367,7 @@ namespace MonoGameEditor.Core.Components
+             finally
+             {
+                 _isLoading = false;
++                System.Threading.Interlocked.Decrement(ref _loadingCount);
+             }
+         }
+         
+diff --git a/MonoGameEditor/Controls/GameControl.cs b/MonoGameEditor/Controls/GameControl.cs
+index existing..new 100644
+--- a/MonoGameEditor/Controls/GameControl.cs
++++ b/MonoGameEditor/Controls/GameControl.cs
+@@ -179,6 +179,14 @@ namespace MonoGameEditor.Controls
+ 
+                 // 2. Render to HDR Target
+ 
++                // CRITICAL: Wait if Scene tab is loading
++                if (Core.Components.ModelRendererComponent.IsAnyInstanceLoading)
++                {
++                    GraphicsDevice.Clear(Color.FromNonPremultiplied(45, 45, 48, 255));
++                    GraphicsDevice.Present();
++                    return;
++                }
++
+                 // Identify Main Camera
+                 var cameraComp = FindMainCamera();
+                 if (cameraComp != null && cameraComp.GameObject != null)

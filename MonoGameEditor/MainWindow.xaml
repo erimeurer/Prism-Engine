@@ -63,7 +63,10 @@
         </DataTemplate>
     </Window.Resources>
 
+    <!-- Container Grid for main content + overlay -->
     <Grid>
+        <!-- Main Content Grid -->
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" /> <!-- Title Bar -->
             <RowDefinition Height="Auto" /> <!-- Menu -->
@@ -165,7 +168,32 @@
                            FontWeight="SemiBold"
                            FontSize="11"
                            VerticalAlignment="Center"/>
-            </StackPanel>
+             </StackPanel>
         </Border>
+        </Grid>
+        
+        <!-- Loading Overlay - Sibling to main Grid -->
+        <Grid x:Name="LoadingOverlay" 
+              Visibility="Collapsed" 
+              Background="#DD000000" 
+              Panel.ZIndex="99999">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="⏳ Loading Scene..." 
+                          FontSize="28" 
+                          Foreground="White" 
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,30"/>
+                <ProgressBar IsIndeterminate="True" 
+                            Width="400" 
+                            Height="8"
+                            Foreground="#007ACC"/>
+                <TextBlock x:Name="LoadingStatusText"
+                          Text="Please wait..."
+                          FontSize="16"
+                          Foreground="#AAAAAA"
+                          HorizontalAlignment="Center"
+                          Margin="0,30,0,0"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

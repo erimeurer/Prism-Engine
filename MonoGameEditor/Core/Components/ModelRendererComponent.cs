@@ -722,6 +722,24 @@ namespace MonoGameEditor.Core.Components
             }
         }
 
+        /// <summary>
+        /// Resolves the correct ContentManager based on the provided GraphicsDevice
+        /// </summary>
+        protected Microsoft.Xna.Framework.Content.ContentManager GetContentManagerForDevice(GraphicsDevice device)
+        {
+            var gameDevice = GameControl.SharedGraphicsDevice;
+            var sceneDevice = MonoGameControl.SharedGraphicsDevice;
+
+            if (device != null)
+            {
+                if (device == sceneDevice) return MonoGameControl.OwnContentManager;
+                if (device == gameDevice) return GameControl.SharedContent;
+            }
+
+            // Fallback
+            return GameControl.SharedContent ?? MonoGameControl.OwnContentManager;
+        }
+
         private object DeserializePropertyValue(System.Text.Json.JsonElement element)
         {
             try
@@ -919,7 +937,7 @@ namespace MonoGameEditor.Core.Components
         }
 
 
-        public void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition, 
+        public virtual void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition, 
             Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
             // Check for disposed device
@@ -976,12 +994,10 @@ namespace MonoGameEditor.Core.Components
             
             
             // RETRY LOGIC: If we have BasicEffect, try to upgrade to PBR
-            var sharedContent = MonoGameEditor.Controls.GameControl.SharedContent;
-            var ownContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
             var isBasicEffect = resources.Effect is BasicEffect;
             
             // Determine which ContentManager to use
-            var contentToUse = sharedContent ?? ownContent;
+            var contentToUse = GetContentManagerForDevice(device);
             
             if (isBasicEffect && contentToUse != null)
             {
@@ -1371,10 +1387,8 @@ namespace MonoGameEditor.Core.Components
                 {
                     ConsoleViewModel.Log($"[ModelRenderer] Attempting PBR shader load...");
                     
-                    // CRITICAL FIX: Pass ContentManager explicitly!
-                    // Try GameControl.SharedContent first (for Game View), then MonoGameControl (for Scene View)
-                    var contentMgr = MonoGameEditor.Controls.GameControl.SharedContent 
-                                  ?? MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
+                    // CRITICAL FIX: Pass ContentManager explicitly based on device!
+                    var contentMgr = GetContentManagerForDevice(device);
                     
                     var pbrEffect = PBREffectLoader.Load(device, contentMgr);
                     if (pbrEffect != null)

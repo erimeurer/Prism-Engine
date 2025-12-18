@@ -1,4 +1,6 @@
+using System.Windows;
 using System.Windows.Controls;
+using MonoGameEditor.ViewModels;
 
 namespace MonoGameEditor.Views
 {
@@ -38,12 +40,23 @@ namespace MonoGameEditor.Views
             return null;
         }
 
-        private void ClearButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            MonoGameEditor.ViewModels.ConsoleViewModel.Instance.Clear();
+            if (DataContext is ConsoleViewModel vm)
+            {
+                vm.Clear();
+            }
+        }
+        
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ConsoleViewModel vm)
+            {
+                vm.CopyToClipboard();
+            }
         }
 
-        private void Tab_Checked(object sender, System.Windows.RoutedEventArgs e)
+        private void Tab_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.RadioButton rb && rb.Tag is string tag)
             {
