@@ -13,12 +13,38 @@ namespace MonoGameEditor.Controls
         private VertexPositionTexture[] _fullScreenQuad;
         
         public float Exposure { get; set; } = 1.0f;
+        public bool UseAA { get; set; } = false;
+        public bool UsePRAA { get; set; } = false;
+        public bool UseMotionBlur { get; set; } = false;
+        public float MotionBlurIntensity { get; set; } = 1.0f;
+        public Vector2 BlurDirection { get; set; } = Vector2.Zero;
 
         public ToneMapRenderer(GraphicsDevice device)
         {
             _graphicsDevice = device;
             InitializeQuad();
-            LoadEffect();
+            // We defer effect loading to Initialize(ContentManager) if possible
+        }
+
+        public void Initialize(Microsoft.Xna.Framework.Content.ContentManager content)
+        {
+            if (content != null)
+            {
+                try
+                {
+                    _toneMapEffect = content.Load<Effect>("Shaders/ToneMap");
+                    ConsoleViewModel.Log("[ToneMapRenderer] Shader loaded successfully via ContentManager.");
+                }
+                catch (Exception ex)
+                {
+                    ConsoleViewModel.Log($"[ToneMapRenderer] Failed to load via ContentManager: {ex.Message}. Trying fallback...");
+                    LoadEffectFallback();
+                }
+            }
+            else
+            {
+                LoadEffectFallback();
+            }
         }
 
         private void InitializeQuad()
@@ -35,7 +61,7 @@ namespace MonoGameEditor.Controls
             };
         }
 
-        private void LoadEffect()
+        private void LoadEffectFallback()
         {
             try 
             {
@@ -45,17 +71,16 @@ namespace MonoGameEditor.Controls
                 {
                     var bytes = File.ReadAllBytes(shaderPath);
                     _toneMapEffect = new Effect(_graphicsDevice, bytes);
+                    ConsoleViewModel.Log("[ToneMapRenderer] Shader loaded via fallback (.mgfxo).");
                 }
                 else
                 {
-                    // If no shader found, we can't do custom tonemapping easily without runtime compiler.
-                    // Fallback to null - Host will handle using a simple SpriteBatch draw (Gamma only or raw)
-                    ConsoleViewModel.Log("[ToneMapRenderer] Warning: ToneMap.mgfxo not found. HDR visuals may be incorrect.");
+                    ConsoleViewModel.Log("[ToneMapRenderer] Warning: ToneMap shader not found (no .xnb or .mgfxo). PP will be disabled.");
                 }
             }
             catch (Exception ex)
             {
-                 ConsoleViewModel.Log($"[ToneMapRenderer] Failed to load shader: {ex.Message}");
+                 ConsoleViewModel.Log($"[ToneMapRenderer] Fallback load failed: {ex.Message}");
             }
         }
 
@@ -69,6 +94,12 @@ namespace MonoGameEditor.Controls
             {
                 _toneMapEffect.Parameters["ScreenTexture"]?.SetValue(sourceTexture);
                 _toneMapEffect.Parameters["Exposure"]?.SetValue(Exposure);
+                _toneMapEffect.Parameters["UseAA"]?.SetValue(UseAA);
+                _toneMapEffect.Parameters["UsePRAA"]?.SetValue(UsePRAA);
+                _toneMapEffect.Parameters["UseMotionBlur"]?.SetValue(UseMotionBlur);
+                _toneMapEffect.Parameters["MotionBlurIntensity"]?.SetValue(MotionBlurIntensity);
+                _toneMapEffect.Parameters["ScreenSize"]?.SetValue(new Vector2(sourceTexture.Width, sourceTexture.Height));
+                _toneMapEffect.Parameters["BlurDirection"]?.SetValue(BlurDirection);
 
                 foreach (var pass in _toneMapEffect.CurrentTechnique.Passes)
                 {

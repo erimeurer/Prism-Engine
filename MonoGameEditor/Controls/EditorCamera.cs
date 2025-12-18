@@ -82,6 +82,14 @@ namespace MonoGameEditor.Controls
             UpdateVectors();
         }
 
+        public void RefreshProjection()
+        {
+            if (AspectRatio > 0)
+            {
+                Projection = Matrix.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, NearPlane, FarPlane);
+            }
+        }
+
         private void UpdateVectors()
         {
             // Calculate forward vector from yaw and pitch
@@ -98,7 +106,7 @@ namespace MonoGameEditor.Controls
             
             // Update view matrix
             View = Matrix.CreateLookAt(Position, Position + Forward, Vector3.Up);
-            Projection = Matrix.CreatePerspectiveFieldOfView(FieldOfView, AspectRatio, NearPlane, FarPlane);
+            RefreshProjection();
         }
 
         // For OrientationGizmo compatibility

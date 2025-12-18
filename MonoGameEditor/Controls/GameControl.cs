@@ -72,7 +72,7 @@ namespace MonoGameEditor.Controls
 
             _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
             _shadowRenderer = new ShadowRenderer(GraphicsDevice!, content);
-            ResizeHDRTarget(Width, Height);
+            ResizeHDRTarget(Width, Height, AntialiasingMode.MSAA_8x); // Default to 8x for Game view
 
             _initialized = true;
             _renderTimer.Start();
@@ -172,9 +172,10 @@ namespace MonoGameEditor.Controls
                 }
     
                 // Ensure HDR Target is valid
-                if (_hdrRenderTarget == null || _hdrRenderTarget.Width != safeWidth || _hdrRenderTarget.Height != safeHeight)
+                if (mainCamera != null && (_hdrRenderTarget == null || _hdrRenderTarget.Width != safeWidth || _hdrRenderTarget.Height != safeHeight || _lastAntialiasing != mainCamera.Antialiasing))
                 {
-                    ResizeHDRTarget(safeWidth, safeHeight);
+                    ResizeHDRTarget(safeWidth, safeHeight, mainCamera?.Antialiasing ?? AntialiasingMode.None);
+                    _lastAntialiasing = mainCamera?.Antialiasing ?? AntialiasingMode.None;
                 }
 
                 // 2. Render to HDR Target
@@ -298,22 +299,32 @@ namespace MonoGameEditor.Controls
             }
         }
 
-        private void ResizeHDRTarget(int width, int height)
+        private AntialiasingMode _lastAntialiasing;
+
+        private void ResizeHDRTarget(int width, int height, AntialiasingMode antialiasingMode)
         {
             _hdrRenderTarget?.Dispose();
             
             if (width <= 0 || height <= 0) return;
 
+            int multiSampleCount = 0;
+            switch (antialiasingMode)
+            {
+                case AntialiasingMode.MSAA_2x: multiSampleCount = 2; break;
+                case AntialiasingMode.MSAA_4x: multiSampleCount = 4; break;
+                case AntialiasingMode.MSAA_8x: multiSampleCount = 8; break;
+            }
+
             try 
             {
                 _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
-                    SurfaceFormat.HalfVector4, DepthFormat.Depth24);
+                    SurfaceFormat.HalfVector4, DepthFormat.Depth24, multiSampleCount, RenderTargetUsage.PreserveContents);
             }
             catch(Exception)
             {
                 // Fallback
                 _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
-                    SurfaceFormat.Color, DepthFormat.Depth24);
+                    SurfaceFormat.Color, DepthFormat.Depth24, multiSampleCount, RenderTargetUsage.PreserveContents);
             }
         }
 

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using WinForms = System.Windows.Forms;
 using MonoGameEditor.ViewModels;
 using MonoGameEditor.Core;
+using MonoGameEditor.Core.Components;
 
 namespace MonoGameEditor.Controls
 {
@@ -28,7 +29,6 @@ namespace MonoGameEditor.Controls
         private MonoGameEditor.Core.Gizmos.ScaleGizmo? _scaleGizmo;
         private ProceduralSkybox? _skybox;
         private RenderTarget2D? _hdrRenderTarget;
-        private ToneMapRenderer? _toneMapRenderer;
         private ShadowRenderer? _shadowRenderer;
         private SelectionOutlineRenderer? _outlineRenderer;
         private Microsoft.Xna.Framework.Content.ContentManager? _ownContentManager;
@@ -58,6 +58,9 @@ namespace MonoGameEditor.Controls
         private System.Drawing.Point _lastMousePosition;
         private Stopwatch _stopwatch = new Stopwatch();
         private TimeSpan _lastFrameTime;
+        private bool _vmSubscribed = false;
+        private Vector3 _lastCameraPosition;
+        private Vector3 _lastCameraForward;
         
         // Render loop timer
         private WinForms.Timer _renderTimer;
@@ -142,7 +145,6 @@ namespace MonoGameEditor.Controls
             _skybox = new ProceduralSkybox();
             _skybox.Initialize(GraphicsDevice!);
 
-            _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
             
             // Initialize Shadow Renderer
             // Try to use SharedContent first, otherwise create our own
@@ -185,6 +187,7 @@ namespace MonoGameEditor.Controls
                 MainViewModel.Instance.FocusRequested += (s, e) => FocusSelection(); // Subscribe to focus requests
                 ShowSkybox = MainViewModel.Instance.IsSkyboxVisible;
                 UpdateToolbarState();
+                _vmSubscribed = true;
             }
             
             _initialized = true;
@@ -259,7 +262,26 @@ namespace MonoGameEditor.Controls
                  if (MainViewModel.Instance != null && IsHandleCreated)
                  {
                      ShowSkybox = MainViewModel.Instance.IsSkyboxVisible;
-                 }
+                  }
+            }
+            else if (e.PropertyName == nameof(MainViewModel.SelectedAntialiasingMode) ||
+                     e.PropertyName == nameof(MainViewModel.CameraFOV) ||
+                     e.PropertyName == nameof(MainViewModel.CameraNearPlane) ||
+                     e.PropertyName == nameof(MainViewModel.CameraFarPlane) ||
+                     e.PropertyName == nameof(MainViewModel.CameraMoveSpeed) ||
+                     e.PropertyName == nameof(MainViewModel.CameraMoveSpeed))
+            {
+                if (e.PropertyName == nameof(MainViewModel.SelectedAntialiasingMode))
+                {
+                    if (IsHandleCreated) Invoke(new Action(() => {
+                        ResizeHDRTarget(Width, Height);
+                        Invalidate();
+                    }));
+                }
+                else
+                {
+                    Invalidate();
+                }
             }
         }
 
@@ -499,6 +521,30 @@ namespace MonoGameEditor.Controls
         {
             if (!_initialized || GraphicsDevice == null) return;
 
+            // Late VM Subscription check
+            if (!_vmSubscribed && MainViewModel.Instance != null)
+            {
+                MainViewModel.Instance.PropertyChanged += OnViewModelPropertyChanged;
+                MainViewModel.Instance.FocusRequested += (s, e) => FocusSelection();
+                ShowSkybox = MainViewModel.Instance.IsSkyboxVisible;
+                UpdateToolbarState();
+                _vmSubscribed = true;
+                ConsoleViewModel.Log("[MonoGameControl] Late VM Subscription completed.");
+                // Ensure initial state is sync'd
+                ResizeHDRTarget(Width, Height);
+            }
+
+            // Sync Camera Settings from VM
+            if (MainViewModel.Instance != null && _camera != null)
+            {
+                var vm = MainViewModel.Instance;
+                _camera.FieldOfView = MathHelper.ToRadians(vm.CameraFOV);
+                _camera.NearPlane = vm.CameraNearPlane;
+                _camera.FarPlane = vm.CameraFarPlane;
+                _camera.MoveSpeed = vm.CameraMoveSpeed;
+                _camera.RefreshProjection();
+            }
+
             try
             {
                 if (GraphicsDevice.PresentationParameters.BackBufferWidth != Width ||
@@ -530,14 +576,17 @@ namespace MonoGameEditor.Controls
                     return;
                 }
 
+                // Ensure Render Target is valid BEFORE any rendering
+                if (_hdrRenderTarget == null || _hdrRenderTarget.Width != safeWidth || _hdrRenderTarget.Height != safeHeight)
+                {
+                    ResizeHDRTarget(safeWidth, safeHeight);
+                }
 
-
-
-        // --- Shadow Pass ---
-        Texture2D shadowMap = null;
-        Matrix? lightViewProj = null;
-        
-        var mainLightObj = FindFirstLight(Core.SceneManager.Instance?.RootObjects);
+                // --- Shadow Pass ---
+                Texture2D shadowMap = null;
+                Matrix? lightViewProj = null;
+                
+                var mainLightObj = FindFirstLight(Core.SceneManager.Instance?.RootObjects);
         if (mainLightObj != null)
         {
             var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
@@ -587,19 +636,12 @@ namespace MonoGameEditor.Controls
                     RenderRecursively(obj, shadowMap, lightViewProj);
                 }
             }
-                // Ensure HDR Target is valid
-                if (_hdrRenderTarget == null || _hdrRenderTarget.Width != safeWidth || _hdrRenderTarget.Height != safeHeight)
-                {
-                    ResizeHDRTarget(safeWidth, safeHeight);
-                }
-
                 // Grid Drawing
                 if (ShowGrid && _camera != null && _gridRenderer != null)
                 {
-                    _camera.UpdateAspectRatio(Width, Height);
                     _gridRenderer.Draw(GraphicsDevice, _camera);
                 }
-                
+
                 // Models are rendered in HDR pass above.
                 // Gizmos are rendered here on top of ToneMapped output.
                 
@@ -652,27 +694,17 @@ namespace MonoGameEditor.Controls
                 // Restore depth state
                 GraphicsDevice.DepthStencilState = previousDepthState;
                 
-                // 2. Tone Mapping Pass (HDR -> Backbuffer)
-                GraphicsDevice.SetRenderTarget(null); // Back to screen
-                // GraphicsDevice.Clear is usually not needed as we draw full screen quad, but good practice if letterboxing
-                
-                if (_toneMapRenderer != null && _hdrRenderTarget != null)
+                // 2. Resolve Pass
+                GraphicsDevice.SetRenderTarget(null);
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+
+                if (_hdrRenderTarget != null)
                 {
-                    _toneMapRenderer.Draw(_hdrRenderTarget);
-                }
-                else
-                {
-                     // Fallback
-                     using (var batch = new SpriteBatch(GraphicsDevice))
-                     {
-                         batch.Begin();
-                         batch.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
-                         batch.End();
-                     }
+                    _spriteBatch?.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+                    _spriteBatch?.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+                    _spriteBatch?.End();
                 }
 
-
-                // Implicit Present
                 GraphicsDevice.Present();
             }
             catch (Exception ex)
@@ -837,21 +869,32 @@ namespace MonoGameEditor.Controls
             
             if (width <= 0 || height <= 0) return;
 
+            int multiSampleCount = 0;
+            if (MainViewModel.Instance != null)
+            {
+                switch (MainViewModel.Instance.SelectedAntialiasingMode)
+                {
+                    case AntialiasingMode.MSAA_2x: multiSampleCount = 2; break;
+                    case AntialiasingMode.MSAA_4x: multiSampleCount = 4; break;
+                    case AntialiasingMode.MSAA_8x: multiSampleCount = 8; break;
+                }
+            }
+
             try 
             {
-                 // Use HalfVector4 for HDR precision (16-bit float per channel)
-                 // Preserves values > 1.0 for Tone Mapping
-                _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
-                    SurfaceFormat.HalfVector4, DepthFormat.Depth24);
-                
-                ConsoleViewModel.Log($"[MonoGameControl] Created HDR Target {width}x{height} (HalfVector4)");
+                 // Use Color for standard LDR rendering
+                 _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, 
+                    width, height, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8, 
+                    multiSampleCount, RenderTargetUsage.PreserveContents);
+                 
+                 ConsoleViewModel.Log($"[MonoGameControl] Resized RenderTarget: {width}x{height} (MSAA: {multiSampleCount}x)");
             }
             catch(Exception ex)
             {
                 ConsoleViewModel.Log($"[MonoGameControl] Failed to create HDR target: {ex.Message}. Fallback to Color.");
                 // Fallback to standard Color if HalfVector4 not supported
                 _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, width, height, false, 
-                    SurfaceFormat.Color, DepthFormat.Depth24);
+                    SurfaceFormat.Color, DepthFormat.Depth24, multiSampleCount, RenderTargetUsage.DiscardContents);
             }
         }
 
@@ -887,7 +930,6 @@ namespace MonoGameEditor.Controls
                     _gridRenderer?.Dispose();
                     _gridRenderer?.Dispose();
                     _hdrRenderTarget?.Dispose();
-                    _toneMapRenderer?.Dispose();
                     _spriteBatch?.Dispose();
                     _graphicsService?.Release(Handle);
                 }

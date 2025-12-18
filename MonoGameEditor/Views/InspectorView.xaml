@@ -210,6 +210,16 @@
                             <TextBlock Text="Main Camera" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
                             <CheckBox Grid.Column="1" IsChecked="{Binding IsMainCamera}" VerticalAlignment="Center"/>
                         </Grid>
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Antialiasing" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" SelectedItem="{Binding Antialiasing}" 
+                                      ItemsSource="{Binding Source={local:EnumValues {x:Type components:AntialiasingMode}}}"
+                                      Background="#333337" Foreground="White" Width="100"/>
+                        </Grid>
                     </StackPanel>
                 </Border>
             </Expander>

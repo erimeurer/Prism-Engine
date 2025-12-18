@@ -4,11 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:MonoGameEditor.Controls"
+             xmlns:viewModels="clr-namespace:MonoGameEditor.ViewModels"
+             xmlns:components="clr-namespace:MonoGameEditor.Core.Components"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="UserControl_Loaded" Unloaded="UserControl_Unloaded">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        
+        <ObjectDataProvider x:Key="AntialiasingModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="components:AntialiasingMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        
+        <Style x:Key="ToolbarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="3"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#44FFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#22FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         
         <!-- Shared Toggle Button Style -->
         <Style x:Key="ToolbarToggleStyle" TargetType="ToggleButton">
@@ -138,6 +173,96 @@
                         <TextBlock Text="Sky" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center"/>
                     </StackPanel>
                 </ToggleButton>
+
+                <!-- Separator -->
+                <Rectangle Width="1" Height="20" Fill="#3F3F3F" Margin="4,0"/>
+
+                <!-- Camera Settings Button -->
+                <Button x:Name="CameraSettingsButton"
+                        ToolTip="Camera Settings"
+                        Style="{StaticResource ToolbarButtonStyle}"
+                        Margin="2,0"
+                        Click="CameraSettingsButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📷" FontSize="14" Foreground="#AAAAAA" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Camera" FontSize="11" Foreground="#CCCCCC" VerticalAlignment="Center"/>
+                        <TextBlock Text="▾" FontSize="10" Foreground="#888888" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button.ContextMenu>
+                        <ContextMenu Background="#2D2D2D" BorderBrush="#3F3F3F" Foreground="White">
+                            <MenuItem Header="General" IsEnabled="False" FontWeight="Bold"/>
+                            <MenuItem StaysOpenOnClick="True">
+                                <MenuItem.Header>
+                                    <Grid Width="200">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Field of View" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <DockPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding CameraFOV, StringFormat={}{0:F0}}" 
+                                                       Width="30" TextAlignment="Right" KeyboardNavigation.TabNavigation="Once" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                            <Slider Minimum="20" Maximum="120" Value="{Binding CameraFOV, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                                        </DockPanel>
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem StaysOpenOnClick="True">
+                                <MenuItem.Header>
+                                    <Grid Width="200">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Speed" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <DockPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding CameraMoveSpeed, StringFormat={}{0:F1}}" 
+                                                       Width="30" TextAlignment="Right" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                            <Slider Minimum="0.1" Maximum="100" Value="{Binding CameraMoveSpeed, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                                        </DockPanel>
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <Separator Background="#3F3F3F"/>
+                            <MenuItem Header="Clipping Planes" IsEnabled="False" FontWeight="Bold"/>
+                            <MenuItem StaysOpenOnClick="True">
+                                <MenuItem.Header>
+                                    <Grid Width="200">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Margin="0,0,5,0">
+                                            <TextBlock Text="Near" FontSize="9" Foreground="#888888"/>
+                                            <TextBox Text="{Binding CameraNearPlane, UpdateSourceTrigger=PropertyChanged}" Background="#1E1E1E" Foreground="White" BorderThickness="0"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                            <TextBlock Text="Far" FontSize="9" Foreground="#888888"/>
+                                            <TextBox Text="{Binding CameraFarPlane, UpdateSourceTrigger=PropertyChanged}" Background="#1E1E1E" Foreground="White" BorderThickness="0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <Separator Background="#3F3F3F"/>
+                            <MenuItem Header="Rendering" IsEnabled="False" FontWeight="Bold"/>
+                            <MenuItem StaysOpenOnClick="True">
+                                <MenuItem.Header>
+                                    <Grid Width="200">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Antialiasing" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <ComboBox Grid.Column="1" 
+                                                  SelectedValue="{Binding SelectedAntialiasingMode}"
+                                                  ItemsSource="{Binding Source={StaticResource AntialiasingModes}}"
+                                                  Background="#1E1E1E" Foreground="White"/>
+                                    </Grid>
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
             </StackPanel>
         </Border>
         

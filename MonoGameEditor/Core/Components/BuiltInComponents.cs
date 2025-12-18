@@ -4,6 +4,17 @@ using Microsoft.Xna.Framework;
 namespace MonoGameEditor.Core.Components
 {
     /// <summary>
+    /// Antialiasing modes supported by the rendering pipeline
+    /// </summary>
+    public enum AntialiasingMode
+    {
+        None,
+        MSAA_2x,
+        MSAA_4x,
+        MSAA_8x
+    }
+
+    /// <summary>
     /// Camera component - makes this GameObject act as a camera
     /// </summary>
     public class CameraComponent : Component
@@ -14,8 +25,15 @@ namespace MonoGameEditor.Core.Components
         private bool _isMainCamera = true;
         private Color _backgroundColor = Color.CornflowerBlue;
         private CameraClearFlags _clearFlags = CameraClearFlags.Skybox;
+        private AntialiasingMode _antialiasing = AntialiasingMode.MSAA_8x;
 
         public override string ComponentName => "Camera";
+
+        public AntialiasingMode Antialiasing
+        {
+            get => _antialiasing;
+            set { _antialiasing = value; OnPropertyChanged(nameof(Antialiasing)); }
+        }
 
         public CameraClearFlags ClearFlags
         {

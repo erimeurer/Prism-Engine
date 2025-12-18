@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using MonoGameEditor.Core.Components;
 
 namespace MonoGameEditor.ViewModels
 {
@@ -23,6 +24,7 @@ namespace MonoGameEditor.ViewModels
         Global,
         Local
     }
+
 
     public class MainViewModel : ViewModelBase
     {
@@ -152,6 +154,44 @@ namespace MonoGameEditor.ViewModels
                 }
             }
         }
+
+        // Camera Settings
+        private float _cameraFOV = 60f;
+        public float CameraFOV
+        {
+            get => _cameraFOV;
+            set { _cameraFOV = value; OnPropertyChanged(); }
+        }
+
+        private float _cameraNearPlane = 0.1f;
+        public float CameraNearPlane
+        {
+            get => _cameraNearPlane;
+            set { _cameraNearPlane = value; OnPropertyChanged(); }
+        }
+
+        private float _cameraFarPlane = 1000f;
+        public float CameraFarPlane
+        {
+            get => _cameraFarPlane;
+            set { _cameraFarPlane = value; OnPropertyChanged(); }
+        }
+
+        private float _cameraMoveSpeed = 10f;
+        public float CameraMoveSpeed
+        {
+            get => _cameraMoveSpeed;
+            set { _cameraMoveSpeed = value; OnPropertyChanged(); }
+        }
+
+        // Rendering Settings
+        private AntialiasingMode _selectedAntialiasingMode = AntialiasingMode.MSAA_8x;
+        public AntialiasingMode SelectedAntialiasingMode
+        {
+            get => _selectedAntialiasingMode;
+            set { _selectedAntialiasingMode = value; OnPropertyChanged(); }
+        }
+
         
         public ICommand SelectToolCommand { get; }
 
