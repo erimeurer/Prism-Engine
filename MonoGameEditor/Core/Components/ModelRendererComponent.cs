@@ -885,10 +885,10 @@ namespace MonoGameEditor.Core.Components
                      }
                 }
             }
-            catch (Exception ex)
-            {
-                 ConsoleViewModel.Log($"[ModelRenderer] Error loading props: {ex.Message}");
-            }
+             catch
+             {
+                  // Silent fail for props, some shaders might not have reflection info
+             }
         }
         
         private object? ParseJsonToValue(Core.Shaders.ShaderPropertyType propType, System.Text.Json.JsonElement element)

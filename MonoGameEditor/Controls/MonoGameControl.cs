@@ -25,6 +25,7 @@ namespace MonoGameEditor.Controls
         private GizmoRenderer? _gizmoRenderer;
         private MonoGameEditor.Core.Gizmos.TranslationGizmo? _translationGizmo;
         private MonoGameEditor.Core.Gizmos.RotationGizmo? _rotationGizmo;
+        private MonoGameEditor.Core.Gizmos.ScaleGizmo? _scaleGizmo;
         private ProceduralSkybox? _skybox;
         private RenderTarget2D? _hdrRenderTarget;
         private ToneMapRenderer? _toneMapRenderer;
@@ -48,6 +49,7 @@ namespace MonoGameEditor.Controls
         private WinForms.Panel? _toolPanel;
         private WinForms.Button? _btnMove;
         private WinForms.Button? _btnRotate;
+        private WinForms.Button? _btnScale;
 
         // Input state
         private bool _isRightMouseDown;
@@ -135,6 +137,7 @@ namespace MonoGameEditor.Controls
 
             _translationGizmo = new MonoGameEditor.Core.Gizmos.TranslationGizmo(GraphicsDevice!);
             _rotationGizmo = new MonoGameEditor.Core.Gizmos.RotationGizmo(GraphicsDevice!);
+            _scaleGizmo = new MonoGameEditor.Core.Gizmos.ScaleGizmo(GraphicsDevice!);
 
             _skybox = new ProceduralSkybox();
             _skybox.Initialize(GraphicsDevice!);
@@ -149,7 +152,6 @@ namespace MonoGameEditor.Controls
             if (sharedContent != null)
             {
                 contentToUse = sharedContent;
-                ConsoleViewModel.Log("[MonoGameControl] Using shared ContentManager for shadows");
             }
             else
             {
@@ -157,7 +159,6 @@ namespace MonoGameEditor.Controls
                 var services = new Microsoft.Xna.Framework.GameServiceContainer();
                 services.AddService(typeof(IGraphicsDeviceService), _graphicsService);
                 contentToUse = new Microsoft.Xna.Framework.Content.ContentManager(services, "Content");
-                ConsoleViewModel.Log("[MonoGameControl] Created own ContentManager for shadows");
             }
             
             try
@@ -165,12 +166,6 @@ namespace MonoGameEditor.Controls
                 _shadowRenderer = new ShadowRenderer(GraphicsDevice!, contentToUse);
                 _ownContentManager = contentToUse; // Store for later use
                 OwnContentManager = contentToUse; // Make it accessible statically
-                
-                if (!_loggedShadowInit)
-                {
-                    ConsoleViewModel.Log("[MonoGameControl] ✅ Shadow renderer initialized!");
-                    _loggedShadowInit = true;
-                }
             }
             catch (Exception ex)
             {
@@ -180,7 +175,6 @@ namespace MonoGameEditor.Controls
             // Initialize Selection Box (simple wireframe)
             _outlineRenderer = new SelectionOutlineRenderer();
             _outlineRenderer.Initialize(GraphicsDevice!);
-            ConsoleViewModel.Log("[MonoGameControl] ✅ Selection box initialized!");
             
             ResizeHDRTarget(Width, Height);
 
@@ -211,9 +205,13 @@ namespace MonoGameEditor.Controls
 
             _btnMove = CreateToolbarButton("✥", 0, TransformTool.Move);
             _btnRotate = CreateToolbarButton("↻", 34, TransformTool.Rotate); 
+            _btnScale = CreateToolbarButton("🔳", 68, TransformTool.Scale);
+
+            _toolPanel.Size = new System.Drawing.Size(104, 34); 
 
             _toolPanel.Controls.Add(_btnMove);
             _toolPanel.Controls.Add(_btnRotate);
+            _toolPanel.Controls.Add(_btnScale);
             
             this.Controls.Add(_toolPanel);
         }
@@ -273,6 +271,7 @@ namespace MonoGameEditor.Controls
             
             _btnMove.BackColor = active == TransformTool.Move ? System.Drawing.Color.FromArgb(0, 122, 204) : System.Drawing.Color.Transparent;
             _btnRotate.BackColor = active == TransformTool.Rotate ? System.Drawing.Color.FromArgb(0, 122, 204) : System.Drawing.Color.Transparent;
+            _btnScale.BackColor = active == TransformTool.Scale ? System.Drawing.Color.FromArgb(0, 122, 204) : System.Drawing.Color.Transparent;
         }
 
         public void SetRenderEnabled(bool enabled)
@@ -482,6 +481,18 @@ namespace MonoGameEditor.Controls
                     _rotationGizmo?.Update(ray, _isLeftMouseDown, selectedObj.Transform);
                 }
             }
+            else if (vm.ActiveTool == TransformTool.Scale)
+            {
+                var selectedObj = vm.Inspector.SelectedObject as MonoGameEditor.Core.GameObject;
+                if (selectedObj != null)
+                {
+                    Vector2 mouseVec = new Vector2(mousePos.X, mousePos.Y);
+                    Viewport vp = new Viewport(0, 0, Width, Height);
+                    
+                    Ray ray = _camera.GetRay(mouseVec, vp);
+                    _scaleGizmo?.Update(ray, _isLeftMouseDown, selectedObj.Transform);
+                }
+            }
         }
 
         protected override void OnPaint(WinForms.PaintEventArgs e)
@@ -500,7 +511,6 @@ namespace MonoGameEditor.Controls
                             GraphicsDevice.PresentationParameters.BackBufferHeight = Height;
                             GraphicsDevice.Reset();
                             _camera?.UpdateAspectRatio(Width, Height);
-                            ConsoleViewModel.Log($"[MonoGameControl] Device Reset to {Width}x{Height}");
                         } catch (Exception ex) {
                             ConsoleViewModel.Log($"Reset failed: {ex.Message}");
                         }
@@ -533,12 +543,6 @@ namespace MonoGameEditor.Controls
             var lightComp = mainLightObj.GetComponent<MonoGameEditor.Core.Components.LightComponent>();
             if (lightComp != null && lightComp.CastShadows && _shadowRenderer != null)
             {
-                if (!_loggedShadowPass)
-                {
-                    ConsoleViewModel.Log("[MonoGameControl] 🌑 Shadow pass executing!");
-                    _loggedShadowPass = true;
-                }
-                
                 // Update resolution if changed
                 _shadowRenderer.UpdateResolution(lightComp.ShadowResolution);
                 
@@ -630,8 +634,10 @@ namespace MonoGameEditor.Controls
                              _translationGizmo?.Draw(_camera, selectedObj.Transform.Position, objRotation, useLocal);
                          else if (vm.ActiveTool == TransformTool.Rotate)
                              _rotationGizmo?.Draw(_camera, selectedObj.Transform.Position);
+                         else if (vm.ActiveTool == TransformTool.Scale)
+                             _scaleGizmo?.Draw(_camera, selectedObj.Transform.Position);
                      }
-                }
+                 }
                 
                 // Render selection outline
                 if (_outlineRenderer != null)
@@ -736,8 +742,6 @@ namespace MonoGameEditor.Controls
                 string ext = System.IO.Path.GetExtension(file).ToLower();
                 if (ext == ".obj" || ext == ".fbx" || ext == ".gltf" || ext == ".blend")
                 {
-                    ConsoleViewModel.Log($"[MonoGameControl] DragDrop received file: {file}");
-                    
                     // Load model data with mesh hierarchy
                     var modelData = await MonoGameEditor.Core.Assets.ModelImporter.LoadModelDataAsync(file);
                     
@@ -765,8 +769,6 @@ namespace MonoGameEditor.Controls
                     // Create child GameObject for each mesh
                     var meshRenderers = new List<MonoGameEditor.Core.Components.ModelRendererComponent>();
                     
-                    ConsoleViewModel.Log($"[MonoGameControl] TRACE: About to create {modelData.Meshes.Count} mesh children");
-                    
                     foreach (var meshData in modelData.Meshes)
                     {
                         var childGO = new MonoGameEditor.Core.GameObject
@@ -780,7 +782,6 @@ namespace MonoGameEditor.Controls
                         if (modelData.Bones.Count > 0)
                         {
                             renderer = new MonoGameEditor.Core.Components.SkinnedModelRendererComponent();
-                            ConsoleViewModel.Log($"[MonoGameControl] Using SkinnedModelRenderer for '{meshData.Name}'");
                         }
                         else
                         {

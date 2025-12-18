@@ -54,6 +54,7 @@ namespace MonoGameEditor.ViewModels
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsMoveToolActive));
                     OnPropertyChanged(nameof(IsRotateToolActive));
+                    OnPropertyChanged(nameof(IsScaleToolActive));
                 }
             }
         }
@@ -74,6 +75,16 @@ namespace MonoGameEditor.ViewModels
             set 
             { 
                 if (value) ActiveTool = TransformTool.Rotate;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsScaleToolActive
+        {
+            get => ActiveTool == TransformTool.Scale;
+            set 
+            { 
+                if (value) ActiveTool = TransformTool.Scale;
                 OnPropertyChanged();
             }
         }

@@ -105,8 +105,6 @@ namespace MonoGameEditor.Core.Components
                 string bone0Id = Bones.Count > 0 ? Bones[0]?.Id.ToString() : "null";
                 string bone1Id = Bones.Count > 1 ? Bones[1]?.Id.ToString() : "null";
                 string bone2Id = Bones.Count > 2 ? Bones[2]?.Id.ToString() : "null";
-                
-                ViewModels.ConsoleViewModel.LogWarning($"[SetBones] Component:{this.GetHashCode()}, Hash:{hash}, Bone[0]:{bone0Id?.Substring(0,8)}, Bone[1]:{bone1Id?.Substring(0,8)}, Bone[2]:{bone2Id?.Substring(0,8)}");
             }
             
             ConsoleViewModel.LogInfo($"[SkinnedRenderer] Set {bones.Count} bones with bind pose captured");
@@ -147,15 +145,12 @@ namespace MonoGameEditor.Core.Components
             }
             if (currentHash != _lastOffsetHash)
             {
-                ViewModels.ConsoleViewModel.LogError($"[CalculateBone] OFFSET HASH CHANGED! Was {_lastOffsetHash}, now {currentHash} - GameObject '{GameObject?.Name}'");
                 _lastOffsetHash = currentHash;
             }
             
             // Auto-discover bones from hierarchy if not set (happens after scene load)
             if ((Bones == null || Bones.Count == 0) && GameObject != null && !string.IsNullOrEmpty(_originalModelPath))
             {
-                ViewModels.ConsoleViewModel.LogError($"[CalculateBone] BONES ARE NULL/EMPTY FOR '{GameObject.Name}' - TRIGGERING REDISCOVERY!");
-                ConsoleViewModel.LogInfo($"[SkinnedRenderer] Auto-discovering bones for {GameObject.Name}");
                 TryDiscoverBonesFromHierarchy();
             }
                 
@@ -166,14 +161,6 @@ namespace MonoGameEditor.Core.Components
             {
                 // Get current bone transformation in world space
                 Matrix currentBoneWorld = CalculateBoneToWorldSpace(i);
-                
-                // DEBUG: Log first bone's offset and world matrices
-                if (i == 0)
-                {
-                    var offset = _offsetMatrices[0];
-                    ViewModels.ConsoleViewModel.LogError($"[MatrixCalc] Offset[0]: M11={offset.M11:F2}, M41={offset.M41:F2}");
-                    ViewModels.ConsoleViewModel.LogError($"[MatrixCalc] World[0]: M11={currentBoneWorld.M11:F2}, M41={currentBoneWorld.M41:F2}");
-                }
                 
                 // Standard skinning: InverseBindPose * CurrentBoneWorld
                 // offsetMatrices from file ARE the InverseBindPose matrices
@@ -324,14 +311,11 @@ namespace MonoGameEditor.Core.Components
             bool isGameDevice = (gameDevice != null && device == gameDevice);
             bool isSceneDevice = (sceneDevice != null && device == sceneDevice);
             
-            ConsoleViewModel.LogWarning($"[SkinnedRenderer] CreateResources: device={device.GetHashCode()}, isGame={isGameDevice}, isScene={isSceneDevice}");
-            
             // CRITICAL FIX: Always clear and recreate for new device
             // Device Reset can corrupt shared Effects
             
             if (_meshData == null)
             {
-                ConsoleViewModel.LogInfo("[SkinnedRenderer] No mesh data available");
                 return null;
             }
             var vertices = _meshData.Vertices;
@@ -417,24 +401,9 @@ namespace MonoGameEditor.Core.Components
             if (bonesParam != null)
             {
                 bonesParam.SetValue(_boneMatrices);
-                
-                // DEBUG: Log first bone matrix to detect corruption
-                if (_boneMatrices != null && _boneMatrices.Length > 0)
-                {
-                    var m = _boneMatrices[0];
-                    ViewModels.ConsoleViewModel.LogError($"[BoneMatrix] Bone[0]: M11={m.M11:F2}, M41={m.M41:F2}, M42={m.M42:F2}, M43={m.M43:F2}");
-                }
             }
             
-            // DEBUG: Log View/Projection to see if GameControl uses different camera
-            var viewParam = effect.Parameters["View"];
-            var projParam = effect.Parameters["Projection"];
-            if (viewParam != null && projParam != null)
-            {
-                var view = viewParam.GetValueMatrix();
-                var proj = projParam.GetValueMatrix();
-                ViewModels.ConsoleViewModel.LogWarning($"[SkinnedShader] View.M41={view.M41:F2}, Proj.M33={proj.M33:F2}, Device={device.GetHashCode()}");
-            }
+            // Sync with base parameters
 
             base.ApplyCustomEffectParameters(effect, device);
         }
@@ -442,16 +411,6 @@ namespace MonoGameEditor.Core.Components
         public override void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition,
             Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
-            ViewModels.ConsoleViewModel.LogError($"[SkinnedDraw] CALLED! Device={device.GetHashCode()}, GameObject={GameObject?.Name}");
-            
-            // CRITICAL DEBUG: Log FULL device state to catch GameControl pollution
-            var depthState = device.DepthStencilState;
-            var blendState = device.BlendState;
-            var rasterState = device.RasterizerState;
-            var viewport = device.Viewport;
-            
-            ViewModels.ConsoleViewModel.LogError($"[SkinnedDraw] Depth={depthState?.Name ?? depthState?.GetHashCode().ToString()}, Blend={blendState?.Name ?? blendState?.GetHashCode().ToString()}, Viewport={viewport.Width}x{viewport.Height}");
-            
             CalculateBoneMatrices();
             base.Draw(device, view, projection, cameraPosition, shadowMap, lightViewProj);
         }
