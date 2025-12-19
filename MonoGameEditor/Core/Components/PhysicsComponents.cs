@@ -155,6 +155,16 @@ namespace MonoGameEditor.Core.Components
         private bool _useGravity = true;
         private bool _isKinematic = false;
 
+        // Position constraints
+        private bool _freezePositionX = false;
+        private bool _freezePositionY = false;
+        private bool _freezePositionZ = false;
+
+        // Rotation constraints
+        private bool _freezeRotationX = false;
+        private bool _freezeRotationY = false;
+        private bool _freezeRotationZ = false;
+
         public Vector3 Velocity { get; set; } = Vector3.Zero;
         public Vector3 AngularVelocity { get; set; } = Vector3.Zero;
 
@@ -188,6 +198,42 @@ namespace MonoGameEditor.Core.Components
         {
             get => _isKinematic;
             set { _isKinematic = value; OnPropertyChanged(nameof(IsKinematic)); }
+        }
+
+        public bool FreezePositionX
+        {
+            get => _freezePositionX;
+            set { _freezePositionX = value; OnPropertyChanged(nameof(FreezePositionX)); }
+        }
+
+        public bool FreezePositionY
+        {
+            get => _freezePositionY;
+            set { _freezePositionY = value; OnPropertyChanged(nameof(FreezePositionY)); }
+        }
+
+        public bool FreezePositionZ
+        {
+            get => _freezePositionZ;
+            set { _freezePositionZ = value; OnPropertyChanged(nameof(FreezePositionZ)); }
+        }
+
+        public bool FreezeRotationX
+        {
+            get => _freezeRotationX;
+            set { _freezeRotationX = value; OnPropertyChanged(nameof(FreezeRotationX)); }
+        }
+
+        public bool FreezeRotationY
+        {
+            get => _freezeRotationY;
+            set { _freezeRotationY = value; OnPropertyChanged(nameof(FreezeRotationY)); }
+        }
+
+        public bool FreezeRotationZ
+        {
+            get => _freezeRotationZ;
+            set { _freezeRotationZ = value; OnPropertyChanged(nameof(FreezeRotationZ)); }
         }
     }
 }

@@ -86,7 +86,7 @@ public class MaterialEditorViewModel : ViewModelBase
         _shaderLoadTimer.Interval = TimeSpan.FromMilliseconds(500);
         _shaderLoadTimer.Tick += (s, e) =>
         {
-            var device = Controls.MonoGameControl.SharedGraphicsDevice;
+            var device = Core.GraphicsManager.GraphicsDevice;
             ConsoleViewModel.Log($"[MaterialEditor] Timer tick - Device: {(device != null ? "Available" : "null")}, Properties: {ShaderProperties.Count}");
             
             if (device != null && ShaderProperties.Count == 0)
@@ -368,7 +368,7 @@ public class MaterialEditorViewModel : ViewModelBase
         try
         {
             // Get GraphicsDevice from MonoGameControl
-            var device = Controls.MonoGameControl.SharedGraphicsDevice;
+            var device = Core.GraphicsManager.GraphicsDevice;
             if (device == null)
             {
                 ConsoleViewModel.Log($"[Material] GraphicsDevice not available yet - will retry when available");

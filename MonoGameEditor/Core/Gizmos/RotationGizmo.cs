@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using MonoGameEditor.Core.Graphics;
 
 namespace MonoGameEditor.Core.Gizmos
 {
@@ -47,7 +48,7 @@ namespace MonoGameEditor.Core.Gizmos
             _circleVertices = vertices.ToArray();
         }
 
-        public void Draw(MonoGameEditor.Controls.EditorCamera camera, Vector3 position)
+        public void Draw(EditorCamera camera, Vector3 position)
         {
             if (camera == null) return;
 

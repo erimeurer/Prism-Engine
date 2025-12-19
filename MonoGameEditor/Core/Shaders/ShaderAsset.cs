@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Shaders;
 
@@ -51,17 +52,17 @@ public class ShaderAsset
     public void DiscoverProperties(Effect effect)
     {
         Properties.Clear();
-        
-        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShaderAsset] Discovering properties from effect with {effect.Parameters.Count} parameters");
+
+        Logger.Log($"[ShaderAsset] Discovering properties from effect with {effect.Parameters.Count} parameters");
         
         foreach (var param in effect.Parameters)
         {
-            MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShaderAsset] Param: {param.Name}, Class: {param.ParameterClass}, Type: {param.ParameterType}");
+            Logger.Log($"[ShaderAsset] Param: {param.Name}, Class: {param.ParameterClass}, Type: {param.ParameterType}");
             
             // Skip system parameters
             if (IsSystemParameter(param.Name))
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShaderAsset]   -> Skipped (system parameter)");
+                Logger.Log($"[ShaderAsset]   -> Skipped (system parameter)");
                 continue;
             }
                 
@@ -85,15 +86,15 @@ public class ShaderAsset
                 catch { /* Ignore if fails to read default */ }
                 
                 Properties.Add(new ShaderProperty(param.Name, propType.Value, defaultValue));
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShaderAsset]   -> Added as {propType.Value} (Default: {defaultValue})");
+                Logger.Log($"[ShaderAsset]   -> Added as {propType.Value} (Default: {defaultValue})");
             }
             else
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShaderAsset]   -> Skipped (unsupported type)");
+                Logger.Log($"[ShaderAsset]   -> Skipped (unsupported type)");
             }
         }
         
-        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShaderAsset] Discovered {Properties.Count} properties");
+        Logger.Log($"[ShaderAsset] Discovered {Properties.Count} properties");
     }
     
     private bool IsSystemParameter(string name)

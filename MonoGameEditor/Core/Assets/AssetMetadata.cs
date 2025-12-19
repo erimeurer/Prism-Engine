@@ -5,8 +5,8 @@ namespace MonoGameEditor.Core.Assets
 {
     public class AssetMetadata
     {
-        public string Name { get; set; }
-        public string Extension { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Extension { get; set; } = string.Empty;
         public int VertexCount { get; set; }
         public int TriangleCount { get; set; }
         public int MaterialCount { get; set; }

@@ -1,0 +1,11 @@
+[21:38:47] [Main] Starting Game.Run()
+=== Game started at 18/12/2025 21:38:48 ===
+21:38:48 [INFO] [StandalonePlayer] Initialize started
+21:38:48 [INFO] [ScriptManager] Creating Scripts folder at D:\git\Prism-Engine\MonoGameEditor\Runtime\Assets\Scripts
+21:38:48 [INFO] [ScriptManager] Found 0 script file(s) in D:\git\Prism-Engine\MonoGameEditor\Runtime\Assets\Scripts
+21:38:48 [INFO] [StandalonePlayer] LoadContent started
+21:38:48 [INFO] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+21:38:48 [INFO] [ToneMapRenderer] Shader loaded successfully via ContentManager.
+21:38:48 [INFO] [StandalonePlayer] No scene to load, creating default
+21:38:48 [INFO] [StandalonePlayer] LoadContent finished
+21:38:48 [INFO] [StandalonePlayer] Initialize finished

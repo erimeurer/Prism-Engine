@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Materials
 {
@@ -13,46 +14,16 @@ namespace MonoGameEditor.Core.Materials
         // Cache per ContentManager to avoid conflicts between MonoGameControl and GameControl
         private static Dictionary<Microsoft.Xna.Framework.Content.ContentManager, Effect> _effectCache = new();
 
-        public static Effect Load(GraphicsDevice device, Microsoft.Xna.Framework.Content.ContentManager contentManager = null)
+        public static Effect? Load(GraphicsDevice device, Microsoft.Xna.Framework.Content.ContentManager? contentManager = null)
         {
             try
             {
-                // If a ContentManager was provided directly, use it first
-                if (contentManager != null)
-                {
-                    // Check if we have cached Effect for this ContentManager
-                    if (_effectCache.TryGetValue(contentManager, out var cachedEffect) && !cachedEffect.IsDisposed)
-                    {
-                        return cachedEffect;
-                    }
-                    
-                    try
-                    {
-                        var effect = contentManager.Load<Effect>("Shaders/PBREffect");
-                        _effectCache[contentManager] = effect; // Cache it
-                        return effect;
-                    }
-                    catch { }
-                }
-                
-                // CRITICAL FIX: Match device to ContentManager
-                var gameDevice = MonoGameEditor.Controls.GameControl.SharedGraphicsDevice;
-                var sceneDevice = MonoGameEditor.Controls.MonoGameControl.SharedGraphicsDevice;
-                
-                Microsoft.Xna.Framework.Content.ContentManager contentToTry = null;
-                
-                if (device == sceneDevice)
-                {
-                    contentToTry = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
-                }
-                else if (device == gameDevice)
-                {
-                    contentToTry = MonoGameEditor.Controls.GameControl.SharedContent;
-                }
+                // If no ContentManager provided, resolve from device
+                var contentToTry = contentManager ?? GraphicsManager.GetContentManager(device) ?? GraphicsManager.ContentManager;
                 
                 if (contentToTry != null)
                 {
-                    if (_effectCache.TryGetValue(contentToTry, out var cachedEffect) && !cachedEffect.IsDisposed)
+                    if (_effectCache.TryGetValue(contentToTry, out var cachedEffect) && !cachedEffect.IsDisposed && cachedEffect.GraphicsDevice == device)
                     {
                         return cachedEffect;
                     }
@@ -66,41 +37,6 @@ namespace MonoGameEditor.Core.Materials
                     catch { }
                 }
 
-                // Fallback: Try MonoGameControl's ContentManager (if not already tried)
-                var monoGameContent = MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
-                if (monoGameContent != null && monoGameContent != contentToTry)
-                {
-                    if (_effectCache.TryGetValue(monoGameContent, out var cachedEffect) && !cachedEffect.IsDisposed)
-                    {
-                        return cachedEffect;
-                    }
-                    
-                    try
-                    {
-                        var effect = monoGameContent.Load<Effect>("Shaders/PBREffect");
-                        _effectCache[monoGameContent] = effect;
-                        return effect;
-                    }
-                    catch { }
-                }
-                
-                // Fallback: Try shared ContentManager from GameControl (if not already tried)
-                var sharedContent = MonoGameEditor.Controls.GameControl.SharedContent;
-                if (sharedContent != null && sharedContent != contentToTry)
-                {
-                    if (_effectCache.TryGetValue(sharedContent, out var cachedEffect) && !cachedEffect.IsDisposed)
-                    {
-                        return cachedEffect;
-                    }
-                    
-                    try
-                    {
-                        var effect = sharedContent.Load<Effect>("Shaders/PBREffect");
-                        _effectCache[sharedContent] = effect;
-                        return effect;
-                    }
-                    catch { }
-                }
 
                 // Last Resort: Try mgfxo format
                 string shaderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "Shaders", "PBREffect.mgfxo");
@@ -116,7 +52,7 @@ namespace MonoGameEditor.Core.Materials
             {
                 // Only log if it's a real unexpected error, not just a load failure
                 if (!(ex is Microsoft.Xna.Framework.Content.ContentLoadException))
-                    MonoGameEditor.ViewModels.ConsoleViewModel.LogError($"[PBRLoader] Unexpected error: {ex.Message}");
+                    Logger.LogError($"[PBRLoader] Unexpected error: {ex.Message}");
             }
 
             return null;

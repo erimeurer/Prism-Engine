@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using MonoGameEditor.Core.Materials;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Assets
 {
@@ -12,10 +13,10 @@ namespace MonoGameEditor.Core.Assets
     /// </summary>
     public class MaterialAssetManager
     {
-        private static MaterialAssetManager _instance;
+        private static MaterialAssetManager _instance = null!;
         public static MaterialAssetManager Instance => _instance ??= new MaterialAssetManager();
 
-        private string _defaultMaterialPath;
+        private string _defaultMaterialPath = null!;
         private List<string> _cachedMaterialPaths = new();
 
         private MaterialAssetManager()
@@ -68,7 +69,7 @@ namespace MonoGameEditor.Core.Assets
                 string json = JsonSerializer.Serialize(defaultMaterial, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(_defaultMaterialPath, json);
 
-                ViewModels.ConsoleViewModel.Log($"[MaterialAssets] Created default material at: {_defaultMaterialPath}");
+                Logger.Log($"[MaterialAssets] Created default material at: {_defaultMaterialPath}");
             }
         }
 
@@ -88,12 +89,12 @@ namespace MonoGameEditor.Core.Assets
                 var materialFiles = Directory.GetFiles(projectPath, "*.mat", SearchOption.AllDirectories);
                 _cachedMaterialPaths = materialFiles.ToList();
 
-                ViewModels.ConsoleViewModel.Log($"[MaterialAssets] Found {_cachedMaterialPaths.Count} materials in project");
+                Logger.Log($"[MaterialAssets] Found {_cachedMaterialPaths.Count} materials in project");
                 return _cachedMaterialPaths;
             }
             catch (Exception ex)
             {
-                ViewModels.ConsoleViewModel.Log($"[MaterialAssets] Error discovering materials: {ex.Message}");
+                Logger.Log($"[MaterialAssets] Error discovering materials: {ex.Message}");
                 _cachedMaterialPaths.Clear();
                 return _cachedMaterialPaths;
             }

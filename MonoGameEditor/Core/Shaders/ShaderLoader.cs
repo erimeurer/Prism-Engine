@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameEditor.ViewModels;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Shaders;
 
@@ -35,12 +35,12 @@ public static class ShaderLoader
                     contentPath = contentPath.Substring("Content/".Length);
                     
                     var effect = materialEditorContent.Load<Effect>(contentPath);
-                    ConsoleViewModel.Log($"[ShaderLoader] Loaded shader via isolated ContentManager: {contentPath}");
+                    Logger.Log($"[ShaderLoader] Loaded shader via isolated ContentManager: {contentPath}");
                     return effect;
                 }
                 catch (Exception ex)
                 {
-                    ConsoleViewModel.Log($"[ShaderLoader] Isolated ContentManager load failed: {ex.Message}");
+                    Logger.Log($"[ShaderLoader] Isolated ContentManager load failed: {ex.Message}");
                     materialEditorContent.Dispose();
                 }
             }
@@ -52,29 +52,30 @@ public static class ShaderLoader
             {
                 byte[] bytecode = File.ReadAllBytes(mgfxoPath);
                 var effect = new Effect(device, bytecode);
-                ConsoleViewModel.Log($"[ShaderLoader] Loaded compiled shader: {mgfxoPath}");
+                Logger.Log($"[ShaderLoader] Loaded compiled shader: {mgfxoPath}");
                 return effect;
             }
             else
             {
-                ConsoleViewModel.Log($"[ShaderLoader] Compiled shader not found: {mgfxoPath}");
+                Logger.Log($"[ShaderLoader] Compiled shader not found: {mgfxoPath}");
             }
             
             // .fx source files require pre-compilation with mgfxc tool
             if (File.Exists(shaderPath) && shaderPath.EndsWith(".fx", StringComparison.OrdinalIgnoreCase))
             {
-                ConsoleViewModel.Log($"[ShaderLoader] ERROR: .fx source file found but not compiled!");
-                ConsoleViewModel.Log($"[ShaderLoader] Please compile '{Path.GetFileName(shaderPath)}' to .mgfxo using mgfxc tool");
-                ConsoleViewModel.Log($"[ShaderLoader] Command: mgfxc \"{shaderPath}\" \"{mgfxoPath}\"");
+                Logger.Log($"[ShaderLoader] ERROR: .fx source file found but not compiled!");
+                Logger.Log($"[ShaderLoader] Please compile '{Path.GetFileName(shaderPath)}' to .mgfxo using mgfxc tool");
+
+                Logger.Log($"[ShaderLoader] Command: mgfxc \"{shaderPath}\" \"{mgfxoPath}\"");
                 return null;
             }
             
-            ConsoleViewModel.Log($"[ShaderLoader] Shader not found: {shaderPath}");
+            Logger.Log($"[ShaderLoader] Shader not found: {shaderPath}");
             return null;
         }
         catch (Exception ex)
         {
-            ConsoleViewModel.Log($"[ShaderLoader] Failed to load shader: {ex.Message}");
+            Logger.Log($"[ShaderLoader] Failed to load shader: {ex.Message}");
             return null;
         }
     }

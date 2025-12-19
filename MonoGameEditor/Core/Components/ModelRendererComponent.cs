@@ -1,4 +1,4 @@
-#nullable disable
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameEditor.Core.Assets;
 using MonoGameEditor.Core.Materials;
-using MonoGameEditor.Controls;
-using MonoGameEditor.ViewModels;
+
+// using MonoGameEditor.Controls; // Removed to decouple core from UI
+using MonoGameEditor.Core;
+// using MonoGameEditor.ViewModels; // Removed to decouple core from UI
+using System.ComponentModel;
 
 namespace MonoGameEditor.Core.Components
 {
@@ -22,15 +25,18 @@ namespace MonoGameEditor.Core.Components
             public Effect Effect { get; set; }
         }
 
-        private readonly Dictionary<GraphicsDevice, DeviceResources> _deviceResources = new();
-        private string _modelPath;
-        private AssetMetadata _metadata;
+        private readonly Dictionary<GraphicsDevice, Dictionary<Assets.MeshData, DeviceResources>> _meshResources = new();
+        private readonly Dictionary<GraphicsDevice, DeviceResources> _deviceResources = new(); // Legacy fallback
+        private string _modelPath = null!;
+        private Assets.AssetMetadata _metadata = null!;
         
         // Multi-mesh support
         private List<Assets.MeshData> _meshes = new(); // Multiple meshes
-        protected Assets.MeshData _meshData; // Legacy single mesh (for backward compatibility)
+        protected Assets.MeshData _meshData = null!; // Legacy single mesh (for backward compatibility)
         
-        
+        protected Microsoft.Xna.Framework.Graphics.VertexBuffer _vertexBuffer = null!;
+        protected Microsoft.Xna.Framework.Graphics.IndexBuffer _indexBuffer = null!;
+        protected Microsoft.Xna.Framework.Graphics.Effect _shader = null!;
         
         public override string ComponentName => "Model Renderer";
 
@@ -43,7 +49,7 @@ namespace MonoGameEditor.Core.Components
                 {
                     _modelPath = value;
                     OnPropertyChanged(nameof(ModelPath));
-                    ConsoleViewModel.Log($"ModelPath set to: {value}");
+                    Logger.Log($"ModelPath set to: {value}");
                     LoadModel();
                 }
             }
@@ -72,7 +78,7 @@ namespace MonoGameEditor.Core.Components
         // Multi-material support (one per mesh)
         private List<Materials.PBRMaterial> _materials = new();
         private List<string> _materialPaths = new();
-        public System.Collections.ObjectModel.ObservableCollection<MaterialSlotViewModel> MaterialSlots { get; } = new();
+        public System.Collections.ObjectModel.ObservableCollection<MaterialSlot> MaterialSlots { get; } = new();
         
         // Pending texture paths used to reload textures for different devices
         private Dictionary<string, string> _pendingTexturePaths = new();
@@ -83,10 +89,12 @@ namespace MonoGameEditor.Core.Components
         // Debug
         private HashSet<string> _loggedMismatches = new HashSet<string>();
         
-        // Dynamic Shader Properties (for Custom Shaders / PBR Extensions)
-        public System.Collections.ObjectModel.ObservableCollection<ShaderPropertyViewModel> DynamicProperties { get; } = new();
+#if !RUNTIME_BUILD
+        // Dynamic Shader Properties (for Custom Shaders / PBR Extensions) - Editor only
+        // Removed ShaderPropertyViewModel dependency. The Editor should create those from _customProperties.
+#endif
         private Dictionary<string, object?> _customProperties = new();
-        private Core.Shaders.ShaderAsset _currentShader;
+        private Core.Shaders.ShaderAsset _currentShader = null!;
         private object _propLock = new object();
         private bool _propertiesLoaded = false;
 
@@ -98,7 +106,7 @@ namespace MonoGameEditor.Core.Components
                 if (_material == null)
                 {
                     _material = Materials.PBRMaterial.CreateDefault();
-                    ConsoleViewModel.Log($"[ModelRenderer] Auto-created default material for {GameObject?.Name ?? "unknown"}");
+                    Logger.Log($"[ModelRenderer] Auto-created default material for {GameObject?.Name ?? "unknown"}");
                 }
                 return _material;
             }
@@ -112,7 +120,7 @@ namespace MonoGameEditor.Core.Components
             {
                 if (_materialPath != value)
                 {
-                    ConsoleViewModel.Log($"[ModelRenderer] MaterialPath CHANGED: '{_materialPath}' → '{value}'");
+                    Logger.Log($"[ModelRenderer] MaterialPath CHANGED: '{_materialPath}' → '{value}'");
                     _materialPath = value;
                     OnPropertyChanged(nameof(MaterialPath));
                     LoadMaterial();
@@ -121,7 +129,7 @@ namespace MonoGameEditor.Core.Components
         }
 
         // For hierarchical meshes - stores the original model file path
-        protected string _originalModelPath;
+        protected string _originalModelPath = null!;
         public string OriginalModelPath
         {
             get => _originalModelPath;
@@ -135,7 +143,7 @@ namespace MonoGameEditor.Core.Components
         /// <summary>
         /// Sets mesh data directly (for hierarchical models with multiple meshes)
         /// </summary>
-        public void SetMeshData(Assets.MeshData meshData, string originalModelPath = null)
+        public void SetMeshData(Assets.MeshData meshData, string? originalModelPath = null)
         {
             _meshData = meshData;
             _originalModelPath = originalModelPath; // Store source path
@@ -143,13 +151,13 @@ namespace MonoGameEditor.Core.Components
             // Clear existing resources to force regeneration on next Draw
             ClearResources();
             
-            ConsoleViewModel.Log($"SetMeshData called for mesh '{meshData.Name}' from '{originalModelPath}'");
+            Logger.Log($"SetMeshData called for mesh '{meshData.Name}' from '{originalModelPath}'");
         }
         
         /// <summary>
         /// Sets multiple meshes (for multi-material models)
         /// </summary>
-        public void SetMeshes(List<Assets.MeshData> meshes, string originalModelPath = null)
+        public void SetMeshes(List<Assets.MeshData> meshes, string? originalModelPath = null)
         {
             _meshes = meshes ?? new List<Assets.MeshData>();
             _originalModelPath = originalModelPath;
@@ -166,7 +174,7 @@ namespace MonoGameEditor.Core.Components
             for (int i = 0; i < _meshes.Count; i++)
             {
                 var mesh = _meshes[i];
-                var slot = new MaterialSlotViewModel
+                var slot = new MaterialSlot
                 {
                     Index = i,
                     MeshName = mesh.Name,
@@ -176,7 +184,7 @@ namespace MonoGameEditor.Core.Components
                 // Subscribe to material path changes
                 slot.MaterialPathChanged += (sender, newPath) =>
                 {
-                    var s = sender as MaterialSlotViewModel;
+                    var s = sender as MaterialSlot;
                     if (s != null && s.Index < _materialPaths.Count)
                     {
                         _materialPaths[s.Index] = newPath;
@@ -189,23 +197,27 @@ namespace MonoGameEditor.Core.Components
                 _materials.Add(null);
             }
             
-            ConsoleViewModel.Log($"SetMeshes called with {meshes?.Count ?? 0} meshes from '{originalModelPath}'");
+            Logger.Log($"SetMeshes called with {meshes?.Count ?? 0} meshes from '{originalModelPath}'");
         }
 
         private void ClearResources()
         {
-            foreach (var resources in _deviceResources.Values)
+            foreach (var deviceMap in _meshResources.Values)
             {
-                resources.VertexBuffer?.Dispose();
-                resources.IndexBuffer?.Dispose();
+                foreach (var resources in deviceMap.Values)
+                {
+                    resources.VertexBuffer?.Dispose();
+                    resources.IndexBuffer?.Dispose();
+                }
             }
+            _meshResources.Clear();
             _deviceResources.Clear();
         }
 
         /// <summary>
         /// Get device resources for outline rendering (public access for SelectionOutlineRenderer)
         /// </summary>
-        public DeviceResources GetDeviceResources(GraphicsDevice device)
+        public DeviceResources? GetDeviceResources(GraphicsDevice device)
         {
             if (_deviceResources.TryGetValue(device, out var resources))
             {
@@ -226,11 +238,11 @@ namespace MonoGameEditor.Core.Components
         {
              if (string.IsNullOrEmpty(_modelPath))
              {
-                 ConsoleViewModel.Log("LoadModel: ModelPath is empty, skipping");
+                 Logger.Log("LoadModel: ModelPath is empty, skipping");
                  return;
              }
 
-             ConsoleViewModel.Log($"LoadModel: Loading {_modelPath}");
+             Logger.Log($"LoadModel: Loading {_modelPath}");
 
              try
              {
@@ -252,17 +264,19 @@ namespace MonoGameEditor.Core.Components
         {
             // CRITICAL: Don't reload during scene deserialization!
             // SceneSerializer will call InitializeAfterSceneLoad() when ready
+#if !RUNTIME_BUILD
             if (MonoGameEditor.IO.SceneSerializer.IsLoadingScene)
             {
-                ConsoleViewModel.Log($"[ModelRenderer] Skipping OnComponentAdded reload for {GameObject?.Name} - scene is loading");
+                Logger.Log($"[ModelRenderer] Skipping OnComponentAdded reload for {GameObject?.Name} - scene is loading");
                 _needsPostSceneLoadInit = true;
                 return;
             }
+#endif
             
             // If we have OriginalModelPath but no _meshData, reload from file
             if (!string.IsNullOrEmpty(_originalModelPath) && _meshData == null)
             {
-                ConsoleViewModel.Log($"Reloading model from: {_originalModelPath}");
+                Logger.Log($"Reloading model from: {_originalModelPath}");
                 
                 // Reload the entire model
                 var modelData = await Assets.ModelImporter.LoadModelDataAsync(_originalModelPath);
@@ -274,7 +288,7 @@ namespace MonoGameEditor.Core.Components
                     {
                         _meshData = myMeshData;
                         ClearResources(); // Invalidate resources
-                        ConsoleViewModel.Log($"Reloaded mesh '{myMeshData.Name}'");
+                        Logger.Log($"Reloaded mesh '{myMeshData.Name}'");
                     }
                 }
             }
@@ -288,14 +302,17 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         public async Task InitializeAfterSceneLoad()
         {
+#if !RUNTIME_BUILD
+            // In editor, check flag to avoid redundant initialization
             if (!_needsPostSceneLoadInit)
                 return;
                 
             _needsPostSceneLoadInit = false;
+#endif
             
-            ConsoleViewModel.Log($"[ModelRenderer] Post-scene-load init for {GameObject?.Name} (ID: {GameObject?.Id})");
+            Logger.Log($"[ModelRenderer] Post-scene-load init for {GameObject?.Name} (ID: {GameObject?.Id})");
             
-            // Reload mesh data
+            // Reload mesh data and reconnect bones
             await ReloadMeshDataOnly();
         }
         
@@ -305,31 +322,69 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         private async Task ReloadMeshDataOnly()
         {
-            if (string.IsNullOrEmpty(_originalModelPath) || _meshData != null)
+            if (string.IsNullOrEmpty(_originalModelPath))
                 return;
                 
-            ConsoleViewModel.Log($"[ModelRenderer] Reloading mesh data only for {GameObject?.Name}");
+            Logger.Log($"[ModelRenderer] Reloading mesh data only for {GameObject?.Name}");
             
-            var modelData = await Assets.ModelImporter.LoadModelDataAsync(_originalModelPath);
-            if (modelData != null && modelData.Meshes.Count > 0)
+            try
             {
-                // Find which mesh we are by GameObject name
-                var myMeshData = modelData.Meshes.FirstOrDefault(m => m.Name == GameObject?.Name);
-                if (myMeshData != null)
+                Logger.Log($"[ModelRenderer] Loading model from: {_originalModelPath}");
+                
+#if RUNTIME_BUILD
+                // In runtime, use .Result to avoid deadlock with .Wait() in SceneSerializer
+                // This is safe because we're already on a background thread from .Wait()
+                Assets.ModelData modelData;
+                try
                 {
-                    _meshData = myMeshData;
-                    ClearResources(); // Invalidate resources so buffers get recreated
-                    ConsoleViewModel.Log($"[ModelRenderer] Mesh data reloaded for '{GameObject?.Name}'");
-                    
-                    // CRITICAL: If this is a SkinnedModelRendererComponent, reconnect to bones
+                    modelData = Assets.ModelImporter.LoadModelDataAsync(_originalModelPath).Result;
+                }
+                catch (AggregateException ae)
+                {
+                    throw ae.InnerException ?? ae;
+                }
+#else
+                // In editor, use await normally to avoid blocking UI thread
+                var modelData = await Assets.ModelImporter.LoadModelDataAsync(_originalModelPath);
+#endif
+                
+                if (modelData == null)
+                {
+                    Logger.Log($"[ModelRenderer] ERROR: LoadModelDataAsync returned null for {_originalModelPath}");
+                    return;
+                }
+                
+                Logger.Log($"[ModelRenderer] Loaded model with {modelData.Meshes.Count} meshes and {modelData.Bones.Count} bones");
+                
+                if (modelData.Meshes.Count > 0)
+                {
+                    // Reload mesh data if missing
+                    if (_meshData == null)
+                    {
+                        // Find which mesh we are by GameObject name
+                        var myMeshData = modelData.Meshes.FirstOrDefault(m => m.Name == GameObject?.Name);
+                        if (myMeshData != null)
+                        {
+                            _meshData = myMeshData;
+                            ClearResources(); // Invalidate resources so buffers get recreated
+                            Logger.Log($"[ModelRenderer] Mesh data reloaded for '{GameObject?.Name}'");
+                        }
+                        else
+                        {
+                            Logger.Log($"[ModelRenderer] ERROR: Could not find mesh '{GameObject?.Name}' in model data");
+                        }
+                    }
+                        
+                    // CRITICAL: If this is a SkinnedModelRendererComponent, ALWAYS reconnect to bones
+                    // Even if meshData already exists, bones need to be linked after scene deserialization
                     if (this is SkinnedModelRendererComponent skinnedComp && GameObject != null)
                     {
-                        ConsoleViewModel.Log($"[ModelRenderer] Attempting to reconnect bones for {GameObject.Name} (ID: {GameObject.Id})");
-                        ConsoleViewModel.Log($"[ModelRenderer] GameObject position: {GameObject.Transform.LocalPosition}");
+                        Logger.Log($"[ModelRenderer] Attempting to reconnect bones for {GameObject.Name} (ID: {GameObject.Id})");
+                        Logger.Log($"[ModelRenderer] GameObject position: {GameObject.Transform.LocalPosition}");
                         
                         // Bones are siblings of this mesh (children of parent GameObject)
                         var searchRoot = GameObject.Parent ?? GameObject;
-                        ConsoleViewModel.Log($"[ModelRenderer] Searching in '{searchRoot.Name}' which has {searchRoot.Children.Count} children");
+                        Logger.Log($"[ModelRenderer] Searching in '{searchRoot.Name}' which has {searchRoot.Children.Count} children");
                         
                         // Find bones in the hierarchy that were loaded from scene
                         var bones = new List<GameObject>();
@@ -344,25 +399,34 @@ namespace MonoGameEditor.Core.Components
                             {
                                 bones.Add(boneObj);
                                 offsetMatrices.Add(boneData.OffsetMatrix);
-                                ConsoleViewModel.Log($"[ModelRenderer] Found bone: {boneData.Name} at local pos {boneObj.Transform.LocalPosition}");
+                                Logger.Log($"[ModelRenderer] Found bone: {boneData.Name} at local pos {boneObj.Transform.LocalPosition}");
                             }
                             else
                             {
-                                ConsoleViewModel.Log($"[ModelRenderer] WARNING: Bone '{boneData.Name}' not found in hierarchy!");
+                                Logger.Log($"[ModelRenderer] WARNING: Bone '{boneData.Name}' not found in hierarchy!");
                             }
                         }
                         
                         if (bones.Count > 0)
                         {
-                            ConsoleViewModel.Log($"[ModelRenderer] Reconnecting {bones.Count} bones for skinned mesh");
+                            Logger.Log($"[ModelRenderer] Reconnecting {bones.Count} bones for skinned mesh");
                             skinnedComp.SetBones(bones, offsetMatrices);
                         }
                         else
                         {
-                            ConsoleViewModel.Log($"[ModelRenderer] ERROR: No bones found to reconnect!");
+                            Logger.Log($"[ModelRenderer] ERROR: No bones found to reconnect!");
                         }
                     }
                 }
+                else
+                {
+                    Logger.Log($"[ModelRenderer] ERROR: Model has no meshes!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"[ModelRenderer] EXCEPTION in ReloadMeshDataOnly: {ex.Message}");
+                Logger.Log($"[ModelRenderer] Stack trace: {ex.StackTrace}");
             }
         }
         
@@ -401,7 +465,8 @@ namespace MonoGameEditor.Core.Components
             if (string.IsNullOrEmpty(materialPathToLoad))
             {
                 materialPathToLoad = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
-                ConsoleViewModel.Log($"[ModelRenderer] No material assigned, using default: {materialPathToLoad}");
+                Logger.Log($"[ModelRenderer] No material assigned, using default: {materialPathToLoad}");
+
             }
             
             if (string.IsNullOrEmpty(materialPathToLoad))
@@ -426,7 +491,7 @@ namespace MonoGameEditor.Core.Components
 
             if (!System.IO.File.Exists(fullPath))
             {
-                ConsoleViewModel.Log($"[ModelRenderer] Material file not found: {fullPath} (Original: {materialPathToLoad}), falling back to default");
+                Logger.Log($"[ModelRenderer] Material file not found: {fullPath} (Original: {materialPathToLoad}), falling back to default");
                 // Don't change _materialPath property if just not found temporarily, but for now we fallback
                 
                 var defaultPath = Assets.MaterialAssetManager.Instance.GetDefaultMaterialPath();
@@ -452,8 +517,8 @@ namespace MonoGameEditor.Core.Components
                 string json = System.IO.File.ReadAllText(fullPath);
                 
                 // DEBUG LOGGING
-                ConsoleViewModel.Log($"[ModelRenderer] Loading Material: {materialPathToLoad}");
-                ConsoleViewModel.Log($"[ModelRenderer] JSON Preview: {json.Substring(0, Math.Min(json.Length, 150))}...");
+                Logger.Log($"[ModelRenderer] Loading Material: {materialPathToLoad}");
+                Logger.Log($"[ModelRenderer] JSON Preview: {json.Substring(0, Math.Min(json.Length, 150))}...");
                 
                 var options = new System.Text.Json.JsonSerializerOptions 
                 { 
@@ -465,12 +530,12 @@ namespace MonoGameEditor.Core.Components
 
                 if (data == null)
                 {
-                    ConsoleViewModel.Log($"[ModelRenderer] FAILED to deserialize material data from {_materialPath}");
+                    Logger.Log($"[ModelRenderer] FAILED to deserialize material data from {_materialPath}");
                     Material = Materials.PBRMaterial.CreateDefault();
                     return;
                 }
                 
-                ConsoleViewModel.Log($"[ModelRenderer] Deserialized: Metallic={data.metallic}, Roughness={data.roughness}, AlbedoLen={data.albedoColor?.Length ?? 0}");
+                Logger.Log($"[ModelRenderer] Deserialized: Metallic={data.metallic}, Roughness={data.roughness}, AlbedoLen={data.albedoColor?.Length ?? 0}");
 
                 _loadedShaderPath = data.shaderPath;
 
@@ -490,11 +555,11 @@ namespace MonoGameEditor.Core.Components
                         (byte)(data.albedoColor[1] * 255),
                         (byte)(data.albedoColor[2] * 255)
                     );
-                    ConsoleViewModel.Log($"[ModelRenderer] Set AlbedoColor: {mat.AlbedoColor}");
+                    Logger.Log($"[ModelRenderer] Set AlbedoColor: {mat.AlbedoColor}");
                 }
                 else 
                 {
-                    ConsoleViewModel.Log($"[ModelRenderer] AlbedoColor not set (null or len<3)");
+                    Logger.Log($"[ModelRenderer] AlbedoColor not set (null or len<3)");
                 }
 
                 if (data.customProperties != null)
@@ -539,7 +604,7 @@ namespace MonoGameEditor.Core.Components
         
         if (_pendingTexturePaths.Count > 0)
         {
-            ConsoleViewModel.Log($"[ModelRenderer] Stored {_pendingTexturePaths.Count} texture paths for lazy loading");
+            Logger.Log($"[ModelRenderer] Stored {_pendingTexturePaths.Count} texture paths for lazy loading");
         }
                 
                 // Load Custom Properties
@@ -560,11 +625,11 @@ namespace MonoGameEditor.Core.Components
                 // For now, we trust the PBRMaterial properties will be applied to whatever effect is used.
                 
                 Material = mat;
-                ConsoleViewModel.Log($"[ModelRenderer] Loaded Material '{mat.Name}' from {_materialPath}");
+                Logger.Log($"[ModelRenderer] Loaded Material '{mat.Name}' from {_materialPath}");
             }
             catch (Exception ex)
             {
-                ConsoleViewModel.Log($"[ModelRenderer] Failed to load material: {ex.Message}");
+                Logger.Log($"[ModelRenderer] Failed to load material: {ex.Message}");
                 Material = Materials.PBRMaterial.CreateDefault();
             }
         }
@@ -576,7 +641,7 @@ namespace MonoGameEditor.Core.Components
         {
             // TODO: Implement per-slot material loading
             // For now, just log
-            ConsoleViewModel.Log($"[ModelRenderer] LoadMaterialForSlot called for index {index}");
+            Logger.Log($"[ModelRenderer] LoadMaterialForSlot called for index {index}");
         }
         
         /// <summary>
@@ -621,7 +686,7 @@ namespace MonoGameEditor.Core.Components
                         if (texture != null)
                         {
                             deviceCache[key] = texture;
-                            // ConsoleViewModel.Log($"[ModelRenderer] Loaded {key} for Device {device.GetHashCode()}");
+                            // Logger.Log($"[ModelRenderer] Loaded {key} for Device {device.GetHashCode()}");
                         }
                     }
                     catch (Exception ex)
@@ -658,7 +723,7 @@ namespace MonoGameEditor.Core.Components
                 }
             }
             
-            // if (materialNeedsUpdate) ConsoleViewModel.Log($"[ModelRenderer] Swapped textures for Device {device.GetHashCode()}");
+            // if (materialNeedsUpdate) Logger.Log($"[ModelRenderer] Swapped textures for Device {device.GetHashCode()}");
         }
 
         private Texture2D LoadTextureFromPath(Microsoft.Xna.Framework.Content.ContentManager contentManager, string relativePath)
@@ -681,7 +746,10 @@ namespace MonoGameEditor.Core.Components
                 {
                     using (var stream = System.IO.File.OpenRead(fullPath))
                     {
-                        return Texture2D.FromStream(MonoGameControl.SharedGraphicsDevice, stream);
+                        // Use device from contentManager if possible
+                        var service = contentManager?.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) as IGraphicsDeviceService;
+                        var device = service?.GraphicsDevice ?? GraphicsManager.GraphicsDevice;
+                        return Texture2D.FromStream(device!, stream);
                     }
                 }
                 else
@@ -691,7 +759,7 @@ namespace MonoGameEditor.Core.Components
             }
         }
         
-        private Texture2D LoadTextureWithoutContentManager(string relativePath, GraphicsDevice device = null)
+        private Texture2D? LoadTextureWithoutContentManager(string relativePath, GraphicsDevice? device = null)
         {
             // Direct file loading without ContentManager
             string projectPath = ProjectManager.Instance.ProjectPath ?? "";
@@ -703,9 +771,8 @@ namespace MonoGameEditor.Core.Components
                 {
                     // Use provided device or try multiple sources
                     var graphicsDevice = device 
-                                      ?? MonoGameControl.SharedGraphicsDevice 
-                                      ?? GameControl.SharedGraphicsDevice;
-                                      
+                                      ?? GraphicsManager.GraphicsDevice;
+
                     if (graphicsDevice != null)
                     {
                         return Texture2D.FromStream(graphicsDevice, stream);
@@ -727,17 +794,7 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         protected Microsoft.Xna.Framework.Content.ContentManager GetContentManagerForDevice(GraphicsDevice device)
         {
-            var gameDevice = GameControl.SharedGraphicsDevice;
-            var sceneDevice = MonoGameControl.SharedGraphicsDevice;
-
-            if (device != null)
-            {
-                if (device == sceneDevice) return MonoGameControl.OwnContentManager;
-                if (device == gameDevice) return GameControl.SharedContent;
-            }
-
-            // Fallback
-            return GameControl.SharedContent ?? MonoGameControl.OwnContentManager;
+            return GraphicsManager.GetContentManager(device) ?? GraphicsManager.ContentManager!;
         }
 
         private object DeserializePropertyValue(System.Text.Json.JsonElement element)
@@ -773,12 +830,11 @@ namespace MonoGameEditor.Core.Components
             string shaderPath = Material.ShaderPath;
             
             // Wait for device (essential for shader reflection)
-            if (MonoGameControl.SharedGraphicsDevice == null) return;
-            var device = MonoGameControl.SharedGraphicsDevice;
+            if (GraphicsManager.GraphicsDevice == null) return;
+            var device = GraphicsManager.GraphicsDevice;
             
             lock(_propLock)
             {
-                DynamicProperties.Clear();
                 _customProperties.Clear();
             }
             
@@ -851,37 +907,9 @@ namespace MonoGameEditor.Core.Components
                          }
                      }
                      
-                     var vm = new ShaderPropertyViewModel(prop, initialValue);
-                     vm.PropertyChanged += (s, e) => 
-                     {
-                         if(e.PropertyName == "Value") 
-                         {
-                             lock(_propLock)
-                             {
-                                 _customProperties[prop.Name] = vm.Value;
-                                 if (Material != null) 
-                                 {
-                                     Material.CustomProperties[prop.Name] = vm.Value;
-                                     
-                                     // Sync back to Material standard properties
-                                     if (prop.Name.Equals("Metallic", StringComparison.OrdinalIgnoreCase) && vm.Value is float fMet)
-                                         Material.Metallic = fMet;
-                                     else if (prop.Name.Equals("Roughness", StringComparison.OrdinalIgnoreCase) && vm.Value is float fRough)
-                                         Material.Roughness = fRough;
-                                     else if ((prop.Name.Equals("AO", StringComparison.OrdinalIgnoreCase) || prop.Name.Equals("AmbientOcclusion", StringComparison.OrdinalIgnoreCase)) && vm.Value is float fAO)
-                                         Material.AmbientOcclusion = fAO;
-                                     else if (prop.Name.Equals("AlbedoColor", StringComparison.OrdinalIgnoreCase) && vm.Value is Microsoft.Xna.Framework.Vector4 vCol)
-                                         Material.AlbedoColor = new Microsoft.Xna.Framework.Color(vCol);
-                                 }
-                             }
-                         }
-                     };
-                     
-                     // Add to collections
                      lock(_propLock)
                      {
-                         DynamicProperties.Add(vm);
-                         _customProperties[prop.Name] = vm.Value;
+                         _customProperties[prop.Name] = initialValue;
                      }
                 }
             }
@@ -963,6 +991,7 @@ namespace MonoGameEditor.Core.Components
                     
                     // Render this mesh using existing single-mesh logic below
                     DrawSingleMesh(device, view, projection, cameraPosition, shadowMap, lightViewProj);
+
                 }
                 return;
             }
@@ -978,12 +1007,16 @@ namespace MonoGameEditor.Core.Components
             var hasData = _meshData != null || (_metadata != null && _metadata.PreviewVertices.Count > 0);
             if (!hasData) return;
 
-            // Get or create resources for this specific device
-            if (!_deviceResources.TryGetValue(device, out var resources))
+            // Get or create resources for this specific device and this specific mesh
+            if (!_meshResources.ContainsKey(device))
+                _meshResources[device] = new Dictionary<Assets.MeshData, DeviceResources>();
+
+            var deviceMeshCache = _meshResources[device];
+            if (!deviceMeshCache.TryGetValue(_meshData, out var resources))
             {
                 resources = CreateResourcesForDevice(device);
                 if (resources == null) return; // Failed to create
-                _deviceResources[device] = resources;
+                deviceMeshCache[_meshData] = resources;
             }
             
             // Lazy load properties if needed
@@ -1009,12 +1042,12 @@ namespace MonoGameEditor.Core.Components
                     {
                         // Upgrade to PBR Effect!
                         resources.Effect = pbrEffect;
-                        ConsoleViewModel.Log($"[ModelRenderer] ✅ Upgraded {GameObject?.Name} to PBR!");
+                        Logger.Log($"[ModelRenderer] ✅ Upgraded {GameObject?.Name} (Mesh: {_meshData.Name}) to PBR!");
                     }
                 }
                 catch (Exception ex)
                 {
-                    ConsoleViewModel.Log($"[ModelRenderer] PBR upgrade failed: {ex.Message}");
+                    Logger.Log($"[ModelRenderer] PBR upgrade failed: {ex.Message}");
                 }
             }
             
@@ -1022,7 +1055,7 @@ namespace MonoGameEditor.Core.Components
             if (resources.VertexBuffer == null || resources.VertexBuffer.IsDisposed ||
                 resources.Effect == null || resources.Effect.IsDisposed)
             {
-                _deviceResources.Remove(device);
+                deviceMeshCache.Remove(_meshData);
                 return;
             }
 
@@ -1051,7 +1084,7 @@ namespace MonoGameEditor.Core.Components
                 if (sceneLight != null)
                 {
                     if (DateTime.Now.Millisecond < 10)
-                        ConsoleViewModel.Log($"[ModelRenderer] Scene light found: {sceneLight.Name}");
+                        Logger.Log($"[ModelRenderer] Scene light found: {sceneLight.Name}");
                     
                     var lightComp = sceneLight.GetComponent<LightComponent>();
                     basicEffect.DirectionalLight0.Enabled = true;
@@ -1068,7 +1101,7 @@ namespace MonoGameEditor.Core.Components
                     var finalColor = baseColor * tempColor * lightComp.Intensity;
                     
                     if (DateTime.Now.Millisecond < 10)
-                        ConsoleViewModel.Log($"[ModelRenderer] Light intensity={lightComp.Intensity}, finalColor=({finalColor.X:F2},{finalColor.Y:F2},{finalColor.Z:F2})");
+                        Logger.Log($"[ModelRenderer] Light intensity={lightComp.Intensity}, finalColor=({finalColor.X:F2},{finalColor.Y:F2},{finalColor.Z:F2})");
                     
                     basicEffect.DirectionalLight0.DiffuseColor = finalColor; // Can exceed 1.0 in HDR
                     
@@ -1087,7 +1120,8 @@ namespace MonoGameEditor.Core.Components
                 {
                     // Fallback if no light found
                     if (DateTime.Now.Millisecond < 10)
-                        ConsoleViewModel.Log("[ModelRenderer] No scene light found, using fallback lighting");
+                        Logger.Log("[ModelRenderer] No scene light found, using fallback lighting");
+
                     basicEffect.DirectionalLight0.Enabled = true;
                     basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.8f);
                     basicEffect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-0.5f, -1f, -0.5f));
@@ -1285,7 +1319,7 @@ namespace MonoGameEditor.Core.Components
             // Guard: If data isn't loaded yet, we can't create resources
             if (_meshData == null && _metadata == null)
             {
-                // ConsoleViewModel.Log($"[ModelRenderer] Skip Resource Creation: No data for {GameObject?.Name}");
+                // Logger.Log($"[ModelRenderer] Skip Resource Creation: No data for {GameObject?.Name}");
                 return null;
             }
 
@@ -1338,13 +1372,13 @@ namespace MonoGameEditor.Core.Components
                 resources.IndexBuffer = new IndexBuffer(device, IndexElementSize.ThirtyTwoBits, indices.Count, BufferUsage.WriteOnly);
                 resources.IndexBuffer.SetData(indices.ToArray());
 
-                ConsoleViewModel.Log($"[ModelRenderer] CreateResourcesForDevice for {GameObject?.Name}");
+                Logger.Log($"[ModelRenderer] CreateResourcesForDevice for {GameObject?.Name}");
                 
                 // Try to load Custom Shader if defined
                 Effect? loadedEffect = null;
                 if (!string.IsNullOrEmpty(_loadedShaderPath))
                 {
-                     ConsoleViewModel.Log($"[ModelRenderer] Attempting custom shader: {_loadedShaderPath}");
+                     Logger.Log($"[ModelRenderer] Attempting custom shader: {_loadedShaderPath}");
                      try 
                      {
                         // Logic to load shader from path. 
@@ -1352,28 +1386,41 @@ namespace MonoGameEditor.Core.Components
                         // If it's a Content path, we use ContentManager.
                         
                         // Simplistic approach: Check if .mgfxo exists at path
+                        // 1. Try absolute/direct file path first (for .mgfxo)
                         if (System.IO.File.Exists(_loadedShaderPath))
                         {
                             var bytes = System.IO.File.ReadAllBytes(_loadedShaderPath);
                             loadedEffect = new Effect(device, bytes);
-                            ConsoleViewModel.Log($"[ModelRenderer] ✅ Loaded Custom Shader: {_loadedShaderPath}");
+                            Logger.Log($"[ModelRenderer] ✅ Loaded Custom Shader from FILE: {_loadedShaderPath}");
                         }
-                        else
+                        // 2. Try as Content Path
+                        else 
                         {
-                             ConsoleViewModel.Log($"[ModelRenderer] Custom shader file not found: {_loadedShaderPath}");
-                             // Try ContentManager if it looks like a content path
-                             var content = MonoGameEditor.Controls.GameControl.SharedContent ?? MonoGameEditor.Controls.MonoGameControl.OwnContentManager;
-                             if (content != null)
-                             {
-                                 // Strip extension and folder if needed purely for Content.Load, but strictly strictly relies on correct pathing
-                                 // For now, let's assume it failed file check.
-                                 ConsoleViewModel.Log($"[ModelRenderer] ContentManager available but no content loading attempted");
-                             }
+                            var content = GetContentManagerForDevice(device);
+                            if (content != null)
+                            {
+                                try
+                                {
+                                    // Strip folder "Content/" if present, and remove extension
+                                    string contentPath = _loadedShaderPath;
+                                    if (contentPath.StartsWith("Content/", StringComparison.OrdinalIgnoreCase))
+                                        contentPath = contentPath.Substring(8);
+                                    
+                                    contentPath = System.IO.Path.ChangeExtension(contentPath, null);
+                                    
+                                    loadedEffect = content.Load<Effect>(contentPath);
+                                    Logger.Log($"[ModelRenderer] ✅ Loaded Custom Shader via Content: {contentPath}");
+                                }
+                                catch (Exception ex)
+                                {
+                                     Logger.Log($"[ModelRenderer] Custom shader not found/failed in Content: {_loadedShaderPath} ({ex.Message})");
+                                }
+                            }
                         }
                      }
                      catch (Exception ex)
                      {
-                         ConsoleViewModel.Log($"[ModelRenderer] ❌ Failed to load custom shader '{_loadedShaderPath}': {ex.Message}");
+                         Logger.Log($"[ModelRenderer] ❌ Failed to load custom shader '{_loadedShaderPath}': {ex.Message}");
                      }
                 }
 
@@ -1381,11 +1428,12 @@ namespace MonoGameEditor.Core.Components
                 if (loadedEffect != null)
                 {
                     resources.Effect = loadedEffect;
-                    ConsoleViewModel.Log($"[ModelRenderer] Using custom shader for {GameObject?.Name}");
+                    Logger.Log($"[ModelRenderer] Using custom shader for {GameObject?.Name}");
+
                 }
                 else
                 {
-                    ConsoleViewModel.Log($"[ModelRenderer] Attempting PBR shader load...");
+                    Logger.Log($"[ModelRenderer] Attempting PBR shader load...");
                     
                     // CRITICAL FIX: Pass ContentManager explicitly based on device!
                     var contentMgr = GetContentManagerForDevice(device);
@@ -1394,11 +1442,13 @@ namespace MonoGameEditor.Core.Components
                     if (pbrEffect != null)
                     {
                         resources.Effect = pbrEffect;
-                        ConsoleViewModel.Log($"[ModelRenderer] ✅ Using PBR Effect for {GameObject?.Name}");
+                        Logger.Log($"[ModelRenderer] ✅ Using PBR Effect for {GameObject?.Name}");
+
                     }
                     else
                     {
-                        ConsoleViewModel.Log($"[ModelRenderer] ⚠️ PBR failed, using BasicEffect for {GameObject?.Name}");
+                        Logger.Log($"[ModelRenderer] ⚠️ PBR failed, using BasicEffect for {GameObject?.Name}");
+
                         // Fallback to BasicEffect
                         var initialEffect = new BasicEffect(device);
                         
@@ -1414,7 +1464,7 @@ namespace MonoGameEditor.Core.Components
             }
             catch (Exception ex)
             {
-                ConsoleViewModel.Log($"Failed to create resources for device: {ex.Message}");
+                Logger.Log($"Failed to create resources for device: {ex.Message}");
                 return null;
             }
 
@@ -1428,36 +1478,49 @@ namespace MonoGameEditor.Core.Components
         public virtual void DrawWithCustomEffect(Effect customEffect, Matrix lightViewProj)
         {
             if (!IsEnabled) return;
-            // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] Request Draw {GameObject.Name}");
 
             var device = customEffect.GraphicsDevice;
-            
-            // Re-add resource creation in case this pass runs first!
-            if (!_deviceResources.ContainsKey(device))
+
+            // Handle multi-mesh
+            if (_meshes != null && _meshes.Count > 0)
             {
-                // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] Creating resources for {GameObject.Name}");
-                CreateResourcesForDevice(device);
+                var originalMesh = _meshData;
+                for (int i = 0; i < _meshes.Count; i++)
+                {
+                    _meshData = _meshes[i];
+                    DrawSingleMeshWithCustomEffect(customEffect, lightViewProj);
+                }
+                _meshData = originalMesh;
+                return;
             }
 
-            if (!_deviceResources.TryGetValue(device, out var resources)) 
+            // Fallback to single mesh
+            DrawSingleMeshWithCustomEffect(customEffect, lightViewProj);
+        }
+
+        private void DrawSingleMeshWithCustomEffect(Effect customEffect, Matrix lightViewProj)
+        {
+            if (_meshData == null && _metadata == null) return;
+            var device = customEffect.GraphicsDevice;
+
+            if (!_meshResources.ContainsKey(device))
+                _meshResources[device] = new Dictionary<Assets.MeshData, DeviceResources>();
+
+            var deviceMeshCache = _meshResources[device];
+            if (!deviceMeshCache.TryGetValue(_meshData, out var resources))
             {
-                 // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] {GameObject.Name} No Resources Found!");
-                 return;
+                resources = CreateResourcesForDevice(device);
+                if (resources == null) return;
+                deviceMeshCache[_meshData] = resources;
             }
-            
-            if (resources.VertexBuffer == null || resources.IndexBuffer == null)
-            {
-                 // MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[ShadowDebug] {GameObject.Name} Buffers are null!");
-                 return;
-            }
+
+            if (resources.VertexBuffer == null || resources.IndexBuffer == null) return;
 
             Matrix world = GameObject != null ? GameObject.Transform.WorldMatrix : Matrix.Identity;
 
-            // Apply global params
             customEffect.Parameters["World"]?.SetValue(world);
             customEffect.Parameters["LightViewProjection"]?.SetValue(lightViewProj);
             
-            // Draw
             foreach (var pass in customEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -1501,13 +1564,13 @@ namespace MonoGameEditor.Core.Components
     }
     
     /// <summary>
-    /// ViewModel for individual material slots in multi-material objects
+    /// Data structure for individual material slots in multi-material objects
     /// </summary>
-    public class MaterialSlotViewModel : ViewModels.ViewModelBase
+    public class MaterialSlot : INotifyPropertyChanged
     {
         public int Index { get; set; }
-        public string MeshName { get; set; }
-        private string _materialPath;
+        public string MeshName { get; set; } = "Mesh";
+        private string _materialPath = "";
         
         public string MaterialPath
         {
@@ -1517,12 +1580,14 @@ namespace MonoGameEditor.Core.Components
                 if (_materialPath != value)
                 {
                     _materialPath = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(MaterialPath));
                     MaterialPathChanged?.Invoke(this, value);
                 }
             }
         }
         
-        public event EventHandler<string> MaterialPathChanged;
+        public event EventHandler<string>? MaterialPathChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

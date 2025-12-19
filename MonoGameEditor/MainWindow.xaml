@@ -102,6 +102,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="New Project..." Command="{Binding NewProjectCommand}" />
                 <MenuItem Header="Open Project..." Command="{Binding OpenProjectCommand}" />
+                <MenuItem Header="Project Settings..." Command="{Binding ProjectSettingsCommand}" />
                 <Separator />
                 <MenuItem Header="New Scene" Command="{Binding NewSceneCommand}" />
                 <MenuItem Header="Open Scene" Command="{Binding OpenSceneCommand}" />
@@ -109,7 +110,7 @@
                 <MenuItem Header="Save" Command="{Binding SaveSceneCommand}" />
                 <MenuItem Header="Save As..." Command="{Binding SaveSceneAsCommand}" />
                 <Separator />
-                <MenuItem Header="Build Settings" />
+                <MenuItem Header="Build Settings" Command="{Binding BuildSettingsCommand}" />
                 <MenuItem Header="Build &amp; Run" />
                 <Separator />
                 <MenuItem Header="Exit" Click="OnCloseClick" />

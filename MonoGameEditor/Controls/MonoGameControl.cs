@@ -7,6 +7,7 @@ using WinForms = System.Windows.Forms;
 using MonoGameEditor.ViewModels;
 using MonoGameEditor.Core;
 using MonoGameEditor.Core.Components;
+using MonoGameEditor.Core.Graphics;
 
 namespace MonoGameEditor.Controls
 {
@@ -30,15 +31,33 @@ namespace MonoGameEditor.Controls
         private ProceduralSkybox? _skybox;
         private RenderTarget2D? _hdrRenderTarget;
         private ShadowRenderer? _shadowRenderer;
+        private ToneMapRenderer? _toneMapRenderer;
         private SelectionOutlineRenderer? _outlineRenderer;
-        private Microsoft.Xna.Framework.Content.ContentManager? _ownContentManager;
+        private static Microsoft.Xna.Framework.Content.ContentManager? _ownContentManager;
+        private Microsoft.Xna.Framework.Content.ContentManager? _sharedContent;
         
         // Static property to access MonoGameControl's ContentManager
-        public static Microsoft.Xna.Framework.Content.ContentManager? OwnContentManager { get; private set; }
+        public static Microsoft.Xna.Framework.Content.ContentManager? OwnContentManager
+        {
+            get => _ownContentManager;
+            private set
+            {
+                _ownContentManager = value;
+                if (value != null) GraphicsManager.ContentManager = value;
+            }
+        }
         
-        // Static GraphicsDevice shared across editor
+        // Static GraphicsDevice shared across editor and runtime
         private static GraphicsDevice? _sharedGraphicsDevice;
-        public static GraphicsDevice? SharedGraphicsDevice => _sharedGraphicsDevice;
+        public static GraphicsDevice? SharedGraphicsDevice
+        {
+            get => _sharedGraphicsDevice;
+            set 
+            { 
+                _sharedGraphicsDevice = value;
+                if (value != null) GraphicsManager.GraphicsDevice = value;
+            }
+        }
         
         // Debug flags (one-time logging)
         private static bool _loggedShadowInit = false;
@@ -161,17 +180,21 @@ namespace MonoGameEditor.Controls
                 var services = new Microsoft.Xna.Framework.GameServiceContainer();
                 services.AddService(typeof(IGraphicsDeviceService), _graphicsService);
                 contentToUse = new Microsoft.Xna.Framework.Content.ContentManager(services, "Content");
+                _sharedContent = contentToUse;
             }
-            
+
+            // REGISTER THIS DEVICE/CONTENT PAIR
+            GraphicsManager.RegisterContentManager(GraphicsDevice!, contentToUse);
+
             try
             {
                 _shadowRenderer = new ShadowRenderer(GraphicsDevice!, contentToUse);
-                _ownContentManager = contentToUse; // Store for later use
-                OwnContentManager = contentToUse; // Make it accessible statically
+                _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
+                _toneMapRenderer.Initialize(contentToUse);
             }
             catch (Exception ex)
             {
-                ConsoleViewModel.Log($"[MonoGameControl] ❌ Shadow renderer failed: {ex.Message}");
+                ConsoleViewModel.Log($"[MonoGameControl] ❌ Shader initialization failed: {ex.Message}");
             }
             
             // Initialize Selection Box (simple wireframe)
@@ -316,7 +339,6 @@ namespace MonoGameEditor.Controls
             if (ViewModels.MainViewModel.Instance?.IsPlaying == true)
             {
                 var gameTime = new GameTime(currentTime, TimeSpan.FromSeconds(deltaTime));
-                PhysicsManager.Instance.Update(gameTime);
                 ScriptManager.Instance.UpdateScripts(gameTime);
             }
             
@@ -521,6 +543,9 @@ namespace MonoGameEditor.Controls
         protected override void OnPaint(WinForms.PaintEventArgs e)
         {
             if (!_initialized || GraphicsDevice == null) return;
+            
+            // Sync with global manager
+            GraphicsManager.GraphicsDevice = GraphicsDevice;
 
             // Late VM Subscription check
             if (!_vmSubscribed && MainViewModel.Instance != null)
@@ -686,7 +711,7 @@ namespace MonoGameEditor.Controls
                 if (_outlineRenderer != null)
                 {
                     var selectedObj = MainViewModel.Instance?.Inspector?.SelectedObject as MonoGameEditor.Core.GameObject;
-                    if (selectedObj != null && selectedObj.IsActive)
+                    if (selectedObj != null)
                     {
                         _outlineRenderer.RenderOutline(selectedObj, _camera.View, _camera.Projection);
                     }
@@ -730,8 +755,6 @@ namespace MonoGameEditor.Controls
 
         private void RenderRecursively(MonoGameEditor.Core.GameObject node, Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
-            if (!node.IsActive) return;
-
             var modelRenderer = node.Components.FirstOrDefault(c => c is MonoGameEditor.Core.Components.ModelRendererComponent) as MonoGameEditor.Core.Components.ModelRendererComponent;
             modelRenderer?.Draw(GraphicsDevice, _camera.View, _camera.Projection, _camera.Position, shadowMap, lightViewProj);
 

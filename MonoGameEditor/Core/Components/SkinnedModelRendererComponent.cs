@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameEditor.ViewModels;
 using MonoGameEditor.Core.Graphics;
 using MonoGameEditor.Core.Materials;
-using MonoGameEditor.Controls;
+using MonoGameEditor.Core;
+
+// using MonoGameEditor.Controls; // Removed to decouple core from UI
 
 namespace MonoGameEditor.Core.Components
 {
@@ -32,7 +33,7 @@ namespace MonoGameEditor.Core.Components
 
         public SkinnedModelRendererComponent()
         {
-            // ConsoleViewModel.Log("[SkinnedRenderer] Component created");
+            // Logger.Log("[SkinnedRenderer] Component created");
 
             // Identity prevents invisible mesh if bones are not ready
             for (int i = 0; i < _boneMatrices.Length; i++)
@@ -78,7 +79,7 @@ namespace MonoGameEditor.Core.Components
                 // Debug offset matrices (disabled to reduce console spam)
                 // if (i < 3)
                 // {
-                //     ConsoleViewModel.Log(
+                //     Logger.Log(
                 //         $"[SkinnedRenderer] Offset[{i}] Translation={_offsetMatrices[i].Translation}");
                 // }
             }
@@ -107,7 +108,7 @@ namespace MonoGameEditor.Core.Components
                 string bone2Id = Bones.Count > 2 ? Bones[2]?.Id.ToString() : "null";
             }
             
-            ConsoleViewModel.LogInfo($"[SkinnedRenderer] Set {bones.Count} bones with bind pose captured");
+            Logger.Log($"[SkinnedRenderer] Set {bones.Count} bones with bind pose captured");
         }
 
         private void OnBoneTransformChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -187,8 +188,8 @@ namespace MonoGameEditor.Core.Components
             // So we search in Parent.Children, not GameObject.Children
             GameObject searchRoot = GameObject.Parent ?? GameObject;
             
-            ConsoleViewModel.LogInfo($"[SkinnedRenderer] Searching for bones in '{searchRoot.Name}' (parent of '{GameObject.Name}')");
-            // ConsoleViewModel.Log($"[SkinnedRenderer] Search root has {searchRoot.Children.Count} children");
+            Logger.Log($"[SkinnedRenderer] Searching for bones in '{searchRoot.Name}' (parent of '{GameObject.Name}')");
+            // Logger.Log($"[SkinnedRenderer] Search root has {searchRoot.Children.Count} children");
                 
             var bones = new List<GameObject>();
             var offsetMatrices = new List<System.Numerics.Matrix4x4>();
@@ -196,7 +197,7 @@ namespace MonoGameEditor.Core.Components
             // STRATEGY 1: Try ID-based reconnection first (most reliable)
             if (BoneIds != null && BoneIds.Count == modelData.Bones.Count)
             {
-                ConsoleViewModel.LogInfo($"[SkinnedRenderer] Attempting ID-based bone reconnection ({BoneIds.Count} bones)");
+                Logger.Log($"[SkinnedRenderer] Attempting ID-based bone reconnection ({BoneIds.Count} bones)");
                 
                 bool allBonesFound = true;
                 for (int i = 0; i < BoneIds.Count; i++)
@@ -208,11 +209,11 @@ namespace MonoGameEditor.Core.Components
                     {
                         bones.Add(boneObj);
                         offsetMatrices.Add(modelData.Bones[i].OffsetMatrix);
-                        // ConsoleViewModel.Log($"[SkinnedRenderer] Found bone by ID: {boneObj.Name} (ID: {boneId})");
+                        // Logger.Log($"[SkinnedRenderer] Found bone by ID: {boneObj.Name} (ID: {boneId})");
                     }
                     else
                     {
-                        ConsoleViewModel.LogWarning($"[SkinnedRenderer] Bone ID {boneId} not found in hierarchy");
+                        Logger.LogWarning($"[SkinnedRenderer] Bone ID {boneId} not found in hierarchy");
                         allBonesFound = false;
                         break;
                     }
@@ -220,7 +221,7 @@ namespace MonoGameEditor.Core.Components
                 
                 if (allBonesFound && bones.Count > 0)
                 {
-                    ConsoleViewModel.LogInfo($"[SkinnedRenderer] ✓ ID-based reconnection successful! ({bones.Count} bones)");
+                    Logger.Log($"[SkinnedRenderer] ✓ ID-based reconnection successful! ({bones.Count} bones)");
                     SetBones(bones, offsetMatrices);
                     return;
                 }
@@ -228,11 +229,11 @@ namespace MonoGameEditor.Core.Components
                 // Clear failed attempt
                 bones.Clear();
                 offsetMatrices.Clear();
-                ConsoleViewModel.LogInfo($"[SkinnedRenderer] ID-based reconnection failed, trying name-based...");
+                Logger.Log($"[SkinnedRenderer] ID-based reconnection failed, trying name-based...");
             }
             
             // STRATEGY 2: Fall back to name-based search
-            ConsoleViewModel.LogInfo($"[SkinnedRenderer] Attempting name-based bone discovery");
+            Logger.Log($"[SkinnedRenderer] Attempting name-based bone discovery");
             
             foreach (var boneData in modelData.Bones)
             {
@@ -241,22 +242,23 @@ namespace MonoGameEditor.Core.Components
                 {
                     bones.Add(boneObj);
                     offsetMatrices.Add(boneData.OffsetMatrix);
-                    // ConsoleViewModel.Log($"[SkinnedRenderer] Found bone by name: {boneData.Name}");
+                    // Logger.Log($"[SkinnedRenderer] Found bone by name: {boneData.Name}");
                 }
                 else
                 {
-                    ConsoleViewModel.LogWarning($"[SkinnedRenderer] Bone '{boneData.Name}' not found in hierarchy");
+                    Logger.LogWarning($"[SkinnedRenderer] Bone '{boneData.Name}' not found in hierarchy");
                 }
             }
             
             if (bones.Count > 0)
             {
-                ConsoleViewModel.LogInfo($"[SkinnedRenderer] ✓ Name-based discovery found {bones.Count} bones");
+                Logger.Log($"[SkinnedRenderer] ✓ Name-based discovery found {bones.Count} bones");
                 SetBones(bones, offsetMatrices);
             }
             else
             {
-                ConsoleViewModel.LogError($"[SkinnedRenderer] No bones found using either method!");
+                Logger.LogError($"[SkinnedRenderer] No bones found using either method!");
+
             }
         }
         
@@ -305,11 +307,11 @@ namespace MonoGameEditor.Core.Components
             // CRITICAL FIX: Only create resources for the device we're actually rendering to
             // GameControl (Game tab) and MonoGameControl (Scene tab) have separate devices
             // Creating resources for wrong device causes corruption
-            var gameDevice = GameControl.SharedGraphicsDevice;
-            var sceneDevice = MonoGameControl.SharedGraphicsDevice;
+            var gameDevice = GraphicsManager.GraphicsDevice;
+            var sceneDevice = GraphicsManager.GraphicsDevice;
             
-            bool isGameDevice = (gameDevice != null && device == gameDevice);
-            bool isSceneDevice = (sceneDevice != null && device == sceneDevice);
+            bool isGameDevice = (device == gameDevice);
+            bool isSceneDevice = (device == sceneDevice);
             
             // CRITICAL FIX: Always clear and recreate for new device
             // Device Reset can corrupt shared Effects
@@ -362,27 +364,15 @@ namespace MonoGameEditor.Core.Components
 
             try
             {
-                // CRITICAL FIX: Load shader from FILE instead of ContentManager cache
-                // ContentManager returns SAME Effect instance for different devices!
-                var shaderPath = System.IO.Path.Combine(content.RootDirectory, "Shaders", "SkinnedPBR.mgfx");
-                
-                if (System.IO.File.Exists(shaderPath))
-                {
-                    var shaderBytes = System.IO.File.ReadAllBytes(shaderPath);
-                    effect = new Effect(device, shaderBytes);
-                    ConsoleViewModel.LogInfo($"[SkinnedRenderer] Loaded SkinnedPBR from FILE for device {device.GetHashCode()}");
-                }
-                else
-                {
-                    // Fallback to ContentManager
-                    effect = content.Load<Effect>("Shaders/SkinnedPBR");
-                    ConsoleViewModel.LogWarning($"[SkinnedRenderer] Using ContentManager (cached) for device {device.GetHashCode()}");
-                }
+                // Load via ContentManager (now safe because each view has its own CM and device)
+                effect = content.Load<Effect>("Shaders/SkinnedPBR");
+                // Logger.Log($"[SkinnedRenderer] Loaded SkinnedPBR from ContentManager for device {device.GetHashCode()}");
             }
             catch (Exception ex)
             {
+                // Try PBR fallback
                 effect = PBREffectLoader.Load(device, content);
-                ConsoleViewModel.LogError($"[SkinnedRenderer] Failed to load SkinnedPBR: {ex.Message}");
+                Logger.LogError($"[SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: {ex.Message}. Using PBR fallback.");
             }
 
             return new DeviceResources
@@ -428,11 +418,11 @@ namespace MonoGameEditor.Core.Components
             if (bonesParam != null)
             {
                 bonesParam.SetValue(_boneMatrices);
-                // ConsoleViewModel.Log($"[SkinnedRenderer] ✓ Applied {_boneMatrices.Length} bone matrices to shadow shader");
+                // Logger.Log($"[SkinnedRenderer] ✓ Applied {_boneMatrices.Length} bone matrices to shadow shader");
             }
             else
             {
-                ConsoleViewModel.LogWarning($"[SkinnedRenderer] Shadow shader has no 'Bones' parameter!");
+                Logger.LogWarning($"[SkinnedRenderer] Shadow shader has no 'Bones' parameter!");
             }
             
             // Call base implementation to actually draw

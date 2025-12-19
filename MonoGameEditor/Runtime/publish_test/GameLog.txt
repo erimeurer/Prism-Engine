@@ -1,0 +1,57 @@
+=== Game started at 18/12/2025 21:55:05 ===
+21:55:05 [INFO] [StandalonePlayer] Initialize started
+21:55:05 [INFO] [ScriptManager] Creating Scripts folder at D:\git\Prism-Engine\MonoGameEditor\Runtime\publish_test\Assets\Scripts
+21:55:05 [INFO] [ScriptManager] Found 0 script file(s) in D:\git\Prism-Engine\MonoGameEditor\Runtime\publish_test\Assets\Scripts
+21:55:05 [INFO] [StandalonePlayer] LoadContent started
+21:55:05 [INFO] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+21:55:05 [INFO] [ToneMapRenderer] Shader loaded successfully via ContentManager.
+21:55:05 [INFO] [StandalonePlayer] Created HDR Target: 1280x720
+21:55:05 [INFO] [StandalonePlayer] No scene to load, creating default
+21:55:05 [INFO] [StandalonePlayer] LoadContent finished
+21:55:05 [INFO] [StandalonePlayer] Initialize finished
+21:55:05 [INFO] [StandalonePlayer] Main Camera found: Main Camera
+=== Game started at 18/12/2025 21:56:28 ===
+21:56:28 [INFO] [StandalonePlayer] Initialize started
+21:56:28 [INFO] [ScriptManager] Found 0 script file(s) in D:\git\Prism-Engine\MonoGameEditor\Runtime\publish_test\Assets\Scripts
+21:56:28 [INFO] [ScriptManager] Found 0 script file(s) in D:\git\Prism-Engine\MonoGameEditor\Runtime\publish_test\Assets\Scripts
+21:56:28 [INFO] [StandalonePlayer] LoadContent started
+21:56:28 [INFO] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+21:56:28 [INFO] [ToneMapRenderer] Shader loaded successfully via ContentManager.
+21:56:28 [INFO] [StandalonePlayer] Created HDR Target: 1280x720
+21:56:28 [INFO] [StandalonePlayer] No scene to load, creating default
+21:56:28 [INFO] [StandalonePlayer] LoadContent finished
+21:56:28 [INFO] [StandalonePlayer] Initialize finished
+21:56:28 [INFO] [StandalonePlayer] Main Camera found: Main Camera
+21:56:33 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:33 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:38 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:38 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:43 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:43 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:48 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:48 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:53 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:53 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:58 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:56:58 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:03 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:03 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:08 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:08 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:13 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:13 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:18 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+21:57:18 [INFO] [StandalonePlayer] Camera Pos: {X:0 Y:5 Z:12}
+=== Game started at 18/12/2025 22:02:07 ===
+22:02:07 [INFO] [StandalonePlayer] Initialize started
+22:02:07 [INFO] [ScriptManager] Found 0 script file(s) in D:\git\Prism-Engine\MonoGameEditor\Runtime\publish_test\Assets\Scripts
+22:02:07 [INFO] [ScriptManager] Found 0 script file(s) in D:\git\Prism-Engine\MonoGameEditor\Runtime\publish_test\Assets\Scripts
+22:02:07 [INFO] [StandalonePlayer] LoadContent started
+22:02:07 [INFO] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+22:02:07 [INFO] [ToneMapRenderer] Shader loaded successfully via ContentManager.
+22:02:07 [INFO] [StandalonePlayer] Created HDR Target: 1280x720
+22:02:07 [INFO] [StandalonePlayer] No scene to load or file missing, creating default
+22:02:07 [INFO] [StandalonePlayer] Total scripts compiled and registered: 0
+22:02:07 [INFO] [StandalonePlayer] LoadContent finished
+22:02:07 [INFO] [StandalonePlayer] Initialize finished
+22:02:07 [INFO] [StandalonePlayer] Main Camera found: Main Camera

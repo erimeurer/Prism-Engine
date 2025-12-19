@@ -1,7 +1,8 @@
-﻿using System.Configuration;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
+using MonoGameEditor.Core;
 namespace MonoGameEditor
 {
     /// <summary>
@@ -9,6 +10,12 @@ namespace MonoGameEditor
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            // Initialize logger for Core
+            Core.Logger.Initialize(new ViewModels.EditorLogger());
+        }
     }
 
 }

@@ -216,9 +216,9 @@ namespace MonoGameEditor.IO
 
         public static void LoadScene(string filePath)
         {
-            // Show loading overlay
-            var mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
-            mainWindow?.ShowLoadingOverlay("Loading scene...");
+#if !RUNTIME_BUILD
+            // Loading overlay removed from Core DLL
+#endif
             
             try
             {
@@ -252,8 +252,9 @@ namespace MonoGameEditor.IO
             }
             finally
             {
-                // Hide loading overlay
-                mainWindow?.HideLoadingOverlay();
+#if !RUNTIME_BUILD
+                // Loading overlay removed from Core DLL
+#endif
             }
         }
 
@@ -276,26 +277,8 @@ namespace MonoGameEditor.IO
                 // For now, we unfortunately will get NEW IDs unless we refactor GameObject.
                 // Let's refactor GameObject slightly to allow setting ID or use Reflection.
                 
-                var go = new GameObject(objData.Name);
+                var go = new GameObject(objData.Name, objData.Id);
                 
-                // Hack: Set ID via reflection since it's readonly
-                var prop = typeof(GameObject).GetProperty("Id");
-                if (prop != null && prop.CanWrite)
-                {
-                    prop.SetValue(go, objData.Id);
-                }
-                else
-                {
-                    // Backing field?
-                    // Or keep new ID? If we keep new ID, parenting links break!
-                    // We must preserve ID.
-                    System.Reflection.FieldInfo? field = typeof(GameObject).GetField("<Id>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                    if (field != null)
-                    {
-                        field.SetValue(go, objData.Id);
-                    }
-                }
-
                 go.IsActive = objData.IsActive;
                 go.IsExpanded = objData.IsExpanded;
                 go.ObjectType = objData.ObjectType;
@@ -304,7 +287,7 @@ namespace MonoGameEditor.IO
                 go.Transform.LocalRotation = objData.LocalRotation;
                 go.Transform.LocalScale = objData.LocalScale;
                 
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Loaded {go.Name} (ID: {go.Id}) at position {objData.LocalPosition}");
+                MonoGameEditor.Core.Logger.Log($"[SceneLoader] Loaded {go.Name} (ID: {go.Id}) at position {objData.LocalPosition}, rotation {objData.LocalRotation}, scale {objData.LocalScale}");
 
                 // Re-add components
                 foreach (var compData in objData.Components)
@@ -315,21 +298,31 @@ namespace MonoGameEditor.IO
                     // First try normal Type.GetType
                     Type? type = Type.GetType(compData.TypeName);
                     
-                    // If that fails and it looks like a user script, try ScriptManager's compiled assembly
+                    // FALLBACK: Search all loaded assemblies for the type (essential for standalone cross-assembly resolution)
+                    if (type == null)
+                    {
+                        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            type = assembly.GetType(compData.TypeName);
+                            if (type != null) break;
+                        }
+                    }
+
+                    // If that still fails and it looks like a user script, try ScriptManager's compiled assembly
                     if (type == null && !compData.TypeName.StartsWith("MonoGameEditor."))
                     {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Type.GetType failed for '{compData.TypeName}', trying ScriptManager assembly");
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] Type.GetType failed for '{compData.TypeName}', trying ScriptManager assembly");
                         type = Core.ScriptManager.Instance.GetCompiledType(compData.TypeName);
                     }
                     
                     if (type != null && Activator.CreateInstance(type) is Component c)
                     {
                         comp = c;
-                        MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Created instance of {type.Name}");
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] Created instance of {type.Name} for {go.Name}");
                     }
                     else
                     {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.LogWarning($"[SceneLoader] Failed to create component of type '{compData.TypeName}'");
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] Failed to create component of type '{compData.TypeName}'");
                     }
                     
                     if (comp != null)
@@ -385,7 +378,7 @@ namespace MonoGameEditor.IO
                         }
                         
                         // Log when adding component
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] Added {componentType.Name} to {go.Name} (ID: {go.Id})");
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] Added {componentType.Name} to {go.Name} (ID: {go.Id})");
                         
                         // Call OnComponentAdded if it exists (for re-initialization after deserialization)
                         var onAddedMethod = type.GetMethod("OnComponentAdded");
@@ -396,24 +389,34 @@ namespace MonoGameEditor.IO
                     }
                     else
                     {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[SceneLoader] WARNING: Could not create instance of {compData.TypeName}");
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] WARNING: Could not create instance of {compData.TypeName}");
                     }
                 }
 
+                
+                // CRITICAL: Check for duplicate IDs
+                if (idToObjMap.ContainsKey(objData.Id))
+                {
+                    MonoGameEditor.Core.Logger.LogError($"[SceneLoader] ❌ DUPLICATE ID! {go.Name} (ID: {objData.Id}) overwrites '{idToObjMap[objData.Id].Name}'!");
+                }
+                
                 idToObjMap[objData.Id] = go;
                 
                 if (objData.ParentId.HasValue)
                 {
                     parentIds[objData.Id] = objData.ParentId.Value;
+                    MonoGameEditor.Core.Logger.Log($"[SceneLoader] {go.Name} (ID: {go.Id}) has parent {objData.ParentId.Value} - will be added to parent later");
                 }
                 else
                 {
-                    // It's a root object (for now)
+                    // It's a root object
                     SceneManager.Instance.RootObjects.Add(go);
+                    MonoGameEditor.Core.Logger.Log($"[SceneLoader] {go.Name} (ID: {go.Id}) added as ROOT object");
                 }
             }
 
             // 2. Restore Hierarchy
+            MonoGameEditor.Core.Logger.Log($"[SceneLoader] Restoring hierarchy for {parentIds.Count} child objects");
             foreach (var kvp in parentIds)
             {
                 Guid childId = kvp.Key;
@@ -422,14 +425,20 @@ namespace MonoGameEditor.IO
                 if (idToObjMap.TryGetValue(childId, out var child) && 
                     idToObjMap.TryGetValue(parentId, out var parent))
                 {
-                    // This moves it from RootObjects (if added there) to Parent's children
-                    // However, we added strict logic in Reparent/AddChild.
-                    // Let's use SceneManager.Instance.Reparent to be safe? 
-                    // No, direct manipulation is faster here, but we need to remove from Root if we added it there.
-                    
-                    // Actually, in the loop above I added to RootObjects ONLY if ParentId is null.
-                    // So here I just need to add to parent.
-                    parent.AddChild(child);
+                    // Check if they're the same object
+                    if (child == parent || child.Id == parent.Id)
+                    {
+                        MonoGameEditor.Core.Logger.LogError($"[SceneLoader] ❌ BUG: Trying to set {child.Name} as child of ITSELF! ChildID={childId}, ParentID={parentId}");
+                    }
+                    else
+                    {
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] Setting {child.Name} (ID: {child.Id}) as child of {parent.Name} (ID: {parent.Id})");
+                        parent.AddChild(child);
+                    }
+                }
+                else
+                {
+                    MonoGameEditor.Core.Logger.LogError($"[SceneLoader] FAILED to restore hierarchy: Child {childId} or Parent {parentId} not found!");
                 }
             }
             
@@ -437,7 +446,7 @@ namespace MonoGameEditor.IO
             // CRITICAL: Wait a moment to ensure ALL GameObjects are in the scene before initializing
             System.Threading.Thread.Sleep(100); // Small delay to ensure hierarchy is stable
             
-            MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Initializing {idToObjMap.Count} objects post-load");
+            MonoGameEditor.Core.Logger.Log($"[SceneLoader] Initializing {idToObjMap.Count} objects post-load");
             
             foreach (var obj in idToObjMap.Values)
             {
@@ -445,14 +454,20 @@ namespace MonoGameEditor.IO
                 {
                     if (component is ModelRendererComponent renderer)
                     {
-                        MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Reinitializing renderer for {obj.Name}");
+                        MonoGameEditor.Core.Logger.Log($"[SceneLoader] Reinitializing renderer for {obj.Name} (Sync/Async)");
+#if RUNTIME_BUILD
+                        // In standalone, we wait synchronously to ensure everything is ready for the first frame
+                        renderer.InitializeAfterSceneLoad().Wait();
+#else
+                        // In the Editor, we must avoid blocking the UI thread (WPF) to prevent deadlocks
                         _ = renderer.InitializeAfterSceneLoad();
+#endif
                     }
                 }
             }
             
             // 4. Resolve Object References
-            MonoGameEditor.ViewModels.ConsoleViewModel.LogInfo($"[SceneLoader] Resolving {pendingReferences.Count} object references");
+            MonoGameEditor.Core.Logger.Log($"[SceneLoader] Resolving {pendingReferences.Count} object references");
             foreach (var (owner, member, refData) in pendingReferences)
             {
                 try
@@ -484,7 +499,7 @@ namespace MonoGameEditor.IO
                 }
                 catch (Exception ex)
                 {
-                    MonoGameEditor.ViewModels.ConsoleViewModel.LogWarning($"[SceneLoader] Failed to resolve reference {member.Name}: {ex.Message}");
+                    MonoGameEditor.Core.Logger.Log($"[SceneLoader] Failed to resolve reference {member.Name}: {ex.Message}");
                 }
             }
         }

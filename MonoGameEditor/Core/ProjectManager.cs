@@ -31,15 +31,19 @@ namespace MonoGameEditor.Core
             EnsureStructure();
             LoadSettings();
             
+#if !RUNTIME_BUILD
             // Start automatic shader compilation
             _shaderCompiler?.StopMonitoring();
             _shaderCompiler = new ShaderCompilationService(ProjectPath);
             _shaderCompiler.StartMonitoring();
+#endif
             
             ProjectLoaded?.Invoke();
 
-            // Fix any script class names that don't match filenames
+#if !RUNTIME_BUILD
+            // Fix any script class names that don't match filenames (Editor only)
             Utilities.ScriptClassNameFixer.FixAllScriptsInProject();
+#endif
             
             // Discover and compile scripts
             ScriptManager.Instance.DiscoverAndCompileScripts();

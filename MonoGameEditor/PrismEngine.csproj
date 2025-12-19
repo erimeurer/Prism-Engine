@@ -11,13 +11,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AssimpNet" Version="4.1.0" />
+    <ProjectReference Include="PrismEngine.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude Runtime project to avoid multiple entry points -->
+    <Compile Remove="Runtime\**" />
+    <EmbeddedResource Remove="Runtime\**" />
+    <None Remove="Runtime\**" />
+    <Page Remove="Runtime\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2210.55" />
-    <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.4.1" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
 
   <ItemGroup>

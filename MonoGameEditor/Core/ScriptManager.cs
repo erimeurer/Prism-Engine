@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Xna.Framework;
 using MonoGameEditor.Core.Assets;
 using MonoGameEditor.Core.Components;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core
 {
@@ -37,20 +38,21 @@ namespace MonoGameEditor.Core
             string projectPath = ProjectManager.Instance.ProjectPath;
             if (string.IsNullOrEmpty(projectPath))
             {
-                ViewModels.ConsoleViewModel.Log("[ScriptManager] No project loaded, skipping script discovery");
+                Logger.Log("[ScriptManager] No project loaded, skipping script discovery");
                 return;
             }
 
             string scriptsFolder = Path.Combine(projectPath, "Assets", "Scripts");
+            Logger.Log($"[ScriptManager] Searching for scripts in: {scriptsFolder}");
             if (!Directory.Exists(scriptsFolder))
             {
-                ViewModels.ConsoleViewModel.Log($"[ScriptManager] Creating Scripts folder at {scriptsFolder}");
+                Logger.Log($"[ScriptManager] Creating Scripts folder at {scriptsFolder}");
                 Directory.CreateDirectory(scriptsFolder);
                 return;
             }
 
             var scriptFiles = Directory.GetFiles(scriptsFolder, "*.cs", SearchOption.AllDirectories);
-            ViewModels.ConsoleViewModel.Log($"[ScriptManager] Found {scriptFiles.Length} script file(s) in {scriptsFolder}");
+            Logger.Log($"[ScriptManager] Found {scriptFiles.Length} script file(s).");
 
             if (scriptFiles.Length == 0)
                 return;
@@ -84,7 +86,7 @@ namespace MonoGameEditor.Core
                     MetadataReference.CreateFromFile(Assembly.Load("netstandard").Location),
                 };
 
-                // Add current assembly reference
+                // Add current assembly reference (PrismEngine.Core)
                 references.Add(MetadataReference.CreateFromFile(Assembly.GetExecutingAssembly().Location));
 
                 var compilation = CSharpCompilation.Create(
@@ -105,7 +107,7 @@ namespace MonoGameEditor.Core
 
                         foreach (var diagnostic in failures)
                         {
-                            ViewModels.ConsoleViewModel.LogError($"{diagnostic.Id}: {diagnostic.GetMessage()}");
+                            Logger.LogError($"{diagnostic.Id}: {diagnostic.GetMessage()}");
                         }
                         return;
                     }
@@ -113,7 +115,7 @@ namespace MonoGameEditor.Core
                     ms.Seek(0, SeekOrigin.Begin);
                     _compiledScriptsAssembly = Assembly.Load(ms.ToArray());
 
-                    ViewModels.ConsoleViewModel.Log($"[ScriptManager] Successfully compiled {scriptFiles.Length} script(s)");
+                    Logger.Log($"[ScriptManager] Successfully compiled {scriptFiles.Length} script(s) into memory assembly.");
 
                     // Register all ScriptComponent types
                     RegisterScriptTypes(scriptFiles);
@@ -121,7 +123,8 @@ namespace MonoGameEditor.Core
             }
             catch (Exception ex)
             {
-                ViewModels.ConsoleViewModel.Log($"[ScriptManager] Compilation error: {ex.Message}");
+                Logger.LogError($"[ScriptManager] CRITICAL Compilation failure: {ex.Message}");
+                Logger.LogError($"[ScriptManager] StackTrace: {ex.StackTrace}");
             }
         }
 
@@ -147,7 +150,7 @@ namespace MonoGameEditor.Core
                 };
 
                 _scriptAssets[type.Name] = asset;
-                ViewModels.ConsoleViewModel.Log($"[ScriptManager] Registered script: {type.Name}");
+                Logger.Log($"[ScriptManager] Registered script: {type.Name}");
             }
             
             // Hot-reload: Replace old script instances with new ones
@@ -164,7 +167,7 @@ namespace MonoGameEditor.Core
                 
             int reloadedCount = 0;
             
-            ViewModels.ConsoleViewModel.Log("[ScriptManager] Starting hot-reload of scripts in scene...");
+            Logger.Log("[ScriptManager] Starting hot-reload of scripts in scene...");
             
             // Recursively reload all scripts in the scene
             foreach (var rootObj in SceneManager.Instance.RootObjects)
@@ -174,11 +177,11 @@ namespace MonoGameEditor.Core
             
             if (reloadedCount > 0)
             {
-                ViewModels.ConsoleViewModel.Log($"[ScriptManager] ✅ Hot-reloaded {reloadedCount} script instance(s)");
+                Logger.Log($"[ScriptManager] ✅ Hot-reloaded {reloadedCount} script instance(s)");
             }
             else
             {
-                ViewModels.ConsoleViewModel.Log("[ScriptManager] No script instances to reload");
+                Logger.Log("[ScriptManager] No script instances to reload");
             }
         }
         
@@ -222,13 +225,13 @@ namespace MonoGameEditor.Core
                             obj.AddComponent(newScript);
                             
                             count++;
-                            ViewModels.ConsoleViewModel.Log($"[ScriptManager]   ↻ Reloaded {typeName} on '{obj.Name}'");
+                            Logger.Log($"[ScriptManager]   ↻ Reloaded {typeName} on '{obj.Name}'");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    ViewModels.ConsoleViewModel.LogError($"[ScriptManager] Failed to reload script on '{obj.Name}': {ex.Message}");
+                    Logger.LogError($"[ScriptManager] Failed to reload script on '{obj.Name}': {ex.Message}");
                 }
             }
             
@@ -321,7 +324,7 @@ namespace MonoGameEditor.Core
                 }
                 catch (Exception ex)
                 {
-                    ViewModels.ConsoleViewModel.Log($"[ScriptManager] Failed to create instance of {scriptName}: {ex.Message}");
+                    Logger.Log($"[ScriptManager] Failed to create instance of {scriptName}: {ex.Message}");
                 }
             }
             return null;
@@ -345,7 +348,7 @@ namespace MonoGameEditor.Core
             }
             catch (Exception ex)
             {
-                ViewModels.ConsoleViewModel.Log($"[ScriptManager] Failed to create instance by type name {typeName}: {ex.Message}");
+                Logger.Log($"[ScriptManager] Failed to create instance by type name {typeName}: {ex.Message}");
             }
             return null;
         }
@@ -374,7 +377,7 @@ namespace MonoGameEditor.Core
                             }
                             catch (Exception ex)
                             {
-                                ViewModels.ConsoleViewModel.Log($"[ScriptManager] Error in {script.ComponentName}.Update(): {ex.Message}");
+                                Logger.Log($"[ScriptManager] Error in {script.ComponentName}.Update(): {ex.Message}");
                             }
                         }
                     }

@@ -6,6 +6,7 @@ using WinForms = System.Windows.Forms;
 using MonoGameEditor.Core;
 using MonoGameEditor.Core.Components;
 using MonoGameEditor.ViewModels;
+using MonoGameEditor.Core.Graphics;
 using System.Linq;
 using System.Windows.Threading;
 
@@ -30,10 +31,26 @@ namespace MonoGameEditor.Controls
 
         // Static ContentManager and GraphicsDevice shared across components
         private static Microsoft.Xna.Framework.Content.ContentManager? _sharedContent;
-        public static Microsoft.Xna.Framework.Content.ContentManager? SharedContent => _sharedContent;
+        public static Microsoft.Xna.Framework.Content.ContentManager? SharedContent 
+        {
+            get => _sharedContent;
+            set
+            {
+                _sharedContent = value;
+                if (value != null) GraphicsManager.ContentManager = value;
+            }
+        }
         
         private static GraphicsDevice? _sharedGraphicsDevice;
-        public static GraphicsDevice? SharedGraphicsDevice => _sharedGraphicsDevice;
+        public static GraphicsDevice? SharedGraphicsDevice
+        {
+            get => _sharedGraphicsDevice;
+            set
+            {
+                _sharedGraphicsDevice = value;
+                if (value != null) GraphicsManager.GraphicsDevice = value;
+            }
+        }
 
         public GraphicsDevice? GraphicsDevice => _graphicsService?.GraphicsDevice;
 
@@ -44,6 +61,15 @@ namespace MonoGameEditor.Controls
                 WinForms.ControlStyles.AllPaintingInWmPaint | 
                 WinForms.ControlStyles.Opaque,
                 true);
+            
+            // CRITICAL: WinForms Panel doesn't receive keyboard events without this!
+            TabStop = true; // Allow control to receive focus via Tab
+            
+            // Give focus when clicked
+            Click += (s, e) => Focus();
+
+            // Also try to focus when mouse enters
+            MouseEnter += (s, e) => Focus();
             
             _renderTimer = new WinForms.Timer();
             _renderTimer.Interval = 16; // ~60 FPS
@@ -72,8 +98,10 @@ namespace MonoGameEditor.Controls
             
             var content = new Microsoft.Xna.Framework.Content.ContentManager(services, "Content");
             _sharedContent = content; // Store for use by PBREffectLoader
+            GraphicsManager.RegisterContentManager(_graphicsService.GraphicsDevice, content);
 
             _toneMapRenderer = new ToneMapRenderer(GraphicsDevice!);
+            _toneMapRenderer.Initialize(content);
             _shadowRenderer = new ShadowRenderer(GraphicsDevice!, content);
             ResizeHDRTarget(Width, Height, AntialiasingMode.MSAA_8x); // Default to 8x for Game view
 
@@ -112,6 +140,17 @@ namespace MonoGameEditor.Controls
 
         private void UpdateGame(GameTime gameTime)
         {
+            // CAPTURE FOCUS check
+            if (!Focused)
+            {
+                // In Editor, sometimes we need to stay vigilant about focus
+                // but we don't want to steal it if user is typing in another tool
+                // if (WinForms.Form.ActiveForm != null) Focus();
+            }
+
+            // CRITICAL: Update Input state BEFORE scripts run
+            Core.Input.Update();
+            
             PhysicsManager.Instance.Update(gameTime);
             ScriptManager.Instance.UpdateScripts(gameTime);
         }
@@ -265,19 +304,16 @@ namespace MonoGameEditor.Controls
                         RenderModelsRecursive(MonoGameEditor.Core.SceneManager.Instance.RootObjects, GraphicsDevice, view, projection, cameraComp.GameObject.Transform.Position, shadowMap, lightViewProj);
                     }
                     
-                    // --- Tone Map ---
+                    // --- Direct Blit (No Tone Mapping) ---
+                    // Using the same method as Scene view to avoid whitewashed look
                     GraphicsDevice.SetRenderTarget(null);
-                    if (_toneMapRenderer != null && _hdrRenderTarget != null)
-                        _toneMapRenderer.Draw(_hdrRenderTarget);
-                    else
+                    GraphicsDevice.Clear(Color.CornflowerBlue);
+                    
+                    using (var batch = new SpriteBatch(GraphicsDevice))
                     {
-                         // Fallback
-                         using (var batch = new SpriteBatch(GraphicsDevice))
-                         {
-                             batch.Begin();
-                             batch.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
-                             batch.End();
-                         }
+                        batch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+                        batch.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+                        batch.End();
                     }
 
                     // --- DEBUG SHADOW MAP (commented out) ---

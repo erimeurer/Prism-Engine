@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using MonoGameEditor.ViewModels;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Shaders;
 
@@ -27,7 +27,7 @@ public class ShaderCompilationService
     /// </summary>
     public void StartMonitoring()
     {
-        ConsoleViewModel.Log("[ShaderCompiler] Starting automatic shader compilation service...");
+        Logger.Log("[ShaderCompiler] Starting automatic shader compilation service...");
         
         // Compile all existing shaders on startup
         CompileAllShadersAsync();
@@ -65,7 +65,7 @@ public class ShaderCompilationService
         watcher.Renamed += OnShaderFileRenamed;
         
         _watchers.Add(watcher);
-        ConsoleViewModel.Log($"[ShaderCompiler] Watching: {path}");
+        Logger.Log($"[ShaderCompiler] Watching: {path}");
     }
     
     private void OnShaderFileChanged(object sender, FileSystemEventArgs e)
@@ -115,7 +115,7 @@ public class ShaderCompilationService
             
             if (shadersToCompile.Count > 0)
             {
-                ConsoleViewModel.Log($"[ShaderCompiler] Found {shadersToCompile.Count} shader(s) to compile");
+                Logger.Log($"[ShaderCompiler] Found {shadersToCompile.Count} shader(s) to compile");
                 
                 foreach (var shaderPath in shadersToCompile)
                 {
@@ -150,7 +150,7 @@ public class ShaderCompilationService
             var mgfxoPath = Path.ChangeExtension(fxPath, ".mgfxo");
             var shaderName = Path.GetFileName(fxPath);
             
-            ConsoleViewModel.Log($"[ShaderCompiler] Compiling: {shaderName}");
+            Logger.Log($"[ShaderCompiler] Compiling: {shaderName}");
             
             var processInfo = new System.Diagnostics.ProcessStartInfo
             {
@@ -166,7 +166,8 @@ public class ShaderCompilationService
             {
                 if (process == null)
                 {
-                    ConsoleViewModel.Log($"[ShaderCompiler] ❌ Failed to start mgfxc. Make sure it's in PATH.");
+                    Logger.Log($"[ShaderCompiler] ❌ Failed to start mgfxc. Make sure it's in PATH.");
+
                     return;
                 }
                 
@@ -176,23 +177,23 @@ public class ShaderCompilationService
                 
                 if (process.ExitCode == 0)
                 {
-                    ConsoleViewModel.Log($"[ShaderCompiler] ✅ {shaderName} compiled successfully");
+                    Logger.Log($"[ShaderCompiler] ✅ {shaderName} compiled successfully");
                 }
                 else
                 {
-                    ConsoleViewModel.Log($"[ShaderCompiler] ❌ {shaderName} compilation failed (exit code {process.ExitCode})");
+                    Logger.Log($"[ShaderCompiler] ❌ {shaderName} compilation failed (exit code {process.ExitCode})");
                     
                     if (!string.IsNullOrWhiteSpace(error))
-                        ConsoleViewModel.Log($"[mgfxc ERROR] {error}");
+                        Logger.Log($"[mgfxc ERROR] {error}");
                     
                     if (!string.IsNullOrWhiteSpace(output))
-                        ConsoleViewModel.Log($"[mgfxc] {output}");
+                        Logger.Log($"[mgfxc] {output}");
                 }
             }
         }
         catch (Exception ex)
         {
-            ConsoleViewModel.Log($"[ShaderCompiler] ❌ Exception: {ex.Message}");
+            Logger.Log($"[ShaderCompiler] ❌ Exception: {ex.Message}");
         }
     }
     
@@ -208,6 +209,6 @@ public class ShaderCompilationService
         }
         _watchers.Clear();
         
-        ConsoleViewModel.Log("[ShaderCompiler] Stopped monitoring");
+        Logger.Log("[ShaderCompiler] Stopped monitoring");
     }
 }

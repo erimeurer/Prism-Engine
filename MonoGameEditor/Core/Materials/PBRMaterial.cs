@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.ComponentModel;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Materials
 {
@@ -10,7 +11,7 @@ namespace MonoGameEditor.Core.Materials
     /// </summary>
     public class PBRMaterial : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private string _name = "Standard";
         private Color _albedoColor = Color.White;
@@ -134,7 +135,7 @@ namespace MonoGameEditor.Core.Materials
         {
             if (effect == null)
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log("[Material] Apply called with null effect!");
+                Logger.Log("[Material] Apply called with null effect!");
                 return;
             }
             
@@ -146,7 +147,7 @@ namespace MonoGameEditor.Core.Materials
             }
             else
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Material] ⚠️ AlbedoColor parameter not found in shader");
+                Logger.Log($"[Material] ⚠️ AlbedoColor parameter not found in shader");
             }
             
             // Set metallic
@@ -157,7 +158,7 @@ namespace MonoGameEditor.Core.Materials
             }
             else
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Material] ⚠️ Metallic parameter not found");
+                Logger.Log($"[Material] ⚠️ Metallic parameter not found");
             }
             
             // Set roughness
@@ -168,7 +169,7 @@ namespace MonoGameEditor.Core.Materials
             }
             else
             {
-                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Material] ⚠️ Roughness parameter not found");
+                Logger.Log($"[Material] ⚠️ Roughness parameter not found");
             }
             
             // Set AO

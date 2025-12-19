@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using MonoGameEditor.Core.Graphics;
 
 namespace MonoGameEditor.Core.Gizmos
 {
@@ -82,7 +83,7 @@ namespace MonoGameEditor.Core.Gizmos
              };
         }
 
-        public void Draw(MonoGameEditor.Controls.EditorCamera camera, Microsoft.Xna.Framework.Vector3 position, Quaternion objectRotation = default, bool useLocalOrientation = false)
+        public void Draw(EditorCamera camera, Microsoft.Xna.Framework.Vector3 position, Quaternion objectRotation = default, bool useLocalOrientation = false)
         {
             if (camera == null) return;
 

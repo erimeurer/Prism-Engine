@@ -14,19 +14,19 @@ namespace MonoGameEditor.Utilities
             string projectPath = Core.ProjectManager.Instance.ProjectPath;
             if (string.IsNullOrEmpty(projectPath))
             {
-                ViewModels.ConsoleViewModel.Log("[ScriptFixer] No project loaded");
+                Core.Logger.Log("[ScriptFixer] No project loaded");
                 return;
             }
 
             string scriptsFolder = Path.Combine(projectPath, "Assets", "Scripts");
             if (!Directory.Exists(scriptsFolder))
             {
-                ViewModels.ConsoleViewModel.Log($"[ScriptFixer] Scripts folder not found: {scriptsFolder}");
+                Core.Logger.Log($"[ScriptFixer] Scripts folder not found: {scriptsFolder}");
                 return;
             }
 
             var scriptFiles = Directory.GetFiles(scriptsFolder, "*.cs", SearchOption.AllDirectories);
-            ViewModels.ConsoleViewModel.Log($"[ScriptFixer] Found {scriptFiles.Length} script file(s)");
+            Core.Logger.Log($"[ScriptFixer] Found {scriptFiles.Length} script file(s)");
 
             int fixedCount = 0;
             foreach (var filePath in scriptFiles)
@@ -37,7 +37,7 @@ namespace MonoGameEditor.Utilities
                 }
             }
 
-            ViewModels.ConsoleViewModel.Log($"[ScriptFixer] Fixed {fixedCount} script(s). Restart editor to recompile.");
+            Core.Logger.Log($"[ScriptFixer] Fixed {fixedCount} script(s). Restart editor to recompile.");
         }
 
         private static bool FixScriptClassName(string filePath)
@@ -51,18 +51,18 @@ namespace MonoGameEditor.Utilities
                 var classMatch = Regex.Match(content, @"\bclass\s+(\w+)\s*:\s*ScriptComponent");
                 if (!classMatch.Success)
                 {
-                    ViewModels.ConsoleViewModel.Log($"[ScriptFixer] Skipping {Path.GetFileName(filePath)} - not a ScriptComponent");
+                    Core.Logger.Log($"[ScriptFixer] Skipping {Path.GetFileName(filePath)} - not a ScriptComponent");
                     return false;
                 }
 
                 string currentClassName = classMatch.Groups[1].Value;
                 if (currentClassName == expectedClassName)
                 {
-                    ViewModels.ConsoleViewModel.Log($"[ScriptFixer] {Path.GetFileName(filePath)} - already correct");
+                    Core.Logger.Log($"[ScriptFixer] {Path.GetFileName(filePath)} - already correct");
                     return false;
                 }
 
-                ViewModels.ConsoleViewModel.Log($"[ScriptFixer] Fixing {Path.GetFileName(filePath)}: {currentClassName} → {expectedClassName}");
+                Core.Logger.Log($"[ScriptFixer] Fixing {Path.GetFileName(filePath)}: {currentClassName} → {expectedClassName}");
 
                 // Replace class declaration
                 content = Regex.Replace(
@@ -87,7 +87,7 @@ namespace MonoGameEditor.Utilities
             }
             catch (Exception ex)
             {
-                ViewModels.ConsoleViewModel.Log($"[ScriptFixer] Error fixing {Path.GetFileName(filePath)}: {ex.Message}");
+                Core.Logger.Log($"[ScriptFixer] Error fixing {Path.GetFileName(filePath)}: {ex.Message}");
                 return false;
             }
         }

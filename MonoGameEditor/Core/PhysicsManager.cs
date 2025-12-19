@@ -13,9 +13,11 @@ namespace MonoGameEditor.Core
         public Vector3 Gravity { get; set; } = new Vector3(0, -9.81f, 0);
 
         private List<ColliderComponent> _allColliders = new List<ColliderComponent>();
+        private int _updateCount = 0;
 
         public void Update(GameTime gameTime)
         {
+            _updateCount++;
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (deltaTime <= 0) return;
 
@@ -23,7 +25,23 @@ namespace MonoGameEditor.Core
             _allColliders.Clear();
             CollectCollidersRecursive(SceneManager.Instance.RootObjects);
 
+            // Diagnostic every 60 frames
+            if (_updateCount % 60 == 0)
+            {
+                Logger.Log($"[PhysicsManager] Update #{_updateCount}: {_allColliders.Count} colliders found");
+            }
+
             // 2. Update all physics bodies
+            int physicsBodyCount = 0;
+            foreach (var root in SceneManager.Instance.RootObjects)
+            {
+                physicsBodyCount += CountPhysicsBodiesRecursive(root);
+            }
+            
+            if (_updateCount % 60 == 0 && physicsBodyCount > 0)
+            {
+                Logger.Log($"[PhysicsManager] Found {physicsBodyCount} physics bodies");
+            }
             UpdatePhysicsRecursive(SceneManager.Instance.RootObjects, deltaTime);
         }
 
@@ -42,9 +60,25 @@ namespace MonoGameEditor.Core
                 }
             }
         }
-
+        
+        private int CountPhysicsBodiesRecursive(GameObject obj)
+        {
+            int count = 0;
+            if (obj.IsActive)
+            {
+                var body = obj.GetComponent<PhysicsBodyComponent>();
+                if (body != null && body.IsEnabled) count++;
+                
+                foreach (var child in obj.Children)
+                {
+                    count += CountPhysicsBodiesRecursive(child);
+                }
+            }
+            return count;
+        }
         private void UpdatePhysicsRecursive(System.Collections.ObjectModel.ObservableCollection<GameObject> objects, float deltaTime)
         {
+            int updatedCount = 0;
             foreach (var obj in objects)
             {
                 if (obj.IsActive)
@@ -53,131 +87,145 @@ namespace MonoGameEditor.Core
                     if (physicsBody != null && physicsBody.IsEnabled && !physicsBody.IsKinematic)
                     {
                         UpdateBody(physicsBody, obj, deltaTime);
+                        updatedCount++;
                     }
 
                     UpdatePhysicsRecursive(obj.Children, deltaTime);
                 }
             }
+            
+            // Diagnostic: Log how many bodies were updated in first few frames
+            if (_updateCount <= 5 && updatedCount > 0)
+            {
+                Logger.Log($"[PhysicsManager] Updated {updatedCount} physics bodies this frame");
+            }
         }
 
         private void UpdateBody(PhysicsBodyComponent body, GameObject go, float deltaTime)
         {
-            // 1. Apply Gravity
+            // Diagnostic: Log physics body state for first 5 updates
+            if (_updateCount <= 5 && go.Name.Contains("tripo"))
+            {
+                string parentName = go.Parent?.Name ?? "ROOT";
+                Logger.Log($"[PhysicsManager] {go.Name} (Parent: {parentName}): Pos={go.Transform.Position}, LocalPos={go.Transform.LocalPosition}, UseGravity={body.UseGravity}, Velocity={body.Velocity}");
+            }
+            
+            // 0. Pre-integration: Apply constraints to current velocity
+            ApplyVelocityConstraints(body);
+
+            // 1. Apply Forces (Gravity & Drag)
             if (body.UseGravity)
             {
                 body.Velocity += Gravity * deltaTime;
+                
+                // Diagnostic: Log velocity AFTER applying gravity
+                if (_updateCount <= 5 && go.Name.Contains("tripo"))
+                {
+                    Logger.Log($"[PhysicsManager] {go.Name} AFTER gravity: Velocity={body.Velocity}, Pos={go.Transform.Position}");
+                }
             }
-
-            // 2. Apply Drag
             if (body.Drag > 0)
             {
                 body.Velocity *= (1.0f - MathHelper.Clamp(body.Drag * deltaTime, 0, 1));
             }
+            if (body.AngularDrag > 0)
+            {
+                body.AngularVelocity *= (1.0f - MathHelper.Clamp(body.AngularDrag * deltaTime, 0, 1));
+            }
 
-            // 3. Simple Integration (Step-by-step to handle collisions better)
-            // For now, just integrate and then resolve
-            go.Transform.Position += body.Velocity * deltaTime;
-
-            // 4. Collision Detection & Resolution
+            // 2. Collision Detection: Collect ALL contacts
+            List<(Vector3 normal, float depth, Vector3 point, ColliderComponent other, ColliderComponent myCol)> contacts = new List<(Vector3, float, Vector3, ColliderComponent, ColliderComponent)>();
             var myColliders = go.GetComponents<ColliderComponent>();
             foreach (var myCol in myColliders)
             {
                 if (!myCol.IsEnabled) continue;
-
                 foreach (var otherCol in _allColliders)
                 {
-                    if (otherCol.GameObject == go) continue; // Don't collide with self
+                    if (otherCol.GameObject == go) continue;
 
-                    if (CheckAndResolveCollision(body, myCol, otherCol))
+                    Vector3 n, c;
+                    float d;
+                    if (myCol is CapsuleColliderComponent cap)
                     {
-                        // Collision occurred and was resolved
+                        // Special multi-point detection for capsules
+                        CollectCapsuleContacts(contacts, body, cap, otherCol);
+                    }
+                    else if (Collide(myCol, otherCol, out n, out d, out c))
+                    {
+                        contacts.Add((n, d, c, otherCol, myCol));
                     }
                 }
             }
 
+            // 3. Iterative Velocity Solver (Sequential Impulses)
+            // Running multiple iterations makes the physics "solid"
+            int velocityIterations = 4;
+            for (int i = 0; i < velocityIterations; i++)
+            {
+                foreach (var ct in contacts)
+                {
+                    SolveVelocity(body, ct.myCol, ct.normal, ct.point);
+                }
+            }
+
+            // 4. Integrate Velocity -> Position
+            ApplyVelocityConstraints(body);
+            go.Transform.Position += body.Velocity * deltaTime;
+
             // 5. Integrate Rotation
-            if (body.AngularVelocity.LengthSquared() > 0)
+            if (body.AngularVelocity.LengthSquared() > 0.0001f)
             {
-                go.Transform.Rotation += body.AngularVelocity * deltaTime;
-                if (body.AngularDrag > 0)
+                Vector3 degAngularVel = new Vector3(
+                    MathHelper.ToDegrees(body.AngularVelocity.X),
+                    MathHelper.ToDegrees(body.AngularVelocity.Y),
+                    MathHelper.ToDegrees(body.AngularVelocity.Z)
+                );
+                go.Transform.Rotation += degAngularVel * deltaTime;
+            }
+
+            // 6. Iterative Position Solver (De-penetration)
+            // We solve position AFTER integration to ensure NO jitter
+            int positionIterations = 2;
+            for (int i = 0; i < positionIterations; i++)
+            {
+                foreach (var ct in contacts)
                 {
-                    body.AngularVelocity *= (1.0f - MathHelper.Clamp(body.AngularDrag * deltaTime, 0, 1));
+                    // Re-calculate depth after position change
+                    Vector3 n, c;
+                    float d;
+                    if (Collide(ct.myCol, ct.other, out n, out d, out c))
+                    {
+                        SolvePosition(body, ct.myCol, n, d);
+                    }
                 }
             }
+
+            // Final Safety
+            ApplyVelocityConstraints(body);
+            if (body.Velocity.LengthSquared() < 0.0001f) body.Velocity = Vector3.Zero;
+            if (body.AngularVelocity.LengthSquared() < 0.0001f) body.AngularVelocity = Vector3.Zero;
         }
 
-        private bool CheckAndResolveCollision(PhysicsBodyComponent body, ColliderComponent myCol, ColliderComponent otherCol)
+        private void ApplyVelocityConstraints(PhysicsBodyComponent body)
         {
-            Vector3 collisionNormal;
-            float penetrationDepth;
+            Vector3 v = body.Velocity;
+            if (body.FreezePositionX) v.X = 0;
+            if (body.FreezePositionY) v.Y = 0;
+            if (body.FreezePositionZ) v.Z = 0;
+            body.Velocity = v;
 
-            if (Collide(myCol, otherCol, out collisionNormal, out penetrationDepth))
-            {
-                // Resolve position (push out)
-                myCol.GameObject.Transform.Position += collisionNormal * penetrationDepth;
-
-                // Resolve velocity (remove component along normal)
-                float velocityAlongNormal = Vector3.Dot(body.Velocity, collisionNormal);
-                
-                // Only resolve if moving towards the other object
-                if (velocityAlongNormal < 0)
-                {
-                    // Simple inelastic collision for now (no bounce)
-                    body.Velocity -= collisionNormal * velocityAlongNormal;
-                }
-
-                return true;
-            }
-
-            return false;
+            Vector3 av = body.AngularVelocity;
+            if (body.FreezeRotationX) av.X = 0;
+            if (body.FreezeRotationY) av.Y = 0;
+            if (body.FreezeRotationZ) av.Z = 0;
+            body.AngularVelocity = av;
         }
 
-        private bool Collide(ColliderComponent a, ColliderComponent b, out Vector3 normal, out float depth)
+        private void CollectCapsuleContacts(List<(Vector3, float, Vector3, ColliderComponent, ColliderComponent)> contacts, PhysicsBodyComponent body, CapsuleColliderComponent cap, ColliderComponent other)
         {
-            normal = Vector3.Zero;
-            depth = 0;
-
-            // Box vs Box
-            if (a is BoxColliderComponent boxA && b is BoxColliderComponent boxB)
-                return BoxVsBox(boxA, boxB, out normal, out depth);
-            
-            // Sphere vs Sphere
-            if (a is SphereColliderComponent sphereA && b is SphereColliderComponent sphereB)
-                return SphereVsSphere(sphereA, sphereB, out normal, out depth);
-
-            // Sphere vs Box
-            if (a is SphereColliderComponent s1 && b is BoxColliderComponent b1)
-                return SphereVsBox(s1, b1, out normal, out depth);
-            if (a is BoxColliderComponent b2 && b is SphereColliderComponent s2)
-            {
-                bool hit = SphereVsBox(s2, b2, out normal, out depth);
-                normal = -normal;
-                return hit;
-            }
-
-            // Capsule support (Simplified: treat as sphere for now to ensure it stops)
-            if (a is CapsuleColliderComponent capA)
-                return CapsuleVsOther(capA, b, out normal, out depth);
-            if (b is CapsuleColliderComponent capB)
-            {
-                bool hit = CapsuleVsOther(capB, a, out normal, out depth);
-                normal = -normal;
-                return hit;
-            }
-
-            return false;
-        }
-
-        private bool CapsuleVsOther(CapsuleColliderComponent cap, ColliderComponent other, out Vector3 normal, out float depth)
-        {
-            normal = Vector3.Zero;
-            depth = 0;
-
             Vector3 worldCenter = GetWorldCenter(cap);
             Vector3 worldScale = GetWorldScale(cap.GameObject.Transform);
-            
-            float scaledRadius;
-            float halfHeight;
+            float scaledRadius, halfHeight;
             Vector3 axis;
 
             switch (cap.Direction)
@@ -185,65 +233,197 @@ namespace MonoGameEditor.Core
                 case CapsuleDirection.X_Axis:
                     scaledRadius = cap.Radius * Math.Max(worldScale.Y, worldScale.Z);
                     halfHeight = (cap.Height * worldScale.X) * 0.5f;
-                    axis = Vector3.UnitX;
+                    axis = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitX, cap.GameObject.Transform.WorldMatrix));
                     break;
                 case CapsuleDirection.Z_Axis:
                     scaledRadius = cap.Radius * Math.Max(worldScale.X, worldScale.Y);
                     halfHeight = (cap.Height * worldScale.Z) * 0.5f;
-                    axis = Vector3.UnitZ;
+                    axis = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitZ, cap.GameObject.Transform.WorldMatrix));
                     break;
                 default: // Y_Axis
                     scaledRadius = cap.Radius * Math.Max(worldScale.X, worldScale.Z);
                     halfHeight = (cap.Height * worldScale.Y) * 0.5f;
-                    axis = Vector3.UnitY;
+                    axis = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitY, cap.GameObject.Transform.WorldMatrix));
                     break;
             }
 
-            float offset = Math.Max(0, halfHeight - scaledRadius);
-            Vector3 topSphereCenter = worldCenter + axis * offset;
-            Vector3 bottomSphereCenter = worldCenter - axis * offset;
+            float segmentHalfLength = Math.Max(0.0f, (halfHeight - scaledRadius));
+            Vector3 pA = worldCenter - axis * segmentHalfLength;
+            Vector3 pB = worldCenter + axis * segmentHalfLength;
+            Vector3[] points = { pA, pB, worldCenter };
 
-            // Test both end spheres
-            Vector3 n1, n2;
-            float d1, d2;
-
-            bool hitTop = CollideSphereManual(topSphereCenter, scaledRadius, other, out n1, out d1);
-            bool hitBottom = CollideSphereManual(bottomSphereCenter, scaledRadius, other, out n2, out d2);
-
-            if (hitTop && hitBottom)
+            foreach (var p in points)
             {
-                if (d1 > d2) { normal = n1; depth = d1; }
-                else { normal = n2; depth = d2; }
-                return true;
+                Vector3 n, c;
+                float d;
+                if (CollideSphereManual(p, scaledRadius, other, out n, out d, out c))
+                {
+                    contacts.Add((n, d, c, other, cap));
+                }
             }
-            if (hitTop) { normal = n1; depth = d1; return true; }
-            if (hitBottom) { normal = n2; depth = d2; return true; }
+        }
+
+        private void SolveVelocity(PhysicsBodyComponent body, ColliderComponent myCol, Vector3 normal, Vector3 contactPoint)
+        {
+            Vector3 worldBodyCenter = myCol.GameObject.Transform.Position;
+            Vector3 r = contactPoint - worldBodyCenter;
+            Vector3 vContact = body.Velocity + Vector3.Cross(body.AngularVelocity, r);
+            float vn = Vector3.Dot(vContact, normal);
+
+            if (vn >= 0) return; // Already moving away
+
+            // Friction and Impulse math
+            float invMass = 1.0f / body.Mass;
+            float radius = (myCol is BoxColliderComponent b) ? b.Size.Length() * 0.5f : 0.5f;
+            float invI = 1.0f / (body.Mass * radius * radius * 0.4f);
+
+            // Effective Inverse Mass per axis
+            Vector3 effInvM = new Vector3(body.FreezePositionX ? 0 : invMass, body.FreezePositionY ? 0 : invMass, body.FreezePositionZ ? 0 : invMass);
+            Vector3 effInvI = new Vector3(body.FreezeRotationX ? 0 : invI, body.FreezeRotationY ? 0 : invI, body.FreezeRotationZ ? 0 : invI);
+
+            // 1. Normal Impulse
+            Vector3 rcn = Vector3.Cross(r, normal);
+            float kNormal = Vector3.Dot(normal * normal, effInvM) + (rcn.X * rcn.X * effInvI.X + rcn.Y * rcn.Y * effInvI.Y + rcn.Z * rcn.Z * effInvI.Z);
+            float jn = -vn / (kNormal + 0.0001f);
+            
+            Vector3 impulse = normal * jn;
+            body.Velocity += impulse * effInvM;
+            Vector3 angImp = Vector3.Cross(r, impulse);
+            body.AngularVelocity += new Vector3(angImp.X * effInvI.X, angImp.Y * effInvI.Y, angImp.Z * effInvI.Z);
+
+            // 2. Friction
+            Vector3 vTangent = vContact - (Vector3.Dot(vContact, normal) * normal);
+            if (vTangent.LengthSquared() > 0.0001f)
+            {
+                Vector3 tangent = Vector3.Normalize(vTangent);
+                float vt = Vector3.Dot(vContact, tangent);
+                Vector3 rct = Vector3.Cross(r, tangent);
+                float kTangent = Vector3.Dot(tangent * tangent, effInvM) + (rct.X * rct.X * effInvI.X + rct.Y * rct.Y * effInvI.Y + rct.Z * rct.Z * effInvI.Z);
+                float jt = -vt / (kTangent + 0.0001f);
+                
+                float maxFriction = jn * 0.8f;
+                jt = MathHelper.Clamp(jt, -maxFriction, maxFriction);
+                
+                Vector3 fImpulse = tangent * jt;
+                body.Velocity += fImpulse * effInvM;
+                Vector3 fAngImp = Vector3.Cross(r, fImpulse);
+                body.AngularVelocity += new Vector3(fAngImp.X * effInvI.X, fAngImp.Y * effInvI.Y, fAngImp.Z * effInvI.Z);
+            }
+        }
+
+        private void SolvePosition(PhysicsBodyComponent body, ColliderComponent myCol, Vector3 normal, float depth)
+        {
+            const float slop = 0.01f;
+            const float bias = 0.3f;
+            if (depth <= slop) return;
+
+            Vector3 correction = normal * (depth - slop) * bias;
+            if (body.FreezePositionX) correction.X = 0;
+            if (body.FreezePositionY) correction.Y = 0;
+            if (body.FreezePositionZ) correction.Z = 0;
+            
+            myCol.GameObject.Transform.Position += correction;
+        }
+
+        private bool Collide(ColliderComponent a, ColliderComponent b, out Vector3 normal, out float depth, out Vector3 contactPoint)
+        {
+            normal = Vector3.Zero;
+            depth = 0;
+            contactPoint = Vector3.Zero;
+
+            // Box vs Box
+            if (a is BoxColliderComponent boxA && b is BoxColliderComponent boxB)
+                return BoxVsBox(boxA, boxB, out normal, out depth, out contactPoint);
+            
+            // Sphere vs Sphere
+            if (a is SphereColliderComponent sphereA && b is SphereColliderComponent sphereB)
+                return SphereVsSphere(sphereA, sphereB, out normal, out depth, out contactPoint);
+
+            // Sphere vs Box
+            if (a is SphereColliderComponent s1 && b is BoxColliderComponent b1)
+                return SphereVsBox(s1, b1, out normal, out depth, out contactPoint);
+            if (a is BoxColliderComponent b2 && b is SphereColliderComponent s2)
+            {
+                bool hit = SphereVsBox(s2, b2, out normal, out depth, out contactPoint);
+                normal = -normal;
+                return hit;
+            }
+
+            // Capsule Support
+            if (a is CapsuleColliderComponent capA)
+                return CapsuleVsOther(capA, b, out normal, out depth, out contactPoint);
+            if (b is CapsuleColliderComponent capB)
+            {
+                bool hit = CapsuleVsOther(capB, a, out normal, out depth, out contactPoint);
+                normal = -normal;
+                return hit;
+            }
 
             return false;
         }
 
-        private bool CollideSphereManual(Vector3 center, float radius, ColliderComponent other, out Vector3 normal, out float depth)
+        private bool CapsuleVsOther(CapsuleColliderComponent cap, ColliderComponent other, out Vector3 normal, out float depth, out Vector3 contactPoint)
         {
             normal = Vector3.Zero;
             depth = 0;
+            contactPoint = Vector3.Zero;
+
+            Vector3 worldCenter = GetWorldCenter(cap);
+            Vector3 worldScale = GetWorldScale(cap.GameObject.Transform);
+            float scaledRadius, halfHeight;
+            Vector3 axis;
+            
+            switch (cap.Direction)
+            {
+                case CapsuleDirection.X_Axis:
+                    scaledRadius = cap.Radius * Math.Max(worldScale.Y, worldScale.Z);
+                    halfHeight = (cap.Height * worldScale.X) * 0.5f;
+                    axis = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitX, cap.GameObject.Transform.WorldMatrix));
+                    break;
+                case CapsuleDirection.Z_Axis:
+                    scaledRadius = cap.Radius * Math.Max(worldScale.X, worldScale.Y);
+                    halfHeight = (cap.Height * worldScale.Z) * 0.5f;
+                    axis = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitZ, cap.GameObject.Transform.WorldMatrix));
+                    break;
+                default: // Y_Axis
+                    scaledRadius = cap.Radius * Math.Max(worldScale.X, worldScale.Z);
+                    halfHeight = (cap.Height * worldScale.Y) * 0.5f;
+                    axis = Vector3.Normalize(Vector3.TransformNormal(Vector3.UnitY, cap.GameObject.Transform.WorldMatrix));
+                    break;
+            }
+
+            float segmentHalfLength = Math.Max(0.0f, (halfHeight - scaledRadius));
+            Vector3 pA = worldCenter - axis * segmentHalfLength;
+            Vector3 pB = worldCenter + axis * segmentHalfLength;
+
+            // Simple Sphere check for single point queries
+            return CollideSphereManual(worldCenter, scaledRadius, other, out normal, out depth, out contactPoint);
+        }
+
+        private bool CollideSphereManual(Vector3 center, float radius, ColliderComponent other, out Vector3 normal, out float depth, out Vector3 contactPoint)
+        {
+            normal = Vector3.Zero;
+            depth = 0;
+            contactPoint = Vector3.Zero;
 
             if (other is SphereColliderComponent s)
             {
                 Vector3 otherCenter = GetWorldCenter(s);
                 float otherRadius = s.Radius * GetMaxScale(s.GameObject.Transform);
-                return SphereVsSphereManual(center, radius, otherCenter, otherRadius, out normal, out depth);
+                return SphereVsSphereManual(center, radius, otherCenter, otherRadius, out normal, out depth, out contactPoint);
             }
             if (other is BoxColliderComponent b)
             {
-                return SphereVsBoxManual(center, radius, b, out normal, out depth);
+                return SphereVsBoxManual(center, radius, b, out normal, out depth, out contactPoint);
             }
             return false;
         }
 
-        private bool BoxVsBox(BoxColliderComponent a, BoxColliderComponent b, out Vector3 normal, out float depth)
+        private bool BoxVsBox(BoxColliderComponent a, BoxColliderComponent b, out Vector3 normal, out float depth, out Vector3 contactPoint)
         {
             normal = Vector3.Zero;
             depth = 0;
+            contactPoint = Vector3.Zero;
 
             var boxA = GetWorldAABB(a);
             var boxB = GetWorldAABB(b);
@@ -270,23 +450,31 @@ namespace MonoGameEditor.Core
                 normal = (boxA.Min.Z + boxA.Max.Z < boxB.Min.Z + boxB.Max.Z) ? -Vector3.UnitZ : Vector3.UnitZ;
             }
 
+            // Contact point = midpoint of overlap
+            contactPoint = new Vector3(
+                (Math.Max(boxA.Min.X, boxB.Min.X) + Math.Min(boxA.Max.X, boxB.Max.X)) * 0.5f,
+                (Math.Max(boxA.Min.Y, boxB.Min.Y) + Math.Min(boxA.Max.Y, boxB.Max.Y)) * 0.5f,
+                (Math.Max(boxA.Min.Z, boxB.Min.Z) + Math.Min(boxA.Max.Z, boxB.Max.Z)) * 0.5f
+            );
+
             return true;
         }
 
-        private bool SphereVsSphere(SphereColliderComponent a, SphereColliderComponent b, out Vector3 normal, out float depth)
+        private bool SphereVsSphere(SphereColliderComponent a, SphereColliderComponent b, out Vector3 normal, out float depth, out Vector3 contactPoint)
         {
             Vector3 posA = GetWorldCenter(a);
             float radA = a.Radius * GetMaxScale(a.GameObject.Transform);
             Vector3 posB = GetWorldCenter(b);
             float radB = b.Radius * GetMaxScale(b.GameObject.Transform);
 
-            return SphereVsSphereManual(posA, radA, posB, radB, out normal, out depth);
+            return SphereVsSphereManual(posA, radA, posB, radB, out normal, out depth, out contactPoint);
         }
 
-        private bool SphereVsSphereManual(Vector3 posA, float radA, Vector3 posB, float radB, out Vector3 normal, out float depth)
+        private bool SphereVsSphereManual(Vector3 posA, float radA, Vector3 posB, float radB, out Vector3 normal, out float depth, out Vector3 contactPoint)
         {
             normal = Vector3.Zero;
             depth = 0;
+            contactPoint = Vector3.Zero;
 
             float radiusSum = radA + radB;
             float distSq = Vector3.DistanceSquared(posA, posB);
@@ -298,61 +486,81 @@ namespace MonoGameEditor.Core
             {
                 normal = (posA - posB) / dist;
                 depth = radiusSum - dist;
+                contactPoint = posA - normal * radA;
             }
             else
             {
                 normal = Vector3.UnitY;
                 depth = radiusSum;
+                contactPoint = posA;
             }
 
             return true;
         }
 
-        private bool SphereVsBox(SphereColliderComponent s, BoxColliderComponent b, out Vector3 normal, out float depth)
+        private bool SphereVsBox(SphereColliderComponent s, BoxColliderComponent b, out Vector3 normal, out float depth, out Vector3 contactPoint)
         {
             Vector3 spherePos = GetWorldCenter(s);
             float scaledRadius = s.Radius * GetMaxScale(s.GameObject.Transform);
-            return SphereVsBoxManual(spherePos, scaledRadius, b, out normal, out depth);
+            return SphereVsBoxManual(spherePos, scaledRadius, b, out normal, out depth, out contactPoint);
         }
 
-        private bool SphereVsBoxManual(Vector3 spherePos, float radius, BoxColliderComponent b, out Vector3 normal, out float depth)
+        private bool SphereVsBoxManual(Vector3 spherePos, float radius, BoxColliderComponent b, out Vector3 normal, out float depth, out Vector3 contactPoint)
         {
             normal = Vector3.Zero;
             depth = 0;
+            contactPoint = Vector3.Zero;
 
-            var box = GetWorldAABB(b);
+            // Transform sphere center to box local space
+            Matrix boxWorld = b.GameObject.Transform.WorldMatrix;
+            Matrix invBoxWorld = Matrix.Invert(boxWorld);
+            Vector3 localSpherePos = Vector3.Transform(spherePos, invBoxWorld);
 
-            // Closest point on AABB to sphere center
-            Vector3 closestPoint = Vector3.Clamp(spherePos, box.Min, box.Max);
+            // Box is AABB in its own local space
+            Vector3 localBoxMin = b.Center - b.Size * 0.5f;
+            Vector3 localBoxMax = b.Center + b.Size * 0.5f;
+
+            // Closest point on local AABB to local sphere center
+            Vector3 localClosestPoint = Vector3.Clamp(localSpherePos, localBoxMin, localBoxMax);
             
-            float distSq = Vector3.DistanceSquared(spherePos, closestPoint);
+            // Transform closest point back to world space to get real world distance
+            Vector3 worldClosestPoint = Vector3.Transform(localClosestPoint, boxWorld);
+            
+            float distSq = Vector3.DistanceSquared(spherePos, worldClosestPoint);
             if (distSq > radius * radius) return false;
 
             float dist = (float)Math.Sqrt(distSq);
-            if (dist > 0)
+            if (dist > 0.0001f)
             {
-                normal = (spherePos - closestPoint) / dist;
+                normal = (spherePos - worldClosestPoint) / dist;
                 depth = radius - dist;
+                contactPoint = worldClosestPoint;
             }
             else
             {
-                // Sphere center is inside the box
-                float dl = spherePos.X - box.Min.X;
-                float dr = box.Max.X - spherePos.X;
-                float db = spherePos.Y - box.Min.Y;
-                float dt = box.Max.Y - spherePos.Y;
-                float df = spherePos.Z - box.Min.Z;
-                float dk = box.Max.Z - spherePos.Z;
+                // Sphere center is inside the box locally
+                float dl = localSpherePos.X - localBoxMin.X;
+                float dr = localBoxMax.X - localSpherePos.X;
+                float db = localSpherePos.Y - localBoxMin.Y;
+                float dt = localBoxMax.Y - localSpherePos.Y;
+                float df = localSpherePos.Z - localBoxMin.Z;
+                float dk = localBoxMax.Z - localSpherePos.Z;
 
                 float min = Math.Min(dl, Math.Min(dr, Math.Min(db, Math.Min(dt, Math.Min(df, dk)))));
-                depth = radius + min;
+                
+                // Get local normal
+                Vector3 localNormal;
+                if (min == dl) localNormal = -Vector3.UnitX;
+                else if (min == dr) localNormal = Vector3.UnitX;
+                else if (min == db) localNormal = -Vector3.UnitY;
+                else if (min == dt) localNormal = Vector3.UnitY;
+                else if (min == df) localNormal = -Vector3.UnitZ;
+                else localNormal = Vector3.UnitZ;
 
-                if (min == dl) normal = -Vector3.UnitX;
-                else if (min == dr) normal = Vector3.UnitX;
-                else if (min == db) normal = -Vector3.UnitY;
-                else if (min == dt) normal = Vector3.UnitY;
-                else if (min == df) normal = -Vector3.UnitZ;
-                else normal = Vector3.UnitZ;
+                // Transform normal back to world space
+                normal = Vector3.Normalize(Vector3.TransformNormal(localNormal, boxWorld));
+                depth = radius + min; // Note: this depth is slightly approximated in world space if scale is non-uniform
+                contactPoint = spherePos - normal * radius;
             }
 
             return true;

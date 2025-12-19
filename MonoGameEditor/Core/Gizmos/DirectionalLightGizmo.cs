@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGameEditor.Controls;
+using MonoGameEditor.Core.Graphics;
 
 namespace MonoGameEditor.Core.Gizmos
 {

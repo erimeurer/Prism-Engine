@@ -8,6 +8,8 @@ namespace MonoGameEditor.Core.Components
     public abstract class ScriptComponent : Component
     {
         private bool _started = false;
+        
+        public override string ComponentName => GetType().Name;
 
         /// <summary>
         /// Called once when the script is first initialized
@@ -39,6 +41,19 @@ namespace MonoGameEditor.Core.Components
             {
                 System.Console.WriteLine($"Exception in ScriptComponent '{GetType().Name}': {ex}");
             }
+        }
+
+        /// <summary>
+        /// Helper method to log messages (works in Editor and Runtime)
+        /// </summary>
+        protected void Log(string message)
+        {
+#if RUNTIME_BUILD
+            Core.Logger.Log($"[{GetType().Name}] {message}");
+#else
+            // In Core DLL, use unified Logger
+            Core.Logger.Log($"[{GetType().Name}] {message}");
+#endif
         }
 
         /// <summary>

@@ -30,7 +30,19 @@ namespace MonoGameEditor.Core
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Id { get; private set; } = Guid.NewGuid();
+        
+        public GameObject(string name = "GameObject")
+        {
+            _name = name;
+            Transform.GameObject = this;
+            Components.CollectionChanged += Components_CollectionChanged;
+        }
+
+        public GameObject(string name, Guid id) : this(name)
+        {
+            Id = id;
+        }
         
         /// <summary>
         /// Transform component (Position, Rotation, Scale)
@@ -126,12 +138,7 @@ namespace MonoGameEditor.Core
 
         public ObservableCollection<GameObject> Children { get; } = new ObservableCollection<GameObject>();
 
-        public GameObject(string name = "GameObject")
-        {
-            _name = name;
-            Transform.GameObject = this;
-            Components.CollectionChanged += Components_CollectionChanged;
-        }
+        // Default constructor moved up to handle Id initialization correctly
 
         private void Components_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -170,6 +177,11 @@ namespace MonoGameEditor.Core
             if (child.Parent != null)
             {
                 child.Parent.Children.Remove(child);
+            }
+            else
+            {
+                // If it was a root object, remove it from the root list
+                SceneManager.Instance.RootObjects.Remove(child);
             }
             child.Parent = this;
             Children.Add(child);

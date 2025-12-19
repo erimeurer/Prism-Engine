@@ -75,6 +75,18 @@ namespace MonoGameEditor.Core
             RootObjects.Add(directionalLight);
         }
 
+        public void LoadScene(string filePath)
+        {
+            MonoGameEditor.IO.SceneSerializer.LoadScene(filePath);
+        }
+
+        public async System.Threading.Tasks.Task LoadSceneAsync(string filePath)
+        {
+            // In a real async implementation, this would yield
+            // For now, we wrap the sync call
+            await System.Threading.Tasks.Task.Run(() => MonoGameEditor.IO.SceneSerializer.LoadScene(filePath));
+        }
+
         public GameObject CreateGameObject(string name = "GameObject", GameObject? parent = null)
         {
             var go = new GameObject(name);

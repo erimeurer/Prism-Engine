@@ -7,7 +7,7 @@ namespace MonoGameEditor.Core.Assets
     /// </summary>
     public class MeshData
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public List<System.Numerics.Vector3> Vertices { get; set; } = new List<System.Numerics.Vector3>();
         public List<System.Numerics.Vector3> Normals { get; set; } = new List<System.Numerics.Vector3>();
         public List<int> Indices { get; set; } = new List<int>();
@@ -27,7 +27,7 @@ namespace MonoGameEditor.Core.Assets
     /// </summary>
     public class BoneData
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public System.Numerics.Matrix4x4 OffsetMatrix { get; set; }
         public System.Numerics.Matrix4x4 LocalTransform { get; set; }
         public int ParentIndex { get; set; } = -1;
@@ -38,7 +38,7 @@ namespace MonoGameEditor.Core.Assets
     /// </summary>
     public class ModelData
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public List<MeshData> Meshes { get; set; } = new List<MeshData>();
         public int TotalVertexCount { get; set; }
         public int TotalTriangleCount { get; set; }

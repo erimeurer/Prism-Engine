@@ -208,6 +208,8 @@ namespace MonoGameEditor.ViewModels
         public ICommand SaveSceneAsCommand { get; }
         public ICommand OpenProjectCommand { get; }
         public ICommand NewProjectCommand { get; }
+        public ICommand ProjectSettingsCommand { get; }
+        public ICommand BuildSettingsCommand { get; }
 
         private bool _isPlaying;
         public bool IsPlaying
@@ -246,6 +248,8 @@ namespace MonoGameEditor.ViewModels
             SaveSceneAsCommand = new RelayCommand(_ => SaveSceneAs());
             OpenProjectCommand = new RelayCommand(_ => OpenProject());
             NewProjectCommand = new RelayCommand(_ => NewProject());
+            ProjectSettingsCommand = new RelayCommand(_ => OpenProjectSettings());
+            BuildSettingsCommand = new RelayCommand(_ => OpenBuildSettings());
 
             SelectToolCommand = new RelayCommand(param => 
             {
@@ -579,6 +583,23 @@ namespace MonoGameEditor.ViewModels
                 
                 ConsoleViewModel.Log($"New Project Created: {newProjectPath}");
             }
+        }
+
+        private void OpenProjectSettings()
+        {
+            var dialog = new MonoGameEditor.Views.ProjectSettingsWindow();
+            dialog.Owner = System.Windows.Application.Current.MainWindow;
+            dialog.ShowDialog();
+            
+            // Re-update title in case project name changed
+            UpdateTitle();
+        }
+
+        private void OpenBuildSettings()
+        {
+            var dialog = new MonoGameEditor.Views.BuildSettingsWindow();
+            dialog.Owner = System.Windows.Application.Current.MainWindow;
+            dialog.ShowDialog();
         }
 
         public event EventHandler FocusRequested;
