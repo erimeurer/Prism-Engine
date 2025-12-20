@@ -14,10 +14,13 @@ namespace MonoGameEditor.Core
         private static BuildManager? _instance;
         public static BuildManager Instance => _instance ??= new BuildManager();
 
+        public event Action<string, float>? OnBuildProgress;
+
         public void BuildProject(string outputPath)
         {
             try
             {
+                OnBuildProgress?.Invoke("Preparing build...", 0.1f);
                 Logger.Log($"[Build] Starting professional build to: {outputPath}");
 
                 // Get the directory where the editor executable is running from
@@ -45,6 +48,7 @@ namespace MonoGameEditor.Core
                 if (!Directory.Exists(outputPath)) Directory.CreateDirectory(outputPath);
 
                 // 2. Run Dotnet Publish
+                OnBuildProgress?.Invoke("Configuring project settings...", 0.2f);
                 var settings = ProjectManager.Instance.CurrentSettings;
                 string projectName = settings.ProjectName;
                 if (string.IsNullOrWhiteSpace(projectName)) projectName = "PrismGame";
@@ -75,6 +79,7 @@ namespace MonoGameEditor.Core
                     command += $" -p:EngineCustomIcon=\"{iconPath}\"";
                 }
 
+                OnBuildProgress?.Invoke("Publishing game binaries (this may take a minute)...", 0.4f);
                 Logger.Log($"[Build] Running command: dotnet {command}");
 
                 var processInfo = new System.Diagnostics.ProcessStartInfo("dotnet", command)
@@ -108,12 +113,13 @@ namespace MonoGameEditor.Core
                         {
                             Logger.LogError($"[Build] Output: {output}");
                         }
-                        return;
+                        throw new Exception("Dotnet publish failed. Check console for details.");
                     }
                     Logger.Log("[Build] ✅ Dotnet publish completed successfully.");
                 }
 
                 // 3. Copy User Assets to the build output
+                OnBuildProgress?.Invoke("Merging user assets...", 0.8f);
                 string assetsPath = ProjectManager.Instance.AssetsPath;
                 if (Directory.Exists(assetsPath))
                 {
@@ -123,18 +129,21 @@ namespace MonoGameEditor.Core
                 }
 
                 // 4. Copy Project Settings
+                OnBuildProgress?.Invoke("Finalizing project settings...", 0.9f);
                 string settingsPath = Path.Combine(ProjectManager.Instance.ProjectPath, "ProjectSettings.json");
                 if (File.Exists(settingsPath))
                 {
                     File.Copy(settingsPath, Path.Combine(outputPath, "ProjectSettings.json"), true);
                 }
 
+                OnBuildProgress?.Invoke("Build Complete!", 1.0f);
                 Logger.Log($"[Build] ✅ SUCCESS! Game built at: {outputPath}");
                 Logger.Log($"[Build] Run {Path.Combine(outputPath, projectName + ".exe")} to play!");
             }
             catch (Exception ex)
             {
                 Logger.LogError($"[Build] ❌ Build failed: {ex.Message}");
+                throw; // Rethrow to let the UI know it failed
             }
         }
 

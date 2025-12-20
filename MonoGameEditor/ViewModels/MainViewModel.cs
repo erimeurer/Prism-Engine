@@ -225,6 +225,79 @@ namespace MonoGameEditor.ViewModels
             set { _isPaused = value; OnPropertyChanged(); }
         }
 
+        private bool _isBuilding;
+        public bool IsBuilding
+        {
+            get => _isBuilding;
+            set { _isBuilding = value; OnPropertyChanged(); }
+        }
+
+        private string _buildStatusText = "";
+        public string BuildStatusText
+        {
+            get => _buildStatusText;
+            set { _buildStatusText = value; OnPropertyChanged(); }
+        }
+
+        private float _buildProgressValue;
+        public float BuildProgressValue
+        {
+            get => _buildProgressValue;
+            set { _buildProgressValue = value; OnPropertyChanged(); }
+        }
+
+        private bool _isMainContentVisible = true;
+        public bool IsMainContentVisible
+        {
+            get => _isMainContentVisible;
+            set { _isMainContentVisible = value; OnPropertyChanged(); }
+        }
+
+        public async System.Threading.Tasks.Task StartBuildAsync(string outputPath)
+        {
+            if (IsBuilding) return;
+
+            IsBuilding = true;
+            IsMainContentVisible = false; // Hide main content (DirectX airspace fix)
+            BuildProgressValue = 0;
+            BuildStatusText = "Initializing build...";
+
+            // Subscribe to progress events
+            Action<string, float> progressHandler = (status, progress) =>
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    BuildStatusText = status;
+                    BuildProgressValue = progress * 100f; // ProgressBar usually works 0-100
+                });
+            };
+
+            Core.BuildManager.Instance.OnBuildProgress += progressHandler;
+
+            try
+            {
+                await System.Threading.Tasks.Task.Run(() => 
+                {
+                    Core.BuildManager.Instance.BuildProject(outputPath);
+                });
+                
+                BuildStatusText = "Build Successful!";
+                await System.Threading.Tasks.Task.Delay(1000);
+            }
+            catch (Exception ex)
+            {
+                BuildStatusText = $"Build Failed: {ex.Message}";
+                Core.Logger.LogError($"[Build] {ex.Message}");
+                await System.Threading.Tasks.Task.Delay(3000);
+            }
+            finally
+            {
+                Core.BuildManager.Instance.OnBuildProgress -= progressHandler;
+                IsBuilding = false;
+                IsMainContentVisible = true;
+            }
+        }
+
         private string _currentScenePath;
 
         public MainViewModel()

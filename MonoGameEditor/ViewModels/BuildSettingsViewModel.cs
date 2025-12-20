@@ -24,17 +24,26 @@ namespace MonoGameEditor.ViewModels
             RemoveSceneCommand = new RelayCommand(param => RemoveScene(param as SceneInBuildItem));
             MoveUpCommand = new RelayCommand(param => MoveUp(param as SceneInBuildItem));
             MoveDownCommand = new RelayCommand(param => MoveDown(param as SceneInBuildItem));
-            BuildCommand = new RelayCommand(_ => Build());
+            BuildCommand = new RelayCommand(param => Build(param));
         }
 
-        private void Build()
+        private async void Build(object parameter)
         {
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
                 dialog.Description = "Select Output Folder for Build";
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    BuildManager.Instance.BuildProject(dialog.SelectedPath);
+                    string outputPath = dialog.SelectedPath;
+                    
+                    // Close the build settings window if passed
+                    if (parameter is System.Windows.Window window)
+                    {
+                        window.Close();
+                    }
+
+                    // Call the main VM to handle the build with progress UI
+                    await MainViewModel.Instance.StartBuildAsync(outputPath);
                 }
             }
         }

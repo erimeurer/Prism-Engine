@@ -58,15 +58,8 @@ namespace MonoGameEditor
                 LoadingOverlay.Visibility = Visibility.Visible;
                 
                 // CRITICAL: Hide the main content Grid to prevent 3D rendering over overlay
-                // DirectX controls ignore WPF ZIndex, so we must hide them
-                if (Content is Grid containerGrid && containerGrid.Children.Count > 0)
-                {
-                    var mainContentGrid = containerGrid.Children[0] as Grid;
-                    if (mainContentGrid != null)
-                    {
-                        mainContentGrid.Visibility = Visibility.Collapsed;
-                    }
-                }
+                // We do this via the ViewModel property to avoid breaking bindings
+                MainViewModel.Instance.IsMainContentVisible = false;
                 
                 System.Diagnostics.Debug.WriteLine($"[MainWindow] Overlay visibility set to Visible");
             });
@@ -79,14 +72,7 @@ namespace MonoGameEditor
                 LoadingOverlay.Visibility = Visibility.Collapsed;
                 
                 // Restore main content visibility
-                if (Content is Grid containerGrid && containerGrid.Children.Count > 0)
-                {
-                    var mainContentGrid = containerGrid.Children[0] as Grid;
-                    if (mainContentGrid != null)
-                    {
-                        mainContentGrid.Visibility = Visibility.Visible;
-                    }
-                }
+                MainViewModel.Instance.IsMainContentVisible = true;
             });
         }
     }

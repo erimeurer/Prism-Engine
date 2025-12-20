@@ -21,6 +21,7 @@ namespace MonoGameEditor.Runtime
 
         private ProjectSettings? _settings;
         private CameraComponent? _mainCamera;
+        private AntialiasingMode _lastAntialiasing;
 
         public StandalonePlayer()
         {
@@ -32,6 +33,7 @@ namespace MonoGameEditor.Runtime
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.GraphicsProfile = GraphicsProfile.HiDef;
+            _graphics.PreferMultiSampling = true; 
             
             // CRITICAL: Ensure window can receive input
             Window.AllowUserResizing = true;
@@ -86,7 +88,7 @@ namespace MonoGameEditor.Runtime
             _toneMap = new ToneMapRenderer(GraphicsDevice);
             _toneMap.Initialize(Content);
             
-            CreateHDRTarget();
+            // HDR target will be created on first update once camera is found
 
             // Load first scene
             string? sceneToLoad = _settings?.ScenesInBuild?.FirstOrDefault();
@@ -111,15 +113,24 @@ namespace MonoGameEditor.Runtime
             Core.Logger.Log("[StandalonePlayer] LoadContent finished");
         }
 
-        private void CreateHDRTarget()
+        private void CreateHDRTarget(AntialiasingMode aaMode)
         {
             _hdrRenderTarget?.Dispose();
-            // Disabled MSAA (set to 0) for reliability on different hardware
+            
+            int multiSampleCount = 0;
+            switch(aaMode)
+            {
+                case AntialiasingMode.MSAA_2x: multiSampleCount = 2; break;
+                case AntialiasingMode.MSAA_4x: multiSampleCount = 4; break;
+                case AntialiasingMode.MSAA_8x: multiSampleCount = 8; break;
+            }
+
             _hdrRenderTarget = new RenderTarget2D(GraphicsDevice, 
                 GraphicsDevice.PresentationParameters.BackBufferWidth, 
                 GraphicsDevice.PresentationParameters.BackBufferHeight, 
-                false, SurfaceFormat.HalfVector4, DepthFormat.Depth24, 0, RenderTargetUsage.PreserveContents);
-            Core.Logger.Log($"[StandalonePlayer] Created HDR Target: {GraphicsDevice.PresentationParameters.BackBufferWidth}x{GraphicsDevice.PresentationParameters.BackBufferHeight}");
+                false, SurfaceFormat.HalfVector4, DepthFormat.Depth24, multiSampleCount, RenderTargetUsage.PreserveContents);
+            
+            Core.Logger.Log($"[StandalonePlayer] Created HDR Target [AA={aaMode}]: {GraphicsDevice.PresentationParameters.BackBufferWidth}x{GraphicsDevice.PresentationParameters.BackBufferHeight}");
         }
 
         protected override void Update(GameTime gameTime)
@@ -141,11 +152,22 @@ namespace MonoGameEditor.Runtime
             var oldCamera = _mainCamera;
             _mainCamera = FindMainCamera();
             
-            if (_mainCamera != null && oldCamera == null)
+            if (_mainCamera != null)
             {
-                Core.Logger.Log($"[StandalonePlayer] Main Camera found: {_mainCamera.GameObject?.Name ?? "Unnamed"}");
+                if (oldCamera == null)
+                {
+                    Core.Logger.Log($"[StandalonePlayer] Main Camera found: {_mainCamera.GameObject?.Name ?? "Unnamed"}");
+                    CreateHDRTarget(_mainCamera.Antialiasing);
+                    _lastAntialiasing = _mainCamera.Antialiasing;
+                }
+                else if (_mainCamera.Antialiasing != _lastAntialiasing)
+                {
+                    Core.Logger.Log($"[StandalonePlayer] AA changed to {_mainCamera.Antialiasing}");
+                    CreateHDRTarget(_mainCamera.Antialiasing);
+                    _lastAntialiasing = _mainCamera.Antialiasing;
+                }
             }
-            else if (_mainCamera == null && oldCamera != null)
+            else if (oldCamera != null)
             {
                 Core.Logger.Log("[StandalonePlayer] WARNING: Main Camera LOST!");
             }
@@ -201,7 +223,7 @@ namespace MonoGameEditor.Runtime
 
         protected override void Draw(GameTime gameTime)
         {
-            if (_mainCamera == null)
+            if (_mainCamera == null || _hdrRenderTarget == null)
             {
                 // Clear to Purple so we can distinguish from "normal" black
                 GraphicsDevice.Clear(Color.Purple);
@@ -239,8 +261,8 @@ namespace MonoGameEditor.Runtime
                 lightViewProj = _shadowRenderer.LightViewProjection;
             }
 
-            // 2. Main Pass (Directly to Backbuffer for Debugging)
-            GraphicsDevice.SetRenderTarget(null);
+            // 2. Main Pass (to HDR Target)
+            GraphicsDevice.SetRenderTarget(_hdrRenderTarget);
             GraphicsDevice.Clear(_mainCamera.BackgroundColor);
 
             if (_mainCamera.ClearFlags == CameraClearFlags.Skybox && _skybox != null)
@@ -249,18 +271,23 @@ namespace MonoGameEditor.Runtime
             }
 
             GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicsDevice.BlendState = BlendState.Opaque;
+            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+
             foreach (var obj in SceneManager.Instance.RootObjects)
             {
                 RenderRecursively(obj, view, projection, shadowMap, lightViewProj);
             }
 
-            // 3. Resolve Pass (Disabled for Debugging)
-            /*
-            if (_toneMap != null && _hdrRenderTarget != null)
-            {
-                _toneMap.Draw(_hdrRenderTarget);
-            }
-            */
+            // 3. Resolve Pass (Direct Blit to Backbuffer)
+            // Note: We skip ToneMapRenderer for now to avoid whitewashed look,
+            // matching the behavior in GameControl.cs
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.Clear(Color.CornflowerBlue); // Fallback color
+            
+            _spriteBatch?.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            _spriteBatch?.Draw(_hdrRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+            _spriteBatch?.End();
 
             base.Draw(gameTime);
         }

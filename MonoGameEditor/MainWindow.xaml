@@ -22,6 +22,8 @@
         <localConverters:PlayColorConverter x:Key="PlayColorConverter"/>
         <localConverters:PlayIconConverter x:Key="PlayIconConverter"/>
         <localConverters:PauseColorConverter x:Key="PauseColorConverter"/>
+        <localConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <localConverters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
 
 
         <Style x:Key="ToolButtonStyle" TargetType="{x:Type ButtonBase}">
@@ -66,7 +68,7 @@
     <!-- Container Grid for main content + overlay -->
     <Grid>
         <!-- Main Content Grid -->
-        <Grid>
+        <Grid x:Name="MainContentGrid" Visibility="{Binding IsMainContentVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" /> <!-- Title Bar -->
             <RowDefinition Height="Auto" /> <!-- Menu -->
@@ -194,6 +196,47 @@
                           Foreground="#AAAAAA"
                           HorizontalAlignment="Center"
                           Margin="0,30,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Build Overlay -->
+        <Grid x:Name="BuildOverlay" 
+              Visibility="{Binding IsBuilding, Converter={StaticResource BooleanToVisibilityConverter}}" 
+              Background="#EE000000" 
+              Panel.ZIndex="100000">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="🚀 Building Game..." 
+                          FontSize="32" 
+                          FontWeight="Bold"
+                          Foreground="White" 
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,10"/>
+                
+                <TextBlock Text="{Binding BuildStatusText}" 
+                          FontSize="18" 
+                          Foreground="#007ACC" 
+                          HorizontalAlignment="Center"
+                          Margin="0,0,0,40"/>
+
+                <Grid Width="500">
+                    <ProgressBar Value="{Binding BuildProgressValue}" 
+                                Height="12"
+                                Background="#333333"
+                                Foreground="#007ACC"
+                                BorderThickness="0"/>
+                    <TextBlock Text="{Binding BuildProgressValue, StringFormat={}{0:0}%}" 
+                             Foreground="White" 
+                             FontSize="10"
+                             FontWeight="Bold"
+                             HorizontalAlignment="Center" 
+                             VerticalAlignment="Center"/>
+                </Grid>
+
+                <TextBlock Text="This may take a few moments depending on the project size." 
+                          FontSize="12"
+                          Foreground="#666666"
+                          HorizontalAlignment="Center"
+                          Margin="0,20,0,0"/>
             </StackPanel>
         </Grid>
     </Grid>
