@@ -113,5 +113,7 @@ License to be defined.
 ## 📷 Preview
 
 ![Scene Editor](docs/images/first.png)
-![Editor Gizmos](docs/images/gizmos.png)
-![Skinned Mesh](docs/images/skinned_mesh.png)
+![Game](docs/images/second.png)
+![LOD](docs/images/lode.png)
+![Code](docs/images/code.png)
+![Build](docs/images/build.png)
