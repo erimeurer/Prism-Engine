@@ -9,6 +9,7 @@ namespace MonoGameEditor.ViewModels
         private string _version;
         private string _author;
         private string _description;
+        private string _iconPath;
 
         public string ProjectName
         {
@@ -34,6 +35,12 @@ namespace MonoGameEditor.ViewModels
             set => SetProperty(ref _description, value);
         }
 
+        public string IconPath
+        {
+            get => _iconPath;
+            set => SetProperty(ref _iconPath, value);
+        }
+
         public ICommand SaveCommand { get; }
 
         public ProjectSettingsViewModel()
@@ -43,6 +50,7 @@ namespace MonoGameEditor.ViewModels
             _version = settings.Version;
             _author = settings.Author;
             _description = settings.Description;
+            _iconPath = settings.IconPath;
 
             SaveCommand = new RelayCommand(_ => Save());
         }
@@ -54,6 +62,7 @@ namespace MonoGameEditor.ViewModels
             settings.Version = Version;
             settings.Author = Author;
             settings.Description = Description;
+            settings.IconPath = IconPath;
 
             ProjectManager.Instance.SaveSettings();
         }

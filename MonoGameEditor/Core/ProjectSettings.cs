@@ -8,6 +8,7 @@ namespace MonoGameEditor.Core
         public string Version { get; set; } = "1.0.0";
         public string Author { get; set; } = "";
         public string Description { get; set; } = "";
+        public string IconPath { get; set; } = "";
         public string LastOpenedScene { get; set; } = "";
         public System.Collections.Generic.List<string> ScenesInBuild { get; set; } = new System.Collections.Generic.List<string>();
     }

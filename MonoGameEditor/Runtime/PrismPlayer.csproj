@@ -6,8 +6,11 @@
     <TieredCompilation>false</TieredCompilation>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>..\prism_engine.ico</ApplicationIcon>
     <DefineConstants>RUNTIME_BUILD</DefineConstants>
+    
+    <!-- Dynamic naming and icon support for export -->
+    <AssemblyName Condition="'$(EngineCustomName)' != ''">$(EngineCustomName)</AssemblyName>
+    <ApplicationIcon Condition="'$(EngineCustomIcon)' != ''">$(EngineCustomIcon)</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

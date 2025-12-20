@@ -45,9 +45,36 @@ namespace MonoGameEditor.Core
                 if (!Directory.Exists(outputPath)) Directory.CreateDirectory(outputPath);
 
                 // 2. Run Dotnet Publish
+                var settings = ProjectManager.Instance.CurrentSettings;
+                string projectName = settings.ProjectName;
+                if (string.IsNullOrWhiteSpace(projectName)) projectName = "PrismGame";
+                
+                // Sanitização básica do nome do projeto para o executável
+                foreach (char c in Path.GetInvalidFileNameChars()) projectName = projectName.Replace(c, '_');
+                projectName = projectName.Replace(" ", "");
+
+                string iconPath = settings.IconPath;
+                if (string.IsNullOrWhiteSpace(iconPath) || !File.Exists(iconPath))
+                {
+                    // Default engine icon
+                    iconPath = Path.Combine(editorDir, "prism_engine.ico");
+                    if (!File.Exists(iconPath))
+                    {
+                        string projectRoot = Path.GetFullPath(Path.Combine(editorDir, "..", "..", ".."));
+                        iconPath = Path.Combine(projectRoot, "prism_engine.ico");
+                    }
+                }
+
                 // We use -c Release for optimized build
                 // Using --self-contained true to ensure all dependencies are included
-                string command = $"publish \"{playerProject}\" -c Release -o \"{outputPath}\" -r win-x64 --self-contained true -p:DefineConstants=RUNTIME_BUILD";
+                // Passing safe custom properties to avoid inheritance conflicts in references
+                string command = $"publish \"{playerProject}\" -c Release -o \"{outputPath}\" -r win-x64 --self-contained true -p:DefineConstants=RUNTIME_BUILD -p:EngineCustomName=\"{projectName}\"";
+                
+                if (File.Exists(iconPath))
+                {
+                    command += $" -p:EngineCustomIcon=\"{iconPath}\"";
+                }
+
                 Logger.Log($"[Build] Running command: dotnet {command}");
 
                 var processInfo = new System.Diagnostics.ProcessStartInfo("dotnet", command)
@@ -103,7 +130,7 @@ namespace MonoGameEditor.Core
                 }
 
                 Logger.Log($"[Build] ✅ SUCCESS! Game built at: {outputPath}");
-                Logger.Log($"[Build] Run {Path.Combine(outputPath, "PrismPlayer.exe")} to play!");
+                Logger.Log($"[Build] Run {Path.Combine(outputPath, projectName + ".exe")} to play!");
             }
             catch (Exception ex)
             {

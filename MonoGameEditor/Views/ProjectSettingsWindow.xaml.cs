@@ -17,6 +17,23 @@ namespace MonoGameEditor.Views
             // Since it's a settings window, we can just say "Applied"
         }
 
+        private void OnBrowseIconClick(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Icon files (*.ico)|*.ico|All files (*.*)|*.*",
+                Title = "Select Executable Icon"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                if (DataContext is ProjectSettingsViewModel vm)
+                {
+                    vm.IconPath = dialog.FileName;
+                }
+            }
+        }
+
         private void OnCloseClick(object sender, RoutedEventArgs e)
         {
             this.Close();

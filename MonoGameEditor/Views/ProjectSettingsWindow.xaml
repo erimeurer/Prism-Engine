@@ -58,6 +58,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -70,9 +71,19 @@
             <TextBlock Grid.Row="2" Text="Author:"/>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBlock Grid.Row="3" Text="Description:" VerticalAlignment="Top" Margin="0,5,10,0"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
-                     AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" VerticalContentAlignment="Top"/>
+            <TextBlock Grid.Row="3" Text="Executable Icon:"/>
+            <Grid Grid.Row="3" Grid.Column="1" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding IconPath, UpdateSourceTrigger=PropertyChanged}" Margin="0"/>
+                <Button Grid.Column="1" Content="..." Width="30" Margin="5,0,0,0" Click="OnBrowseIconClick"/>
+            </Grid>
+
+            <TextBlock Grid.Row="4" Text="Description:" VerticalAlignment="Top" Margin="0,5,10,0"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                      AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" VerticalContentAlignment="Top"/>
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
