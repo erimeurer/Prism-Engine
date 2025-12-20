@@ -267,4 +267,30 @@ namespace MonoGameEditor.Core.Materials
         // Dictionary to store dynamic properties (e.g. from Custom Shaders)
         public Dictionary<string, object> CustomProperties { get; set; } = new Dictionary<string, object>();
     }
+
+    /// <summary>
+    /// Serializable data structure for material assets (.mat)
+    /// </summary>
+    public class MaterialData
+    {
+        public string name { get; set; } = "";
+        public float[] albedoColor { get; set; } = new float[3];
+        public float metallic { get; set; }
+        public float roughness { get; set; }
+        public float ambientOcclusion { get; set; }
+
+        // Texture paths (relative to project)
+        public string? albedoMap { get; set; }
+        public string? normalMap { get; set; }
+        public string? metallicMap { get; set; }
+        public string? roughnessMap { get; set; }
+        public string? aoMap { get; set; }
+        public string? heightMap { get; set; }
+
+        // Shader path
+        public string? shaderPath { get; set; }
+
+        // Custom shader properties
+        public Dictionary<string, System.Text.Json.JsonElement>? customProperties { get; set; }
+    }
 }

@@ -153,6 +153,10 @@
                                 <TextBlock Text="UVs" Foreground="#88CC88" FontSize="10"/>
                             </Border>
                          </StackPanel>
+
+                         <Button Content="Extract Materials" Margin="0,15,0,0" Padding="10,6"
+                                 Background="#3E3E42" Foreground="White" BorderThickness="1" BorderBrush="#555555"
+                                 Click="ExtractMaterials_Click" Tag="{Binding}"/>
                      </StackPanel>
                  </StackPanel>
             </ScrollViewer>
@@ -777,6 +781,9 @@
                                     </Border>
                                 </Grid>
                                 
+                                <Button Content="Extract Materials" Margin="90,5,0,0" Padding="8,2" 
+                                        Background="#3E3E42" Foreground="#CCCCCC" BorderThickness="0" 
+                                        HorizontalAlignment="Left" Click="ExtractMaterials_Click" Tag="{Binding}"/>
 
 
                                 <Separator Background="#3E3E3E" Margin="0,5,0,5"/>

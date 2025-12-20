@@ -94,7 +94,7 @@ namespace MonoGameEditor.ViewModels
             }
         }
 
-        private void LoadCurrentDirectory()
+        public void LoadCurrentDirectory()
         {
             GridItems.Clear();
             if (SelectedDirectory == null) return;
@@ -730,13 +730,15 @@ public class {ClassName} : ScriptComponent
             }
         }
 
-        public void LoadChildren()
+        public void LoadChildren(bool force = false)
         {
             // Clear dummy
             if (Children.Count == 1 && Children[0] == null) Children.Clear();
             
             // Don't reload if already loaded (unless forced?)
-            if (Children.Count > 0) return;
+            if (Children.Count > 0 && !force) return;
+
+            if (force) Children.Clear();
 
             try
             {

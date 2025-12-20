@@ -11,6 +11,7 @@ using MonoGameEditor.Core.Materials;
 using MonoGameEditor.Core;
 // using MonoGameEditor.ViewModels; // Removed to decouple core from UI
 using System.ComponentModel;
+using System.IO;
 
 namespace MonoGameEditor.Core.Components
 {
@@ -639,9 +640,85 @@ namespace MonoGameEditor.Core.Components
         /// </summary>
         private void LoadMaterialForSlot(int index)
         {
-            // TODO: Implement per-slot material loading
-            // For now, just log
-            Logger.Log($"[ModelRenderer] LoadMaterialForSlot called for index {index}");
+            if (index < 0 || index >= _materialPaths.Count) return;
+            
+            string path = _materialPaths[index];
+            if (string.IsNullOrEmpty(path)) return;
+
+            try
+            {
+                string fullPath = path;
+                if (!Path.IsPathRooted(fullPath))
+                {
+                    var projectPath = ProjectManager.Instance.ProjectPath;
+                    if (!string.IsNullOrEmpty(projectPath))
+                        fullPath = Path.Combine(projectPath, path);
+                }
+
+                if (File.Exists(fullPath))
+                {
+                    string json = File.ReadAllText(fullPath);
+                    var data = System.Text.Json.JsonSerializer.Deserialize<MaterialData>(json, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    
+                    if (data != null)
+                    {
+                        var mat = new Materials.PBRMaterial
+                        {
+                            Name = data.name ?? $"Slot_{index}",
+                            Metallic = data.metallic,
+                            Roughness = data.roughness,
+                            AmbientOcclusion = data.ambientOcclusion,
+                            ShaderPath = data.shaderPath
+                        };
+
+                        if (data.albedoColor != null && data.albedoColor.Length >= 3)
+                            mat.AlbedoColor = new Color(data.albedoColor[0], data.albedoColor[1], data.albedoColor[2]);
+
+                        _materials[index] = mat;
+                        Logger.Log($"[ModelRenderer] Loaded material for slot {index}: {mat.Name}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"[ModelRenderer] Failed to load material for slot {index}: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Automatically finds and applies .mat files from a folder based on mesh names
+        /// </summary>
+        public void ApplyMaterialsFromFolder(string folderPath)
+        {
+            if (!Directory.Exists(folderPath)) return;
+
+            var matFiles = Directory.GetFiles(folderPath, "*.mat");
+            bool changed = false;
+
+            for (int i = 0; i < MaterialSlots.Count; i++)
+            {
+                var slot = MaterialSlots[i];
+                string meshName = slot.MeshName;
+
+                // Try to find a .mat file that matches the mesh name
+                string? matchingFile = matFiles.FirstOrDefault(f => 
+                    Path.GetFileNameWithoutExtension(f).Equals(meshName, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingFile != null)
+                {
+                    string relativePath = Path.GetRelativePath(ProjectManager.Instance.ProjectPath ?? "", matchingFile).Replace("\\", "/");
+                    slot.MaterialPath = relativePath;
+                    _materialPaths[i] = relativePath;
+                    LoadMaterialForSlot(i);
+                    changed = true;
+                }
+            }
+
+            if (changed)
+            {
+                OnPropertyChanged(nameof(MaterialSlots));
+                Logger.Log($"[ModelRenderer] Applied materials from folder: {folderPath}");
+            }
         }
         
         /// <summary>

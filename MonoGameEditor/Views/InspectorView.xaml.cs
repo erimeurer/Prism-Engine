@@ -210,16 +210,93 @@ namespace MonoGameEditor.Views
 
         private void PickColor_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is CameraComponent camera)
+            var button = sender as Button;
+            var component = button?.Tag as Core.Component;
+            if (component == null) return;
+
+            // Get Current Color
+            System.Drawing.Color initialColor = System.Drawing.Color.White;
+            if (component is LightComponent light) initialColor = System.Drawing.Color.FromArgb(light.Color.R, light.Color.G, light.Color.B);
+            else if (component is CameraComponent cam) initialColor = System.Drawing.Color.FromArgb(cam.BackgroundColor.R, cam.BackgroundColor.G, cam.BackgroundColor.B);
+
+
+            var dialog = new System.Windows.Forms.ColorDialog
             {
-                using (var dialog = new System.Windows.Forms.ColorDialog())
+                Color = initialColor
+            };
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var newColor = new Microsoft.Xna.Framework.Color(dialog.Color.R, dialog.Color.G, dialog.Color.B);
+                if (component is LightComponent l) l.Color = newColor;
+                else if (component is CameraComponent c) c.BackgroundColor = newColor;
+            }
+        }
+
+        private void ExtractMaterials_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string? modelPath = null;
+            ModelRendererComponent? renderer = null;
+
+            if (button?.Tag is ModelRendererComponent r)
+            {
+                renderer = r;
+                modelPath = r.ModelPath;
+            }
+            else if (button?.Tag is MonoGameEditor.ViewModels.FileItemViewModel fileVm)
+            {
+                modelPath = fileVm.FullPath;
+            }
+
+            if (string.IsNullOrEmpty(modelPath))
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log("[Inspector] Cannot extract materials: Path is null");
+                return;
+            }
+
+            try
+            {
+                string projectPath = Core.ProjectManager.Instance.ProjectPath ?? "";
+                string absoluteModelPath = System.IO.Path.IsPathRooted(modelPath) 
+                    ? modelPath 
+                    : System.IO.Path.Combine(projectPath, modelPath);
+
+                if (!System.IO.File.Exists(absoluteModelPath))
                 {
-                    dialog.Color = System.Drawing.Color.FromArgb(camera.BackgroundColor.A, camera.BackgroundColor.R, camera.BackgroundColor.G, camera.BackgroundColor.B);
-                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    {
-                        camera.BackgroundColor = new Microsoft.Xna.Framework.Color(dialog.Color.R, dialog.Color.G, dialog.Color.B, dialog.Color.A);
-                    }
+                    MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Inspector] Model file not found: {absoluteModelPath}");
+                    return;
                 }
+
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Inspector] Extracting materials from: {modelPath}");
+                
+                // 1. Run Extraction
+                Core.Assets.MaterialExtractor.ExtractMaterials(absoluteModelPath);
+
+                // 2. Apply extracted materials if it's a renderer in a scene
+                if (renderer != null)
+                {
+                    string materialsDir = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(absoluteModelPath) ?? "", "Materials");
+                    renderer.ApplyMaterialsFromFolder(materialsDir);
+                    MonoGameEditor.ViewModels.ConsoleViewModel.Log("[Inspector] Materials extraction and application completed!");
+                }
+                else
+                {
+                    MonoGameEditor.ViewModels.ConsoleViewModel.Log("[Inspector] Material extraction completed! Folders created next to the model.");
+                }
+
+                // 3. Refresh Project Browser if needed
+                var projectVm = MonoGameEditor.ViewModels.MainViewModel.Instance?.Project;
+                if (projectVm?.SelectedDirectory != null)
+                {
+                    // Always refresh the current directory view to show new Textures/Materials folders
+                    projectVm.SelectedDirectory.LoadChildren(true);
+                    projectVm.LoadCurrentDirectory();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MonoGameEditor.ViewModels.ConsoleViewModel.Log($"[Inspector] Error extracting materials: {ex.Message}");
             }
         }
 
