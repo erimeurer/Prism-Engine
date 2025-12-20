@@ -166,6 +166,9 @@ namespace MonoGameEditor.Runtime
                     CreateHDRTarget(_mainCamera.Antialiasing);
                     _lastAntialiasing = _mainCamera.Antialiasing;
                 }
+                
+                // Update LOD Groups
+                UpdateLODGroups(SceneManager.Instance.RootObjects, _mainCamera.GameObject.Transform.Position);
             }
             else if (oldCamera != null)
             {
@@ -173,6 +176,17 @@ namespace MonoGameEditor.Runtime
             }
 
             base.Update(gameTime);
+        }
+
+        private void UpdateLODGroups(System.Collections.ObjectModel.ObservableCollection<GameObject> objects, Vector3 cameraPos)
+        {
+            foreach (var obj in objects)
+            {
+                if (!obj.IsActive) continue;
+                var lodGroup = obj.GetComponent<LODGroupComponent>();
+                lodGroup?.UpdateLOD(cameraPos);
+                UpdateLODGroups(obj.Children, cameraPos);
+            }
         }
 
         private CameraComponent? FindMainCamera()

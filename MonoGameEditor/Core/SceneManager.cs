@@ -174,6 +174,26 @@ namespace MonoGameEditor.Core
             }
         }
 
+        public GameObject? FindMainCamera()
+        {
+            return FindMainCameraRecursive(RootObjects);
+        }
+
+        private GameObject? FindMainCameraRecursive(ObservableCollection<GameObject> objects)
+        {
+            foreach (var go in objects)
+            {
+                var camera = go.GetComponent<Components.CameraComponent>();
+                if (camera != null && camera.IsMainCamera)
+                    return go;
+
+                var childResult = FindMainCameraRecursive(go.Children);
+                if (childResult != null)
+                    return childResult;
+            }
+            return null;
+        }
+
         private Microsoft.Xna.Framework.Vector3 ToEulerAngles(Microsoft.Xna.Framework.Quaternion q)
         {
             // Conversion from Quaternion to Euler (Degrees)

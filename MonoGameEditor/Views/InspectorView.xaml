@@ -898,6 +898,68 @@
         </DataTemplate>
 
         
+        <!-- LODGroupComponent DataTemplate -->
+        <DataTemplate DataType="{x:Type components:LODGroupComponent}">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="LOD Group" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                    <StackPanel>
+                        <TextBlock Text="LOD Levels (Manage Distance Thresholds)" Foreground="#888888" FontSize="10" FontWeight="Bold" Margin="0,0,0,8"/>
+                        
+                        <ItemsControl ItemsSource="{Binding Levels}" AlternationCount="100">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="55"/>
+                                            <ColumnDefinition Width="22"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, StringFormat=LOD {0}}" 
+                                                   Foreground="#888888" FontSize="10" VerticalAlignment="Center"/>
+                                        
+                                        <!-- Droppable Target Object -->
+                                        <Border Grid.Column="1" Height="22" Background="#333337" BorderBrush="#555555" BorderThickness="1" CornerRadius="2" Margin="4,0"
+                                                AllowDrop="True" Drop="LODLevel_Drop" ToolTip="Drag mesh GameObject here">
+                                            <TextBlock Text="{Binding TargetObject.Name, FallbackValue='None (GameObject)'}" 
+                                                       Foreground="#DDDDDD" FontSize="10" VerticalAlignment="Center" Margin="6,0" TextTrimming="CharacterEllipsis"/>
+                                        </Border>
+                                        
+                                        <TextBox Grid.Column="2" Text="{Binding DistanceThreshold, StringFormat=F1, UpdateSourceTrigger=PropertyChanged}" 
+                                                 Style="{StaticResource NumericTextBox}" Width="50" HorizontalAlignment="Right"/>
+                                        
+                                        <Button Grid.Column="3" Content="✕" FontSize="9" Width="16" Height="16" Margin="4,0,0,0"
+                                                Background="Transparent" Foreground="#884444" BorderThickness="0" 
+                                                Click="RemoveLODLevel_Click" ToolTip="Remove Level"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        
+                        <Button Content="+ Add Level" Margin="0,5,0,0" Padding="8,3" Background="#3E3E42" Foreground="#CCCCCC" 
+                                FontSize="10" BorderThickness="0" HorizontalAlignment="Left" 
+                                Click="AddLODLevel_Click" Tag="{Binding}"/>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+
         <!-- GameObject Template -->
         <DataTemplate DataType="{x:Type core:GameObject}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" AllowDrop="True" 

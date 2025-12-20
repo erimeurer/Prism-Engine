@@ -341,8 +341,37 @@ namespace MonoGameEditor.Controls
                 var gameTime = new GameTime(currentTime, TimeSpan.FromSeconds(deltaTime));
                 ScriptManager.Instance.UpdateScripts(gameTime);
             }
+
+            // Update LOD Groups (always in editor for visual feedback)
+            if (SceneManager.Instance != null)
+            {
+                Vector3 lodCameraPos = _camera != null ? _camera.Position : Vector3.Zero;
+                
+                // If playing, try to use the Main Camera from the scene
+                if (ViewModels.MainViewModel.Instance?.IsPlaying == true)
+                {
+                    var mainCameraGO = SceneManager.Instance.FindMainCamera();
+                    if (mainCameraGO != null)
+                    {
+                        lodCameraPos = mainCameraGO.Transform.Position;
+                    }
+                }
+
+                UpdateLODGroups(SceneManager.Instance.RootObjects, lodCameraPos);
+            }
             
             Invalidate(); // Triggers OnPaint
+        }
+
+        private void UpdateLODGroups(System.Collections.ObjectModel.ObservableCollection<GameObject> objects, Vector3 cameraPos)
+        {
+            foreach (var obj in objects)
+            {
+                if (!obj.IsActive) continue;
+                var lodGroup = obj.GetComponent<LODGroupComponent>();
+                lodGroup?.UpdateLOD(cameraPos);
+                UpdateLODGroups(obj.Children, cameraPos);
+            }
         }
 
         #region Mouse Input
@@ -881,6 +910,9 @@ namespace MonoGameEditor.Controls
                     
                     if (MainViewModel.Instance != null)
                         MainViewModel.Instance.Inspector.SelectedObject = rootGO;
+
+                    // AUTO-LOD CONFIGURATION
+                    ConfigureAutoLOD(rootGO);
                 }
                 else
                 {
@@ -1063,6 +1095,49 @@ namespace MonoGameEditor.Controls
                 MathHelper.ToDegrees(yaw),
                 MathHelper.ToDegrees(roll)
             );
+        }
+
+        private void ConfigureAutoLOD(GameObject root)
+        {
+            var lodChildren = new Dictionary<int, GameObject>();
+            
+            // Search for children following LODX or _LODX or .LODX pattern
+            // Common patterns: Mesh_LOD0, Mesh.LOD0, LOD0, etc.
+            var regex = new System.Text.RegularExpressions.Regex(@"LOD(\d+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            foreach (var child in root.Children)
+            {
+                var match = regex.Match(child.Name);
+                if (match.Success)
+                {
+                    if (int.TryParse(match.Groups[1].Value, out int lodLevel))
+                    {
+                        lodChildren[lodLevel] = child;
+                    }
+                }
+            }
+
+            if (lodChildren.Count >= 2) // At least 2 levels required for LOD
+            {
+                var lodGroup = new LODGroupComponent();
+                
+                // Sort levels by index and create thresholds
+                // Default thresholds: LOD0: 15m, LOD1: 35m, LOD2: 70m, etc.
+                float[] defaultThresholds = { 15f, 35f, 70f, 150f, 300f };
+
+                var sortedIndices = lodChildren.Keys.OrderBy(k => k).ToList();
+                foreach (var index in sortedIndices)
+                {
+                    float threshold = (index < defaultThresholds.Length) 
+                        ? defaultThresholds[index] 
+                        : defaultThresholds.Last() * (index - defaultThresholds.Length + 2 + (index - sortedIndices.Count));
+                    
+                    lodGroup.Levels.Add(new LODLevel(lodChildren[index], threshold));
+                }
+
+                root.AddComponent(lodGroup);
+                ConsoleViewModel.Log($"[MonoGameControl] 🚀 Auto-configured LOD Group with {lodChildren.Count} levels for '{root.Name}'");
+            }
         }
     }
 }

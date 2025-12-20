@@ -67,6 +67,46 @@ namespace MonoGameEditor.Views
             }
         }
 
+        private void AddLODLevel_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is LODGroupComponent lodGroup)
+            {
+                lodGroup.AddLevel();
+            }
+        }
+
+        private void RemoveLODLevel_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is LODLevel level)
+            {
+                // Find the LODGroupComponent in the hierarchy
+                var parent = System.Windows.Media.VisualTreeHelper.GetParent(button);
+                while (parent != null && !(parent is ItemsControl))
+                    parent = System.Windows.Media.VisualTreeHelper.GetParent(parent);
+
+                if (parent is ItemsControl itemsControl && itemsControl.DataContext is LODGroupComponent lodGroup)
+                {
+                    lodGroup.RemoveLevel(level);
+                }
+            }
+        }
+
+        private void LODLevel_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (sender is FrameworkElement element && element.DataContext is LODLevel level)
+            {
+                if (e.Data.GetDataPresent("GameObject"))
+                {
+                    var go = e.Data.GetData("GameObject") as GameObject;
+                    if (go != null)
+                    {
+                        level.TargetObject = go;
+                        e.Handled = true;
+                    }
+                }
+            }
+        }
+
         private void AddComponent_Click(object sender, RoutedEventArgs e)
         {
             var selectedObject = SceneManager.Instance.SelectedObject;
@@ -141,6 +181,11 @@ namespace MonoGameEditor.Views
                 
                 menu.Items.Add(scriptsItem);
             }
+
+            menu.Items.Add(new Separator());
+            var lodGroupItem = new MenuItem { Header = "LOD Group" };
+            lodGroupItem.Click += (s, args) => selectedObject.AddComponent(new LODGroupComponent());
+            menu.Items.Add(lodGroupItem);
             
             menu.IsOpen = true;
         }

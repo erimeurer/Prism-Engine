@@ -88,7 +88,7 @@ namespace MonoGameEditor.Core.Graphics
 
         private void DrawColliderGizmos(GameObject go, EditorCamera camera)
         {
-            if (_colliderGizmoRenderer == null) return;
+            if (_colliderGizmoRenderer == null || !go.IsSelected) return;
 
             var world = go.Transform.WorldMatrix;
 
