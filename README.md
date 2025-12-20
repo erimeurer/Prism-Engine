@@ -112,6 +112,6 @@ License to be defined.
 
 ## 📷 Preview
 
-![Scene Editor](docs/images/Captura de tela 2025-12-20 130300.png)
+![Scene Editor](docs/images/first.png)
 ![Editor Gizmos](docs/images/gizmos.png)
 ![Skinned Mesh](docs/images/skinned_mesh.png)
