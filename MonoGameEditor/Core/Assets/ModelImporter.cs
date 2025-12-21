@@ -174,6 +174,10 @@ namespace MonoGameEditor.Core.Assets
 
                         int totalVertices = 0;
                         int totalTriangles = 0;
+                        
+                        // CRITICAL FIX: Extract bone hierarchy BEFORE processing meshes
+                        // Vertex bone indices reference the global bone palette (modelData.Bones)
+                        ExtractBoneHierarchy(scene, modelData);
 
                         // Extract each mesh separately
                         for (int i = 0; i < scene.MeshCount; i++)
@@ -242,7 +246,7 @@ namespace MonoGameEditor.Core.Assets
                             // Extract bone weights for skinning (if mesh has bones)
                             if (assimpMesh.HasBones)
                             {
-                                ExtractBoneWeights(assimpMesh, meshData, scene);
+                                ExtractBoneWeights(assimpMesh, meshData, scene, modelData);
                             }
                             else
                             {
@@ -285,8 +289,8 @@ namespace MonoGameEditor.Core.Assets
                         modelData.TotalVertexCount = totalVertices;
                         modelData.TotalTriangleCount = totalTriangles;
                         
-                        // Extract bone hierarchy if present
-                        ExtractBoneHierarchy(scene, modelData);
+                        // Extract bone hierarchy if present (Moved up)
+                        // ExtractBoneHierarchy(scene, modelData);
                         
                         // CACHE DISABLED - Testing if cache causes corruption
                         if (false)
@@ -310,16 +314,12 @@ namespace MonoGameEditor.Core.Assets
         }
         
         /// <summary>
-        /// Extracts bone weights for vertex skinning
+        /// Extracts bone weights for vertex skinning using global bone mapping
         /// </summary>
-        private static void ExtractBoneWeights(Mesh assimpMesh, MeshData meshData, Scene scene)
+        private static void ExtractBoneWeights(Mesh assimpMesh, MeshData meshData, Scene scene, ModelData modelData)
         {
-            // First, build a bone name to index mapping
-            var boneNameToIndex = new Dictionary<string, int>();
-            for (int i = 0; i < assimpMesh.BoneCount; i++)
-            {
-                boneNameToIndex[assimpMesh.Bones[i].Name] = i;
-            }
+            // First, build a bone name to index mapping using the GLOBAL model palette
+            // Vertex bone indices in the shader MUST reference the global Bones[] array
             
             // Initialize arrays for each vertex (up to 4 bones per vertex)
             var vertexBoneIndices = new List<List<int>>();
@@ -334,8 +334,12 @@ namespace MonoGameEditor.Core.Assets
             // Process each bone in the mesh
             foreach (var bone in assimpMesh.Bones)
             {
-                // Get bone index from our mapping
-                int boneIndex = boneNameToIndex[bone.Name];
+                // Get bone index from our GLOBAL mapping
+                if (!modelData.BoneNameToIndex.TryGetValue(bone.Name, out int boneIndex))
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ModelImporter] ❌ Global bone mapping failed for '{bone.Name}' in mesh '{meshData.Name}'");
+                    continue;
+                }
                 
                 // Process each vertex weight for this bone
                 foreach (var weight in bone.VertexWeights)
