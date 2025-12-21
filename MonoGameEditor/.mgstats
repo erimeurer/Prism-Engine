@@ -1,2 +1,1 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"D:/git/Prism-Engine/MonoGameEditor/Content/Shaders/PBREffect.fx","D:/git/Prism-Engine/MonoGameEditor/bin/Debug/net8.0-windows/Content/Shaders/Content/Shaders/PBREffect.xnb","EffectProcessor","CompiledEffectContent",7547,6796,0,2248482

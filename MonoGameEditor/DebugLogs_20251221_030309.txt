@@ -1,0 +1,831 @@
+=== Prism Engine Debug Log Started: 21/12/2025 03:03:09 ===
+03:03:09.439 [ℹ] [ShaderCompiler] Starting automatic shader compilation service...
+03:03:09.442 [ℹ] [ShaderCompiler] Watching: D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows\Content\Shaders
+03:03:09.442 [ℹ] [ShaderCompiler] Watching: D:\ProjetosMono\Teste3\Assets
+03:03:09.443 [ℹ] [ShaderCompiler] Found 1 shader(s) to compile
+03:03:09.444 [ℹ] [ScriptFixer] Found 2 script file(s)
+03:03:09.446 [ℹ] [ScriptFixer] PlayerTest.cs - already correct
+03:03:09.446 [ℹ] [ScriptFixer] TesteScript.cs - already correct
+03:03:09.446 [ℹ] [ScriptFixer] Fixed 0 script(s). Restart editor to recompile.
+03:03:09.446 [ℹ] [ScriptManager] Searching for scripts in: D:\ProjetosMono\Teste3\Assets\Scripts
+03:03:09.447 [ℹ] [ScriptManager] Found 2 script file(s).
+03:03:10.157 [ℹ] [ScriptManager] Successfully compiled 2 script(s) into memory assembly.
+03:03:10.159 [ℹ] [ScriptManager] Registered script: PlayerTest
+03:03:10.159 [ℹ] [ScriptManager] Registered script: TesteScript
+03:03:10.159 [ℹ] [ScriptManager] Starting hot-reload of scripts in scene...
+03:03:10.159 [ℹ] [ScriptManager] No script instances to reload
+03:03:10.186 [ℹ] [SceneLoader] Loaded Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc) at position {X:0 Y:50 Z:0}, rotation {X:-50 Y:-40 Z:-10}, scale {X:1 Y:1 Z:1}
+03:03:10.187 [ℹ] [SceneLoader] Created instance of LightComponent for Directional Light
+03:03:10.209 [ℹ] [SceneLoader] Added LightComponent to Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc)
+03:03:10.209 [ℹ] [SceneLoader] Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc) added as ROOT object
+03:03:10.210 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543) at position {X:-0,95017 Y:6,1104326 Z:4,2211685}, rotation {X:-1,8481218 Y:-1,3765824 Z:0}, scale {X:4,8110113 Y:4,8110113 Z:4,8110113}
+03:03:10.210 [ℹ] [SceneLoader] Created instance of PhysicsBodyComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+03:03:10.222 [ℹ] [SceneLoader] Added PhysicsBodyComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.222 [ℹ] [SceneLoader] Created instance of CapsuleColliderComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+03:03:10.232 [ℹ] [SceneLoader] Added CapsuleColliderComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.233 [ℹ] [SceneLoader] Created instance of PlayerTest for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+03:03:10.239 [ℹ] [SceneLoader] Added PlayerTest to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.239 [ℹ] [SceneLoader] Created instance of TesteScript for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+03:03:10.241 [ℹ] [SceneLoader] Added TesteScript to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.241 [ℹ] [SceneLoader] tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543) added as ROOT object
+03:03:10.241 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.247 [ℹ] [SceneLoader] Created instance of SkinnedModelRendererComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+03:03:10.252 [ℹ] [ModelRenderer] MaterialPath CHANGED: '' → 'Assets\Mat10.mat'
+03:03:10.253 [ℹ] [ModelRenderer] Loading Material: Assets\Mat10.mat
+03:03:10.253 [ℹ] [ModelRenderer] JSON Preview: {
+  "name": "NewMaterial1",
+  "albedoColor": [
+    0.7058824,
+    0.7058824,
+    0.7058824
+  ],
+  "metallic": 0,
+  "roughness": 0.5,
+  "ambie...
+03:03:10.258 [ℹ] [ModelRenderer] Deserialized: Metallic=0, Roughness=0,5, AlbedoLen=3
+03:03:10.258 [ℹ] [ModelRenderer] Set AlbedoColor: {R:180 G:180 B:180 A:255}
+03:03:10.259 [ℹ] [ModelRenderer] Stored 1 texture paths for lazy loading
+03:03:10.259 [ℹ] [ModelRenderer] Loaded Material 'NewMaterial1' from Assets\Mat10.mat
+03:03:10.263 [ℹ] [SceneLoader] Added SkinnedModelRendererComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+03:03:10.263 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh - scene is loading
+03:03:10.263 [ℹ] [SceneLoader] tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) has parent 8b5e9a3a-fad6-4083-835e-67dc633bf543 - will be added to parent later
+03:03:10.263 [ℹ] [SceneLoader] Loaded mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) at position {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.263 [ℹ] [SceneLoader] mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) has parent 8b5e9a3a-fad6-4083-835e-67dc633bf543 - will be added to parent later
+03:03:10.263 [ℹ] [SceneLoader] Loaded mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) at position {X:0,062570825 Y:-0,030949144 Z:0,0055499123}, rotation {X:-1,1472068 Y:0,12425185 Z:-173,81932}, scale {X:1 Y:1 Z:1}
+03:03:10.263 [ℹ] [SceneLoader] mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) has parent 4248f113-1d1a-48fe-8c79-336e97078c07 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) at position {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}, rotation {X:-12,02008 Y:0 Z:0,7867111}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) has parent be21ef24-799f-49e8-83e2-ad3f9cd2b700 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) at position {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}, rotation {X:65,63935 Y:-6,969762 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) has parent 0030bab2-7fb1-45f7-9a1b-4a46e9584f59 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) at position {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}, rotation {X:37,056774 Y:-12,616247 Z:-4,3744907E-07}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) has parent fc2ce7d5-3d28-4d57-b023-d6a29c1d347a - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) at position {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}, rotation {X:-0,09146497 Y:-0,009909072 Z:173,81685}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) has parent 4248f113-1d1a-48fe-8c79-336e97078c07 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) at position {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}, rotation {X:-11,900182 Y:-6,6701067E-09 Z:-0,81415886}, scale {X:0,99999994 Y:0,99999994 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) has parent 783c7ecd-da5d-4988-bdf5-37bcd10c45e3 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) at position {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}, rotation {X:64,36353 Y:6,9263964 Z:2,1501259E-07}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) has parent 70c60ea0-07f3-474d-9550-5e61c1227ecb - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) at position {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}, rotation {X:37,180954 Y:12,748792 Z:-8,753538E-07}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) has parent 0f754088-6de0-4604-9e1e-2afb8b3de83d - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) at position {X:0 Y:0,0556635 Z:-0,0014606453}, rotation {X:47,77728 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) has parent 4248f113-1d1a-48fe-8c79-336e97078c07 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) at position {X:0 Y:0,06496308 Z:-4,524171E-12}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) has parent d02efbeb-8045-4417-b285-8f3ee3afd289 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) at position {X:0 Y:0,07424357 Z:-1,3589962E-12}, rotation {X:-15,70435 Y:0 Z:1,6850998}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) has parent 3312ec60-3b71-4462-85ea-dfdad4437c63 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) at position {X:0,037708238 Y:0,070419066 Z:-0,00016501882}, rotation {X:-70,66212 Y:89,75292 Z:-179,61998}, scale {X:0,99999994 Y:0,99999994 Z:0,99999994}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) has parent 2d8a432a-13a4-4180-9925-92055d155597 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) at position {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}, rotation {X:-10,427199 Y:-8,3376334E-10 Z:0,14952397}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) has parent fcde5a9a-740f-4400-bd66-a23968981261 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) at position {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}, rotation {X:-8,117519 Y:0 Z:4,0117264}, scale {X:0,99999994 Y:0,99999994 Z:0,99999994}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) has parent 685bd692-69f5-4d29-a8e5-42ff709fa10a - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) at position {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}, rotation {X:11,831818 Y:25,722307 Z:18,037724}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) has parent 8e85d6b8-3d5c-4668-b14b-97304997e29b - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) at position {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}, rotation {X:-5,2712746 Y:-5,3360854E-08 Z:-6,2998853}, scale {X:1 Y:0,99999994 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) has parent f33fa062-4990-48e8-b8a5-f2345eff8af9 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) at position {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}, rotation {X:7,9614315 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) has parent 6238ab89-4879-472e-8183-e496f0afee80 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) at position {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}, rotation {X:0,18083942 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) has parent 8929ed00-50db-43dd-99d1-dbc20d8ee5b1 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) at position {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}, rotation {X:-3,5302378E-06 Y:0 Z:32,182915}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) has parent f33fa062-4990-48e8-b8a5-f2345eff8af9 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) at position {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}, rotation {X:4,38211 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) has parent 337accb9-47f4-456d-b0dd-4248576e59f6 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) at position {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}, rotation {X:-1,5570459 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) has parent 7172a1b9-f816-46fe-ab1a-4e9fbda7591d - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) at position {X:0 Y:0,08352399 Z:-2,1309339E-09}, rotation {X:1,503131 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) has parent 2d8a432a-13a4-4180-9925-92055d155597 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) at position {X:0 Y:0,040507227 Z:0,015411837}, rotation {X:0 Y:2,9400866 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) has parent 8bbe0e02-d260-4dae-bece-f10064b8a2b9 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) at position {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}, rotation {X:-70,777504 Y:-89,213165 Z:179,72232}, scale {X:0,99999994 Y:0,99999994 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) has parent 2d8a432a-13a4-4180-9925-92055d155597 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) at position {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}, rotation {X:-10,406265 Y:-6,6701067E-09 Z:-0,8737074}, scale {X:0,99999994 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) has parent dd367c2f-7dd9-4634-a6c6-ec85d91bb858 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) at position {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}, rotation {X:-8,077427 Y:1,0672171E-07 Z:-12,114854}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) has parent 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) at position {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}, rotation {X:15,423945 Y:-21,665234 Z:-22,451714}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) has parent 248c5436-c3f2-4260-b32b-b715deb8e5be - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) at position {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}, rotation {X:-15,378899 Y:2,1344342E-06 Z:14,089797}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) has parent aff9b821-a64f-4f87-8580-75be2c40661e - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) at position {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}, rotation {X:20,36898 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) has parent 393f8ee0-c159-4113-b4fd-0fb759ce8e8b - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) at position {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}, rotation {X:-2,8631508 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) has parent 73ea4933-73d1-4f7b-b7d3-672bec11ca95 - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) at position {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}, rotation {X:-1,0410827E-05 Y:4,07111E-13 Z:-26,926573}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) has parent aff9b821-a64f-4f87-8580-75be2c40661e - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) at position {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}, rotation {X:4,1339054 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) has parent bd784ff6-04aa-407f-bddf-a80e78bacd2b - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) at position {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}, rotation {X:-0,8241592 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+03:03:10.264 [ℹ] [SceneLoader] mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) has parent c1770117-64a6-49a1-a29f-01f2ac63a86b - will be added to parent later
+03:03:10.264 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c) at position {X:0,06389562 Y:-0,16389823 Z:0,2611336}, rotation {X:1,8486551 Y:1,3758662 Z:0,044403613}, scale {X:0,0062356945 Y:0,0062356945 Z:0,006235694}
+03:03:10.264 [ℹ] [SceneLoader] Created instance of LODGroupComponent for MB_Urn_04_LOD0.002
+03:03:10.267 [ℹ] [SceneLoader] Added LODGroupComponent to MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+03:03:10.267 [ℹ] [SceneLoader] MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c) has parent 8b5e9a3a-fad6-4083-835e-67dc633bf543 - will be added to parent later
+03:03:10.267 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.267 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for MB_Urn_04_LOD0.002
+03:03:10.313 [ℹ] [SceneLoader] Added ModelRendererComponent to MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3)
+03:03:10.313 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for MB_Urn_04_LOD0.002 - scene is loading
+03:03:10.313 [ℹ] [SceneLoader] MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3) has parent f150bcef-4ced-44f2-b186-3ec3e9d1d23c - will be added to parent later
+03:03:10.313 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.313 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for MB_Urn_04_LOD1.004
+03:03:10.318 [ℹ] [SceneLoader] Added ModelRendererComponent to MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c)
+03:03:10.318 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for MB_Urn_04_LOD1.004 - scene is loading
+03:03:10.318 [ℹ] [SceneLoader] MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c) has parent f150bcef-4ced-44f2-b186-3ec3e9d1d23c - will be added to parent later
+03:03:10.318 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.318 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for MB_Urn_04_LOD2.002
+03:03:10.324 [ℹ] [SceneLoader] Added ModelRendererComponent to MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95)
+03:03:10.324 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for MB_Urn_04_LOD2.002 - scene is loading
+03:03:10.324 [ℹ] [SceneLoader] MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95) has parent f150bcef-4ced-44f2-b186-3ec3e9d1d23c - will be added to parent later
+03:03:10.324 [ℹ] [SceneLoader] Loaded Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6) at position {X:-0,23436737 Y:-0,066179276 Z:5,404556}, rotation {X:180 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.324 [ℹ] [SceneLoader] Created instance of BoxColliderComponent for Plane
+03:03:10.332 [ℹ] [SceneLoader] Added BoxColliderComponent to Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6)
+03:03:10.332 [ℹ] [SceneLoader] Created instance of PhysicsBodyComponent for Plane
+03:03:10.345 [ℹ] [SceneLoader] Added PhysicsBodyComponent to Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6)
+03:03:10.345 [ℹ] [SceneLoader] Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6) added as ROOT object
+03:03:10.345 [ℹ] [SceneLoader] Loaded Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+03:03:10.345 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for Plane
+03:03:10.349 [ℹ] [SceneLoader] Added ModelRendererComponent to Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9)
+03:03:10.349 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for Plane - scene is loading
+03:03:10.349 [ℹ] [SceneLoader] Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) has parent 598357d3-d454-4d07-a8bc-b2212929ebb6 - will be added to parent later
+03:03:10.349 [ℹ] [SceneLoader] Loaded Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587) at position {X:1,1920929E-07 Y:4,9999995 Z:31,051577}, rotation {X:-15,000004 Y:-1,0848228E-07 Z:-7,551558E-09}, scale {X:1,0100789 Y:1,0100787 Z:1,0100788}
+03:03:10.349 [ℹ] [SceneLoader] Created instance of CameraComponent for Main Camera
+03:03:10.359 [ℹ] [SceneLoader] Added CameraComponent to Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587)
+03:03:10.359 [ℹ] [SceneLoader] Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587) added as ROOT object
+03:03:10.359 [ℹ] [SceneLoader] Restoring hierarchy for 40 child objects
+03:03:10.360 [ℹ] [SceneLoader] Setting tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) as child of mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) as child of mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) as child of mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) as child of mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) as child of mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) as child of mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) as child of mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) as child of mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) as child of mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) as child of mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) as child of mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) as child of mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) as child of mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) as child of mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) as child of mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) as child of mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) as child of mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) as child of mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) as child of mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) as child of mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) as child of mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) as child of mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) as child of mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) as child of mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) as child of mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) as child of mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) as child of mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) as child of mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) as child of mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) as child of mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) as child of mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) as child of mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b)
+03:03:10.360 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) as child of mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b)
+03:03:10.360 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+03:03:10.360 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3) as child of MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+03:03:10.360 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c) as child of MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+03:03:10.360 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95) as child of MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+03:03:10.360 [ℹ] [SceneLoader] Setting Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) as child of Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6)
+03:03:10.471 [ℹ] [SceneLoader] Initializing 44 objects post-load
+03:03:10.471 [ℹ] [SceneLoader] Reinitializing renderer for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (Sync/Async)
+03:03:10.473 [ℹ] [ModelRenderer] Post-scene-load init for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+03:03:10.474 [ℹ] [ModelRenderer] Reloading mesh data only for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+03:03:10.474 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\Player.fbx
+03:03:10.475 [ℹ] [SceneLoader] Reinitializing renderer for MB_Urn_04_LOD0.002 (Sync/Async)
+03:03:10.475 [ℹ] [ModelRenderer] Post-scene-load init for MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3)
+03:03:10.475 [ℹ] [ModelRenderer] Reloading mesh data only for MB_Urn_04_LOD0.002
+03:03:10.475 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\MB_Urn_04.fbx
+03:03:10.475 [ℹ] [SceneLoader] Reinitializing renderer for MB_Urn_04_LOD1.004 (Sync/Async)
+03:03:10.475 [ℹ] [ModelRenderer] Post-scene-load init for MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c)
+03:03:10.475 [ℹ] [ModelRenderer] Reloading mesh data only for MB_Urn_04_LOD1.004
+03:03:10.475 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\MB_Urn_04.fbx
+03:03:10.475 [ℹ] [SceneLoader] Reinitializing renderer for MB_Urn_04_LOD2.002 (Sync/Async)
+03:03:10.475 [ℹ] [ModelRenderer] Post-scene-load init for MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95)
+03:03:10.475 [ℹ] [ModelRenderer] Reloading mesh data only for MB_Urn_04_LOD2.002
+03:03:10.475 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\MB_Urn_04.fbx
+03:03:10.475 [ℹ] [SceneLoader] Reinitializing renderer for Plane (Sync/Async)
+03:03:10.475 [ℹ] [ModelRenderer] Post-scene-load init for Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9)
+03:03:10.475 [ℹ] [ModelRenderer] Reloading mesh data only for Plane
+03:03:10.475 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Teste\Terrain.obj
+03:03:10.478 [ℹ] [SceneLoader] Resolving 0 object references
+03:03:10.487 [ℹ] Scene Loaded: D:\ProjetosMono\Teste3\Assets\Scenes\NewScene.world
+03:03:10.490 [ℹ] Project Opened: D:\ProjetosMono\Teste3
+03:03:10.493 [ℹ] [ShaderCompiler] Compiling: NewShader.fx
+03:03:10.733 [ℹ] [MaterialAssets] Found 29 materials in project
+03:03:10.982 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=853804. Total devices: 1
+03:03:11.024 [ℹ] [ShadowRenderer] Failed to load ShadowDepth: The content file was not found.
+03:03:11.041 [ℹ] [ToneMapRenderer] Failed to load via ContentManager: The content file was not found.. Trying fallback...
+03:03:11.042 [ℹ] [ToneMapRenderer] Warning: ToneMap shader not found (no .xnb or .mgfxo). PP will be disabled.
+03:03:11.043 [ℹ] [MonoGameControl] Resized RenderTarget: 200x100 (MSAA: 8x)
+03:03:11.238 [ℹ] [ShaderCompiler] ❌ Exception: An error occurred trying to start process 'mgfxc' with working directory 'D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows'. O sistema não pode encontrar o arquivo especificado.
+03:03:11.240 [ℹ] [ModelRenderer] Loaded model with 1 meshes and 0 bones
+03:03:11.241 [ℹ] [ModelRenderer] Mesh data reloaded for 'Plane'
+03:03:11.241 [ℹ] [ModelRenderer] Loaded model with 3 meshes and 0 bones
+03:03:11.241 [ℹ] [ModelRenderer] Mesh data reloaded for 'MB_Urn_04_LOD0.002'
+03:03:11.241 [ℹ] [ModelRenderer] Loaded model with 3 meshes and 0 bones
+03:03:11.241 [ℹ] [ModelRenderer] Mesh data reloaded for 'MB_Urn_04_LOD2.002'
+03:03:11.241 [ℹ] [ModelRenderer] Loaded model with 3 meshes and 0 bones
+03:03:11.241 [ℹ] [ModelRenderer] Mesh data reloaded for 'MB_Urn_04_LOD1.004'
+03:03:13.517 [ℹ] [ModelRenderer] Loaded model with 1 meshes and 34 bones
+03:03:13.517 [ℹ] [ModelRenderer] Mesh data reloaded for 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+03:03:13.517 [ℹ] [ModelRenderer] Attempting to reconnect bones for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+03:03:13.517 [ℹ] [ModelRenderer] GameObject position: {X:0 Y:0 Z:0}
+03:03:13.517 [ℹ] [ModelRenderer] Searching in 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' which has 3 children
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftUpLeg at local pos {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftLeg at local pos {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftFoot at local pos {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftToeBase at local pos {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex1 at local pos {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightArm at local pos {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightForeArm at local pos {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHand at local pos {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex2 at local pos {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightUpLeg at local pos {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightLeg at local pos {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightFoot at local pos {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightToeBase at local pos {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine2 at local pos {X:0 Y:0,07424357 Z:-1,3589962E-12}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftShoulder at local pos {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftArm at local pos {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHand at local pos {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftForeArm at local pos {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex1 at local pos {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex2 at local pos {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine at local pos {X:0 Y:0,0556635 Z:-0,0014606453}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:Hips at local pos {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:Neck at local pos {X:0 Y:0,08352399 Z:-2,1309339E-09}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:Head at local pos {X:0 Y:0,040507227 Z:0,015411837}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightShoulder at local pos {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine1 at local pos {X:0 Y:0,06496308 Z:-4,524171E-12}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex3 at local pos {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex3 at local pos {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb1 at local pos {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb1 at local pos {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb3 at local pos {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb2 at local pos {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb2 at local pos {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb3 at local pos {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+03:03:13.518 [ℹ] [ModelRenderer] Reconnecting 34 bones for skinned mesh
+03:03:13.519 [ℹ] [SkinnedRenderer] Set 34 bones with bind pose captured
+03:03:15.506 [ℹ] [MonoGameControl] Resized RenderTarget: 790x374 (MSAA: 8x)
+03:03:15.679 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:15.695 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:15.695 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:15.695 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:15.698 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD0.002
+03:03:15.698 [ℹ] [ModelRenderer] Attempting PBR shader load...
+03:03:15.708 [ℹ] [ModelRenderer] ⚠️ PBR failed, using BasicEffect for MB_Urn_04_LOD0.002
+03:03:15.719 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD1.004
+03:03:15.719 [ℹ] [ModelRenderer] Attempting PBR shader load...
+03:03:15.727 [ℹ] [ModelRenderer] ⚠️ PBR failed, using BasicEffect for MB_Urn_04_LOD1.004
+03:03:15.736 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD2.002
+03:03:15.736 [ℹ] [ModelRenderer] Attempting PBR shader load...
+03:03:15.745 [ℹ] [ModelRenderer] ⚠️ PBR failed, using BasicEffect for MB_Urn_04_LOD2.002
+03:03:15.753 [ℹ] [ModelRenderer] CreateResourcesForDevice for Plane
+03:03:15.754 [ℹ] [ModelRenderer] Attempting PBR shader load...
+03:03:15.762 [ℹ] [ModelRenderer] ⚠️ PBR failed, using BasicEffect for Plane
+03:03:16.036 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:16.046 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:16.046 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:16.046 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:16.279 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:16.289 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:16.289 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:16.289 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:16.465 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:16.475 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:16.475 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:16.475 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:16.666 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:16.676 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:16.676 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:16.676 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:16.871 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:16.880 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:16.880 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:16.880 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:17.071 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:17.080 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:17.080 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:17.080 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:17.267 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:17.278 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:17.278 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:17.278 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:17.452 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:17.461 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:17.462 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:17.462 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:17.640 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:17.650 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:17.651 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:17.651 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:17.822 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:17.832 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:17.832 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:17.832 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:18.007 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:18.017 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:18.017 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:18.017 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:18.192 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:18.201 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:18.202 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:18.202 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:18.375 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:18.384 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:18.385 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:18.385 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:18.555 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:18.564 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:18.564 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:18.564 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:18.735 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:18.744 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:18.744 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:18.744 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:18.912 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:18.922 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:18.922 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:18.922 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:19.089 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:19.098 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:19.098 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:19.098 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:19.339 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:19.351 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:19.351 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:19.351 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:19.507 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:19.517 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:19.517 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:19.517 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:19.686 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:19.695 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:19.695 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:19.695 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:19.852 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:19.862 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:19.862 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:19.862 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:20.021 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:20.031 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:20.031 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:20.031 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:20.186 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:20.195 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:20.195 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:20.196 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:20.349 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:20.359 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:20.359 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:20.360 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:20.515 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:20.524 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:20.524 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:20.524 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:20.677 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:20.687 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:20.687 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:20.687 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:20.918 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:20.927 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:20.928 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:20.928 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:21.054 [ℹ] [MonoGameControl] Resized RenderTarget: 1360x654 (MSAA: 8x)
+03:03:21.173 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:21.183 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:21.185 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:21.185 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:21.394 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:21.404 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:21.404 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:21.404 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:21.572 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:21.582 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:21.582 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:21.582 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:21.743 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:21.752 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:21.753 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:21.753 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:21.931 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:21.942 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:21.942 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:21.942 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:22.099 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:22.109 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:22.109 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:22.109 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:22.265 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:22.275 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:22.275 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:22.275 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:22.438 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:22.450 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:22.450 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:22.450 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:22.602 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:22.611 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:22.611 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:22.611 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:22.801 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:22.810 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:22.810 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:22.810 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:22.969 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:22.979 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:22.979 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:22.979 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:23.004 [ℹ] [ModelRenderer] Scene light found: Directional Light
+03:03:23.005 [ℹ] [ModelRenderer] Light intensity=1,2, finalColor=(1,20,1,09,0,80)
+03:03:23.277 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:23.289 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:23.289 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:23.289 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:23.755 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:23.770 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:23.770 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:23.770 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:23.978 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:23.996 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:23.996 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:23.996 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:24.222 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:24.237 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:24.237 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:24.237 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:24.459 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:24.473 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:24.473 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:24.473 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:24.684 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:24.697 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:24.697 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:24.697 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:24.989 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:25.000 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:25.000 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:25.000 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:25.009 [ℹ] [ModelRenderer] Scene light found: Directional Light
+03:03:25.189 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:25.198 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:25.199 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:25.199 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:25.377 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:25.387 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:25.387 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:25.387 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:25.544 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:25.554 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:25.554 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:25.554 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:25.720 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:25.729 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:25.730 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:25.730 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:25.893 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:25.902 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:25.902 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:25.903 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:26.059 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:26.068 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:26.068 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:26.068 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:26.224 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:26.234 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:26.234 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:26.234 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:26.387 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:26.396 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:26.396 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:26.396 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:26.552 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:26.562 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:26.562 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:26.562 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:26.718 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:26.727 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:26.728 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:26.728 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:26.884 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:26.893 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:26.893 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:26.893 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:27.061 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:27.071 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:27.071 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:27.071 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:27.239 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:27.249 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:27.249 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:27.249 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:27.416 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:27.426 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:27.426 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:27.426 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:27.598 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:27.607 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:27.607 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:27.607 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:27.780 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:27.789 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:27.790 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:27.790 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:27.958 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:27.970 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:27.970 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:27.970 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:28.003 [ℹ] [ModelRenderer] Scene light found: Directional Light
+03:03:28.004 [ℹ] [ModelRenderer] Light intensity=1,2, finalColor=(1,20,1,09,0,80)
+03:03:28.870 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:28.879 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:28.879 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:28.879 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:29.136 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:29.146 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:29.146 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:29.146 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:29.306 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:29.316 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:29.317 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:29.317 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:29.473 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:29.483 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:29.483 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:29.483 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:29.647 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:29.656 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:29.656 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:29.656 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:29.817 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:29.826 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:29.826 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:29.826 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:35.724 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:35.733 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:35.733 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:35.733 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:35.994 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:36.003 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:36.003 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:36.003 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:36.159 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:36.169 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:36.169 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:36.169 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:36.321 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:36.331 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:36.331 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:36.331 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:36.484 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:36.494 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:36.494 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:36.494 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:36.665 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:36.674 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:36.675 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:36.675 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:36.826 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:36.836 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:36.836 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:36.836 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:36.991 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:37.000 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:37.000 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:37.000 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:37.009 [ℹ] [ModelRenderer] Scene light found: Directional Light
+03:03:37.009 [ℹ] [ModelRenderer] Light intensity=1,2, finalColor=(1,20,1,09,0,80)
+03:03:37.152 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:37.162 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:37.163 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:37.163 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:37.337 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:37.347 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:37.348 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:37.348 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:37.506 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:37.516 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:37.516 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:37.516 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:37.693 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:37.703 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:37.703 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:37.703 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:37.859 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:37.868 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:37.868 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:37.868 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:38.022 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:38.032 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:38.032 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:38.032 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:38.184 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:38.194 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:38.194 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:38.194 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:38.347 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:38.358 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:38.358 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:38.358 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:38.512 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:38.520 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:38.521 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:38.521 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:38.676 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:38.685 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:38.686 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:38.686 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:38.840 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:38.849 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:38.850 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:38.850 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:39.001 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:39.010 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:39.010 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:39.010 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:39.051 [ℹ] [GameControl] OnCreateControl: Handle=658038
+03:03:39.132 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=658038. Total devices: 2
+03:03:39.174 [ℹ] [ToneMapRenderer] Failed to load via ContentManager: The content file was not found.. Trying fallback...
+03:03:39.175 [ℹ] [ToneMapRenderer] Warning: ToneMap shader not found (no .xnb or .mgfxo). PP will be disabled.
+03:03:39.194 [ℹ] [ShadowRenderer] Failed to load ShadowDepth: The content file was not found.
+03:03:39.209 [ℹ] [GameControl] Device Reset to 1360x684
+03:03:39.338 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:39.348 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:39.348 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:39.348 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:39.348 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD0.002
+03:03:39.348 [ℹ] [ModelRenderer] Attempting PBR shader load...
+03:03:39.356 [ℹ] [ModelRenderer] ⚠️ PBR failed, using BasicEffect for MB_Urn_04_LOD0.002
+03:03:39.365 [ℹ] [ModelRenderer] CreateResourcesForDevice for Plane
+03:03:39.365 [ℹ] [ModelRenderer] Attempting PBR shader load...
+03:03:39.374 [ℹ] [ModelRenderer] ⚠️ PBR failed, using BasicEffect for Plane
+03:03:39.521 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:39.531 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:39.531 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:39.531 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:39.673 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:39.683 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:39.683 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:39.683 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:39.823 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:39.832 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:39.832 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:39.832 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:39.984 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:39.993 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:39.994 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:39.994 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:40.002 [ℹ] [ModelRenderer] Scene light found: Directional Light
+03:03:40.002 [ℹ] [ModelRenderer] Light intensity=1,2, finalColor=(1,20,1,09,0,80)
+03:03:40.129 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:40.139 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:40.140 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:40.140 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:40.280 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:40.290 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:40.290 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:40.290 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:40.426 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:40.436 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:40.436 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:40.436 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:40.570 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:40.579 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:40.579 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:40.579 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:40.715 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:40.724 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:40.724 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:40.724 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:40.859 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:40.868 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:40.868 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:40.868 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:41.002 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:41.012 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:41.012 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:41.012 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:41.190 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:41.200 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:41.200 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:41.200 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:41.386 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:41.395 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:41.395 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:41.395 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:41.552 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:41.563 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:41.563 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:41.563 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:41.721 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:41.730 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:41.731 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:41.731 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:41.889 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:41.899 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:41.899 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:41.899 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:42.054 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:42.063 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:42.064 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:42.064 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:03:42.216 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:03:42.226 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:03:42.226 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:03:42.226 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:01.277 [ℹ] [Inspector] Script_Drop called
+03:04:01.277 [ℹ] [Inspector] Files dropped: 1
+03:04:01.278 [ℹ] [Inspector] File path: D:\ProjetosMono\Teste3\Assets\Mat10.mat
+03:04:03.349 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:03.358 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:03.358 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:03.358 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:03.724 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:03.733 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:03.733 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:03.733 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:03.889 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:03.898 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:03.898 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:03.898 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:04.050 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:04.059 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:04.059 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:04.059 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:04.210 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:04.219 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:04.219 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:04.219 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:04.370 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:04.379 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:04.380 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:04.380 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:04.533 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:04.542 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:04.542 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:04.542 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:04.694 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:04.703 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:04.703 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:04.703 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:04.853 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:04.863 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:04.863 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:04.863 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:05.025 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:05.034 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:05.034 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:05.034 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:05.171 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:05.181 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:05.181 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:05.181 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:05.320 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:05.329 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:05.330 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:05.330 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:05.468 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:05.477 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:05.478 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:05.478 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:05.614 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:05.625 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:05.625 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:05.625 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:05.803 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:05.813 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:05.813 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:05.813 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:06.028 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:06.038 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:06.038 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:06.038 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:06.195 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:06.203 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:06.203 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:06.203 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:06.358 [❌] [SkinnedRenderer] Failed to load SkinnedPBR via ContentManager: The content file was not found.. Using PBR fallback.
+03:04:06.368 [ℹ] [ShaderLoader] Isolated ContentManager load failed: The content file was not found.
+03:04:06.368 [ℹ] [ShaderLoader] Compiled shader not found: Content/Shaders/PBREffect.mgfxo
+03:04:06.368 [ℹ] [ShaderLoader] Shader not found: Content/Shaders/PBREffect.fx
+03:04:18.751 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=2623594. Total devices: 3
+03:04:18.767 [ℹ] [ShadowRenderer] Failed to load ShadowDepth: The content file was not found.
+03:04:18.779 [ℹ] [ToneMapRenderer] Failed to load via ContentManager: The content file was not found.. Trying fallback...
+03:04:18.779 [ℹ] [ToneMapRenderer] Warning: ToneMap shader not found (no .xnb or .mgfxo). PP will be disabled.
+03:04:18.780 [ℹ] [MonoGameControl] Resized RenderTarget: 1360x654 (MSAA: 8x)
+03:04:18.782 [ℹ] [GraphicsDeviceService] RELEASING device for Handle=2623594. Total devices before: 3
+03:04:18.785 [ℹ] [GraphicsDeviceService] Total devices after: 2
+03:04:18.798 [ℹ] [GameControl] OnCreateControl: Handle=397274
+03:04:18.862 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=397274. Total devices: 3
+03:04:18.874 [ℹ] [ToneMapRenderer] Failed to load via ContentManager: The content file was not found.. Trying fallback...
+03:04:18.874 [ℹ] [ToneMapRenderer] Warning: ToneMap shader not found (no .xnb or .mgfxo). PP will be disabled.
+03:04:18.885 [ℹ] [ShadowRenderer] Failed to load ShadowDepth: The content file was not found.
+03:04:18.886 [ℹ] [GraphicsDeviceService] RELEASING device for Handle=397274. Total devices before: 3
+03:04:18.887 [ℹ] [GraphicsDeviceService] Total devices after: 2
