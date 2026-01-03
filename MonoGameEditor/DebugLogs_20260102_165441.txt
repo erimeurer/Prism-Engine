@@ -1,0 +1,811 @@
+=== Prism Engine Debug Log Started: 02/01/2026 16:54:41 ===
+16:54:41.886 [ℹ] [ShaderCompiler] Starting automatic shader compilation service...
+16:54:41.888 [ℹ] [ShaderCompiler] Watching: D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows\Content\Shaders
+16:54:41.888 [ℹ] [ShaderCompiler] Watching: D:\ProjetosMono\Teste3\Assets
+16:54:41.889 [ℹ] [ShaderCompiler] Found 1 shader(s) to compile
+16:54:41.890 [ℹ] [ScriptFixer] Found 2 script file(s)
+16:54:41.892 [ℹ] [ScriptFixer] PlayerTest.cs - already correct
+16:54:41.892 [ℹ] [ScriptFixer] TesteScript.cs - already correct
+16:54:41.892 [ℹ] [ScriptFixer] Fixed 0 script(s). Restart editor to recompile.
+16:54:41.892 [ℹ] [ScriptManager] Searching for scripts in: D:\ProjetosMono\Teste3\Assets\Scripts
+16:54:41.893 [ℹ] [ScriptManager] Found 2 script file(s).
+16:54:42.616 [ℹ] [ScriptManager] Successfully compiled 2 script(s) into memory assembly.
+16:54:42.617 [ℹ] [ScriptManager] Registered script: PlayerTest
+16:54:42.617 [ℹ] [ScriptManager] Registered script: TesteScript
+16:54:42.617 [ℹ] [ScriptManager] Starting hot-reload of scripts in scene...
+16:54:42.618 [ℹ] [ScriptManager] No script instances to reload
+16:54:42.645 [ℹ] [SceneLoader] Loaded Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc) at position {X:0 Y:50 Z:0}, rotation {X:-50 Y:-40 Z:-10}, scale {X:1 Y:1 Z:1}
+16:54:42.645 [ℹ] [SceneLoader] Created instance of LightComponent for Directional Light
+16:54:42.668 [ℹ] [SceneLoader] Added LightComponent to Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc)
+16:54:42.668 [ℹ] [SceneLoader] Directional Light (ID: 68caca95-dad2-4236-875f-fedf65040adc) added as ROOT object
+16:54:42.668 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543) at position {X:-0,95017 Y:6,9613457 Z:4,2211685}, rotation {X:-1,8481218 Y:-1,3765824 Z:0}, scale {X:4,8110113 Y:4,8110113 Z:4,8110113}
+16:54:42.668 [ℹ] [SceneLoader] Created instance of PhysicsBodyComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.681 [ℹ] [SceneLoader] Added PhysicsBodyComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+16:54:42.681 [ℹ] [SceneLoader] Created instance of CapsuleColliderComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.691 [ℹ] [SceneLoader] Added CapsuleColliderComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+16:54:42.692 [ℹ] [SceneLoader] Created instance of PlayerTest for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.699 [ℹ] [SceneLoader] Added PlayerTest to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+16:54:42.699 [ℹ] [SceneLoader] Created instance of TesteScript for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.700 [ℹ] [SceneLoader] Added TesteScript to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+16:54:42.700 [ℹ] [SceneLoader] tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543) added as ROOT object
+16:54:42.700 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.708 [ℹ] [SceneLoader] Created instance of SkinnedModelRendererComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.714 [ℹ] [ModelRenderer] MaterialPath CHANGED: '' → 'Assets\Mat10.mat'
+16:54:42.715 [ℹ] [ModelRenderer] Loading Material: Assets\Mat10.mat
+16:54:42.715 [ℹ] [ModelRenderer] JSON Preview: {
+  "name": "NewMaterial1",
+  "albedoColor": [
+    0.7058824,
+    0.7058824,
+    0.7058824
+  ],
+  "metallic": 0,
+  "roughness": 0.5,
+  "ambie...
+16:54:42.720 [ℹ] [ModelRenderer] Deserialized: Metallic=0, Roughness=0,5, AlbedoLen=3
+16:54:42.720 [ℹ] [ModelRenderer] Set AlbedoColor: {R:180 G:180 B:180 A:255}
+16:54:42.721 [ℹ] [ModelRenderer] Stored 1 texture paths for lazy loading
+16:54:42.721 [ℹ] [ModelRenderer] Loaded Material 'NewMaterial1' from Assets\Mat10.mat
+16:54:42.724 [ℹ] [SceneLoader] Added SkinnedModelRendererComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+16:54:42.725 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh - scene is loading
+16:54:42.725 [ℹ] [SceneLoader] tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) has parent 8b5e9a3a-fad6-4083-835e-67dc633bf543 - will be added to parent later
+16:54:42.725 [ℹ] [SceneLoader] Loaded mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) at position {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.725 [ℹ] [SceneLoader] mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) has parent 8b5e9a3a-fad6-4083-835e-67dc633bf543 - will be added to parent later
+16:54:42.725 [ℹ] [SceneLoader] Loaded mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) at position {X:0,062570825 Y:-0,030949144 Z:0,0055499123}, rotation {X:-1,1472068 Y:0,12425185 Z:-173,81932}, scale {X:1 Y:1 Z:1}
+16:54:42.725 [ℹ] [SceneLoader] mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) has parent 4248f113-1d1a-48fe-8c79-336e97078c07 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) at position {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}, rotation {X:-12,02008 Y:0 Z:0,7867111}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) has parent be21ef24-799f-49e8-83e2-ad3f9cd2b700 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) at position {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}, rotation {X:65,63935 Y:-6,969762 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) has parent 0030bab2-7fb1-45f7-9a1b-4a46e9584f59 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) at position {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}, rotation {X:37,056774 Y:-12,616247 Z:-4,3744907E-07}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) has parent fc2ce7d5-3d28-4d57-b023-d6a29c1d347a - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) at position {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}, rotation {X:-0,09146497 Y:-0,009909072 Z:173,81685}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) has parent 4248f113-1d1a-48fe-8c79-336e97078c07 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) at position {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}, rotation {X:-11,900182 Y:-6,6701067E-09 Z:-0,81415886}, scale {X:0,99999994 Y:0,99999994 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) has parent 783c7ecd-da5d-4988-bdf5-37bcd10c45e3 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) at position {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}, rotation {X:64,36353 Y:6,9263964 Z:2,1501259E-07}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) has parent 70c60ea0-07f3-474d-9550-5e61c1227ecb - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) at position {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}, rotation {X:37,180954 Y:12,748792 Z:-8,753538E-07}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) has parent 0f754088-6de0-4604-9e1e-2afb8b3de83d - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) at position {X:0 Y:0,0556635 Z:-0,0014606453}, rotation {X:47,77728 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) has parent 4248f113-1d1a-48fe-8c79-336e97078c07 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) at position {X:0 Y:0,06496308 Z:-4,524171E-12}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) has parent d02efbeb-8045-4417-b285-8f3ee3afd289 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) at position {X:0 Y:0,07424357 Z:-1,3589962E-12}, rotation {X:-15,70435 Y:0 Z:1,6850998}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) has parent 3312ec60-3b71-4462-85ea-dfdad4437c63 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) at position {X:0,037708238 Y:0,070419066 Z:-0,00016501882}, rotation {X:-70,66212 Y:89,75292 Z:-179,61998}, scale {X:0,99999994 Y:0,99999994 Z:0,99999994}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) has parent 2d8a432a-13a4-4180-9925-92055d155597 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) at position {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}, rotation {X:-10,427199 Y:-8,3376334E-10 Z:0,14952397}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) has parent fcde5a9a-740f-4400-bd66-a23968981261 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) at position {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}, rotation {X:-8,117519 Y:0 Z:4,0117264}, scale {X:0,99999994 Y:0,99999994 Z:0,99999994}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) has parent 685bd692-69f5-4d29-a8e5-42ff709fa10a - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) at position {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}, rotation {X:11,831818 Y:25,722307 Z:18,037724}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) has parent 8e85d6b8-3d5c-4668-b14b-97304997e29b - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) at position {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}, rotation {X:-5,2712746 Y:-5,3360854E-08 Z:-6,2998853}, scale {X:1 Y:0,99999994 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) has parent f33fa062-4990-48e8-b8a5-f2345eff8af9 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) at position {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}, rotation {X:7,9614315 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) has parent 6238ab89-4879-472e-8183-e496f0afee80 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) at position {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}, rotation {X:0,18083942 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) has parent 8929ed00-50db-43dd-99d1-dbc20d8ee5b1 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) at position {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}, rotation {X:-3,5302378E-06 Y:0 Z:32,182915}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) has parent f33fa062-4990-48e8-b8a5-f2345eff8af9 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) at position {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}, rotation {X:4,38211 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) has parent 337accb9-47f4-456d-b0dd-4248576e59f6 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) at position {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}, rotation {X:-1,5570459 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) has parent 7172a1b9-f816-46fe-ab1a-4e9fbda7591d - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) at position {X:0 Y:0,08352399 Z:-2,1309339E-09}, rotation {X:1,503131 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) has parent 2d8a432a-13a4-4180-9925-92055d155597 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) at position {X:0 Y:0,040507227 Z:0,015411837}, rotation {X:0 Y:2,9400866 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) has parent 8bbe0e02-d260-4dae-bece-f10064b8a2b9 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) at position {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}, rotation {X:-70,777504 Y:-89,213165 Z:179,72232}, scale {X:0,99999994 Y:0,99999994 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) has parent 2d8a432a-13a4-4180-9925-92055d155597 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) at position {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}, rotation {X:-10,406265 Y:-6,6701067E-09 Z:-0,8737074}, scale {X:0,99999994 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) has parent dd367c2f-7dd9-4634-a6c6-ec85d91bb858 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) at position {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}, rotation {X:-8,077427 Y:1,0672171E-07 Z:-12,114854}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) has parent 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) at position {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}, rotation {X:15,423945 Y:-21,665234 Z:-22,451714}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) has parent 248c5436-c3f2-4260-b32b-b715deb8e5be - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) at position {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}, rotation {X:-15,378899 Y:2,1344342E-06 Z:14,089797}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) has parent aff9b821-a64f-4f87-8580-75be2c40661e - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) at position {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}, rotation {X:20,36898 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) has parent 393f8ee0-c159-4113-b4fd-0fb759ce8e8b - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) at position {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}, rotation {X:-2,8631508 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) has parent 73ea4933-73d1-4f7b-b7d3-672bec11ca95 - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) at position {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}, rotation {X:-1,0410827E-05 Y:4,07111E-13 Z:-26,926573}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) has parent aff9b821-a64f-4f87-8580-75be2c40661e - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) at position {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}, rotation {X:4,1339054 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) has parent bd784ff6-04aa-407f-bddf-a80e78bacd2b - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) at position {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}, rotation {X:-0,8241592 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.726 [ℹ] [SceneLoader] mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) has parent c1770117-64a6-49a1-a29f-01f2ac63a86b - will be added to parent later
+16:54:42.726 [ℹ] [SceneLoader] Loaded Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6) at position {X:-0,23436737 Y:-0,066179276 Z:5,404556}, rotation {X:180 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.726 [ℹ] [SceneLoader] Created instance of BoxColliderComponent for Plane
+16:54:42.735 [ℹ] [SceneLoader] Added BoxColliderComponent to Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6)
+16:54:42.735 [ℹ] [SceneLoader] Created instance of PhysicsBodyComponent for Plane
+16:54:42.747 [ℹ] [SceneLoader] Added PhysicsBodyComponent to Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6)
+16:54:42.747 [ℹ] [SceneLoader] Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6) added as ROOT object
+16:54:42.747 [ℹ] [SceneLoader] Loaded Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.747 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for Plane
+16:54:42.794 [ℹ] [SceneLoader] Added ModelRendererComponent to Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9)
+16:54:42.794 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for Plane - scene is loading
+16:54:42.794 [ℹ] [SceneLoader] Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) has parent 598357d3-d454-4d07-a8bc-b2212929ebb6 - will be added to parent later
+16:54:42.794 [ℹ] [SceneLoader] Loaded Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587) at position {X:1,1920929E-07 Y:4,9999995 Z:31,051577}, rotation {X:-15,000004 Y:-1,0848228E-07 Z:-7,551558E-09}, scale {X:1,0100789 Y:1,0100787 Z:1,0100788}
+16:54:42.794 [ℹ] [SceneLoader] Created instance of CameraComponent for Main Camera
+16:54:42.805 [ℹ] [SceneLoader] Added CameraComponent to Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587)
+16:54:42.805 [ℹ] [SceneLoader] Main Camera (ID: ddff193b-70bd-4c9c-9c82-b3c916def587) added as ROOT object
+16:54:42.805 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c) at position {X:2,9533446 Y:-0,013471127 Z:5,509277}, rotation {X:2,2233691E-07 Y:1,11168454E-07 Z:2,156952E-16}, scale {X:0,029999997 Y:0,029999997 Z:0,029999994}
+16:54:42.805 [ℹ] [SceneLoader] Created instance of LODGroupComponent for MB_Urn_04_LOD0.002
+16:54:42.808 [ℹ] [SceneLoader] Added LODGroupComponent to MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+16:54:42.808 [ℹ] [SceneLoader] Created instance of BoxColliderComponent for MB_Urn_04_LOD0.002
+16:54:42.818 [ℹ] [SceneLoader] Added BoxColliderComponent to MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+16:54:42.818 [ℹ] [SceneLoader] MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c) added as ROOT object
+16:54:42.818 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.818 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for MB_Urn_04_LOD0.002
+16:54:42.823 [ℹ] [SceneLoader] Added ModelRendererComponent to MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3)
+16:54:42.823 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for MB_Urn_04_LOD0.002 - scene is loading
+16:54:42.823 [ℹ] [SceneLoader] MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3) has parent f150bcef-4ced-44f2-b186-3ec3e9d1d23c - will be added to parent later
+16:54:42.823 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.823 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for MB_Urn_04_LOD1.004
+16:54:42.828 [ℹ] [SceneLoader] Added ModelRendererComponent to MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c)
+16:54:42.828 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for MB_Urn_04_LOD1.004 - scene is loading
+16:54:42.828 [ℹ] [SceneLoader] MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c) has parent f150bcef-4ced-44f2-b186-3ec3e9d1d23c - will be added to parent later
+16:54:42.828 [ℹ] [SceneLoader] Loaded MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.828 [ℹ] [SceneLoader] Created instance of ModelRendererComponent for MB_Urn_04_LOD2.002
+16:54:42.832 [ℹ] [SceneLoader] Added ModelRendererComponent to MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95)
+16:54:42.833 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for MB_Urn_04_LOD2.002 - scene is loading
+16:54:42.833 [ℹ] [SceneLoader] MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95) has parent f150bcef-4ced-44f2-b186-3ec3e9d1d23c - will be added to parent later
+16:54:42.833 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 9f618d5b-e708-4cf8-8e63-cbcc54854f47) at position {X:8,868832 Y:6,488586 Z:6,6250286}, rotation {X:0 Y:0 Z:0}, scale {X:2,8663936 Y:2,8663936 Z:2,8663936}
+16:54:42.833 [ℹ] [SceneLoader] Created instance of AnimatorComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.834 [ℹ] [SceneLoader] Added AnimatorComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 9f618d5b-e708-4cf8-8e63-cbcc54854f47)
+16:54:42.834 [ℹ] [SceneLoader] tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 9f618d5b-e708-4cf8-8e63-cbcc54854f47) added as ROOT object
+16:54:42.834 [ℹ] [SceneLoader] Loaded tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: bee5d876-3bf5-4c81-9805-9f5c80a97fc2) at position {X:0 Y:0 Z:0}, rotation {X:0 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.834 [ℹ] [SceneLoader] Created instance of SkinnedModelRendererComponent for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.837 [ℹ] [ModelRenderer] MaterialPath CHANGED: '' → 'Assets\Mat10.mat'
+16:54:42.837 [ℹ] [ModelRenderer] Loading Material: Assets\Mat10.mat
+16:54:42.837 [ℹ] [ModelRenderer] JSON Preview: {
+  "name": "NewMaterial1",
+  "albedoColor": [
+    0.7058824,
+    0.7058824,
+    0.7058824
+  ],
+  "metallic": 0,
+  "roughness": 0.5,
+  "ambie...
+16:54:42.837 [ℹ] [ModelRenderer] Deserialized: Metallic=0, Roughness=0,5, AlbedoLen=3
+16:54:42.837 [ℹ] [ModelRenderer] Set AlbedoColor: {R:180 G:180 B:180 A:255}
+16:54:42.837 [ℹ] [ModelRenderer] Stored 1 texture paths for lazy loading
+16:54:42.837 [ℹ] [ModelRenderer] Loaded Material 'NewMaterial1' from Assets\Mat10.mat
+16:54:42.841 [ℹ] [SceneLoader] Added SkinnedModelRendererComponent to tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: bee5d876-3bf5-4c81-9805-9f5c80a97fc2)
+16:54:42.841 [ℹ] [ModelRenderer] Skipping OnComponentAdded reload for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh - scene is loading
+16:54:42.841 [ℹ] [SceneLoader] tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: bee5d876-3bf5-4c81-9805-9f5c80a97fc2) has parent 9f618d5b-e708-4cf8-8e63-cbcc54854f47 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:Hips (ID: c5a23efb-29cb-45a9-8c5a-f68d9a93adaa) at position {X:0,0004406463 Y:0,48361933 Z:0,00092021155}, rotation {X:-3,9524784 Y:-5,16383 Z:-2,4646034}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:Hips (ID: c5a23efb-29cb-45a9-8c5a-f68d9a93adaa) has parent 9f618d5b-e708-4cf8-8e63-cbcc54854f47 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftUpLeg (ID: 03616c73-5417-4056-913f-d9d0ab26a92d) at position {X:0,062570825 Y:-0,030949144 Z:0,0055499123}, rotation {X:-1,1472068 Y:0,12425185 Z:-173,81932}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftUpLeg (ID: 03616c73-5417-4056-913f-d9d0ab26a92d) has parent c5a23efb-29cb-45a9-8c5a-f68d9a93adaa - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftLeg (ID: 5dc79522-c891-4a11-892f-f33612829fbf) at position {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}, rotation {X:-12,02008 Y:0 Z:0,7867111}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftLeg (ID: 5dc79522-c891-4a11-892f-f33612829fbf) has parent 03616c73-5417-4056-913f-d9d0ab26a92d - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftFoot (ID: ec78982b-b5e8-463f-ad01-b1c285ba8345) at position {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}, rotation {X:65,63935 Y:-6,969762 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftFoot (ID: ec78982b-b5e8-463f-ad01-b1c285ba8345) has parent 5dc79522-c891-4a11-892f-f33612829fbf - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftToeBase (ID: 18cec1b1-045f-4a49-91ad-64be91f7f4f2) at position {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}, rotation {X:37,056774 Y:-12,616247 Z:-4,3744907E-07}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftToeBase (ID: 18cec1b1-045f-4a49-91ad-64be91f7f4f2) has parent ec78982b-b5e8-463f-ad01-b1c285ba8345 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightUpLeg (ID: fe3491ca-289f-4d1a-b57a-64751085cb1d) at position {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}, rotation {X:-0,09146497 Y:-0,009909072 Z:173,81685}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightUpLeg (ID: fe3491ca-289f-4d1a-b57a-64751085cb1d) has parent c5a23efb-29cb-45a9-8c5a-f68d9a93adaa - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightLeg (ID: 6dd7c9ad-fea0-4365-b059-e98230311ece) at position {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}, rotation {X:-11,900182 Y:-6,6701067E-09 Z:-0,81415886}, scale {X:0,99999994 Y:0,99999994 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightLeg (ID: 6dd7c9ad-fea0-4365-b059-e98230311ece) has parent fe3491ca-289f-4d1a-b57a-64751085cb1d - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightFoot (ID: d81aa351-e77a-4901-bcec-4012c643ce27) at position {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}, rotation {X:64,36353 Y:6,9263964 Z:2,1501259E-07}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightFoot (ID: d81aa351-e77a-4901-bcec-4012c643ce27) has parent 6dd7c9ad-fea0-4365-b059-e98230311ece - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightToeBase (ID: 14c4817d-828e-48c0-8ac8-66e4524e6ab9) at position {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}, rotation {X:37,180954 Y:12,748792 Z:-8,753538E-07}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightToeBase (ID: 14c4817d-828e-48c0-8ac8-66e4524e6ab9) has parent d81aa351-e77a-4901-bcec-4012c643ce27 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:Spine (ID: 1cf97b71-79e2-426c-8a61-a8bda440d8b6) at position {X:0 Y:0,0556635 Z:-0,0014606453}, rotation {X:-1,5031332 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:Spine (ID: 1cf97b71-79e2-426c-8a61-a8bda440d8b6) has parent c5a23efb-29cb-45a9-8c5a-f68d9a93adaa - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:Spine1 (ID: 7b057c56-c8a5-4d8c-a226-a3f7c2110710) at position {X:0 Y:0,06496308 Z:-4,524171E-12}, rotation {X:1,0305525 Y:0,36104193 Z:1,6490744}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:Spine1 (ID: 7b057c56-c8a5-4d8c-a226-a3f7c2110710) has parent 1cf97b71-79e2-426c-8a61-a8bda440d8b6 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:Spine2 (ID: 4a2ed6a9-98fb-4aea-97e8-801014f6ec62) at position {X:0 Y:0,07424357 Z:-1,3589962E-12}, rotation {X:1,0051379 Y:0,3836807 Z:1,6532449}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:Spine2 (ID: 4a2ed6a9-98fb-4aea-97e8-801014f6ec62) has parent 7b057c56-c8a5-4d8c-a226-a3f7c2110710 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftShoulder (ID: 8c42baec-ec13-4569-86b8-69870b1b44ff) at position {X:0,037708238 Y:0,070419066 Z:-0,00016501882}, rotation {X:-70,66212 Y:89,75292 Z:-179,61998}, scale {X:0,99999994 Y:0,99999994 Z:0,99999994}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftShoulder (ID: 8c42baec-ec13-4569-86b8-69870b1b44ff) has parent 4a2ed6a9-98fb-4aea-97e8-801014f6ec62 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftArm (ID: 0288bfe3-112b-4014-8c4d-de17944b218b) at position {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}, rotation {X:-10,427199 Y:-8,3376334E-10 Z:0,14952397}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftArm (ID: 0288bfe3-112b-4014-8c4d-de17944b218b) has parent 8c42baec-ec13-4569-86b8-69870b1b44ff - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftForeArm (ID: d8a5127e-63a0-4695-8ebb-967ece1f18bb) at position {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}, rotation {X:-8,117519 Y:0 Z:12,261038}, scale {X:0,99999994 Y:0,99999994 Z:0,99999994}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftForeArm (ID: d8a5127e-63a0-4695-8ebb-967ece1f18bb) has parent 0288bfe3-112b-4014-8c4d-de17944b218b - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHand (ID: 6e535d92-160a-4237-aea3-ef7ef9685e52) at position {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}, rotation {X:11,831818 Y:25,722307 Z:18,037724}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHand (ID: 6e535d92-160a-4237-aea3-ef7ef9685e52) has parent d8a5127e-63a0-4695-8ebb-967ece1f18bb - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex1 (ID: 3b169594-1e8d-4e5f-9cc7-ec8399006f5e) at position {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}, rotation {X:-5,2712746 Y:-5,3360854E-08 Z:-6,2998853}, scale {X:1 Y:0,99999994 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHandIndex1 (ID: 3b169594-1e8d-4e5f-9cc7-ec8399006f5e) has parent 6e535d92-160a-4237-aea3-ef7ef9685e52 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex2 (ID: 8bbd93da-d726-44fd-9333-28c6e3b3c21a) at position {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}, rotation {X:7,9614315 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHandIndex2 (ID: 8bbd93da-d726-44fd-9333-28c6e3b3c21a) has parent 3b169594-1e8d-4e5f-9cc7-ec8399006f5e - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandIndex3 (ID: 5b201e2e-dfac-4c20-8e4b-1ecf3eddd0f2) at position {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}, rotation {X:0,18083942 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHandIndex3 (ID: 5b201e2e-dfac-4c20-8e4b-1ecf3eddd0f2) has parent 8bbd93da-d726-44fd-9333-28c6e3b3c21a - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb1 (ID: 190c4e45-1e23-48bc-9fb6-939faa850817) at position {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}, rotation {X:-3,5302378E-06 Y:0 Z:32,182915}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHandThumb1 (ID: 190c4e45-1e23-48bc-9fb6-939faa850817) has parent 6e535d92-160a-4237-aea3-ef7ef9685e52 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb2 (ID: 7d3d171e-1892-43f8-823a-b4eb3acbb1e8) at position {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}, rotation {X:4,38211 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHandThumb2 (ID: 7d3d171e-1892-43f8-823a-b4eb3acbb1e8) has parent 190c4e45-1e23-48bc-9fb6-939faa850817 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:LeftHandThumb3 (ID: 4b841c08-5657-49a7-aacb-bef1f92f9f52) at position {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}, rotation {X:-1,5570459 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:LeftHandThumb3 (ID: 4b841c08-5657-49a7-aacb-bef1f92f9f52) has parent 7d3d171e-1892-43f8-823a-b4eb3acbb1e8 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:Neck (ID: fa652a82-4b20-4d18-b5c1-32850da772b8) at position {X:0 Y:0,08352399 Z:-2,1309339E-09}, rotation {X:1,503131 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:Neck (ID: fa652a82-4b20-4d18-b5c1-32850da772b8) has parent 4a2ed6a9-98fb-4aea-97e8-801014f6ec62 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:Head (ID: 7b0fab48-2e61-47ba-9ede-7adc3b33e77d) at position {X:0 Y:0,040507227 Z:0,015411838}, rotation {X:-7,6031957 Y:1,1959199 Z:-0,34525985}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:Head (ID: 7b0fab48-2e61-47ba-9ede-7adc3b33e77d) has parent fa652a82-4b20-4d18-b5c1-32850da772b8 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightShoulder (ID: ac2ab980-6db9-44d5-87b1-b9abb112bade) at position {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}, rotation {X:-70,777504 Y:-89,213165 Z:179,72232}, scale {X:0,99999994 Y:0,99999994 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightShoulder (ID: ac2ab980-6db9-44d5-87b1-b9abb112bade) has parent 4a2ed6a9-98fb-4aea-97e8-801014f6ec62 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightArm (ID: 85e244e0-cb59-4647-8f3d-2a1997b94ddc) at position {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}, rotation {X:-10,406265 Y:-6,6701067E-09 Z:-0,8737074}, scale {X:0,99999994 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightArm (ID: 85e244e0-cb59-4647-8f3d-2a1997b94ddc) has parent ac2ab980-6db9-44d5-87b1-b9abb112bade - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightForeArm (ID: 9a4e12e4-5277-4189-a690-920c4fe4aa80) at position {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}, rotation {X:-8,077427 Y:1,0672171E-07 Z:-12,114854}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightForeArm (ID: 9a4e12e4-5277-4189-a690-920c4fe4aa80) has parent 85e244e0-cb59-4647-8f3d-2a1997b94ddc - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHand (ID: 4631510a-0ca6-4cf3-bcb4-b7dc71988533) at position {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}, rotation {X:15,423945 Y:-21,665234 Z:-22,451714}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHand (ID: 4631510a-0ca6-4cf3-bcb4-b7dc71988533) has parent 9a4e12e4-5277-4189-a690-920c4fe4aa80 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex1 (ID: 31c8cce6-aa45-460b-92e7-704387f88853) at position {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}, rotation {X:-15,378899 Y:2,1344342E-06 Z:14,089797}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHandIndex1 (ID: 31c8cce6-aa45-460b-92e7-704387f88853) has parent 4631510a-0ca6-4cf3-bcb4-b7dc71988533 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex2 (ID: 37506a50-2caa-4223-ab06-4f8669c329ee) at position {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}, rotation {X:20,36898 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHandIndex2 (ID: 37506a50-2caa-4223-ab06-4f8669c329ee) has parent 31c8cce6-aa45-460b-92e7-704387f88853 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHandIndex3 (ID: 190b824b-6456-4263-ae6d-f10d3a751fac) at position {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}, rotation {X:-2,8631508 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHandIndex3 (ID: 190b824b-6456-4263-ae6d-f10d3a751fac) has parent 37506a50-2caa-4223-ab06-4f8669c329ee - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb1 (ID: 9cc57cdf-1a85-438b-b3a0-734b4abae59a) at position {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}, rotation {X:-1,0410827E-05 Y:4,07111E-13 Z:-26,926573}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHandThumb1 (ID: 9cc57cdf-1a85-438b-b3a0-734b4abae59a) has parent 4631510a-0ca6-4cf3-bcb4-b7dc71988533 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb2 (ID: 731b0634-6560-4eaa-9725-494cc6b47440) at position {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}, rotation {X:4,1339054 Y:0 Z:0}, scale {X:1 Y:1 Z:1}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHandThumb2 (ID: 731b0634-6560-4eaa-9725-494cc6b47440) has parent 9cc57cdf-1a85-438b-b3a0-734b4abae59a - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Loaded mixamorig:RightHandThumb3 (ID: f91d3f35-9644-435d-8158-f0b2e39d987d) at position {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}, rotation {X:-0,8241592 Y:0 Z:0}, scale {X:1 Y:0,99999994 Z:0,99999994}
+16:54:42.841 [ℹ] [SceneLoader] mixamorig:RightHandThumb3 (ID: f91d3f35-9644-435d-8158-f0b2e39d987d) has parent 731b0634-6560-4eaa-9725-494cc6b47440 - will be added to parent later
+16:54:42.841 [ℹ] [SceneLoader] Restoring hierarchy for 74 child objects
+16:54:42.842 [ℹ] [SceneLoader] Setting tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 8b5e9a3a-fad6-4083-835e-67dc633bf543)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700) as child of mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59) as child of mixamorig:LeftUpLeg (ID: be21ef24-799f-49e8-83e2-ad3f9cd2b700)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a) as child of mixamorig:LeftLeg (ID: 0030bab2-7fb1-45f7-9a1b-4a46e9584f59)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftToeBase (ID: b9681175-f24c-4dbc-9ba4-e2fdbc581ba4) as child of mixamorig:LeftFoot (ID: fc2ce7d5-3d28-4d57-b023-d6a29c1d347a)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3) as child of mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb) as child of mixamorig:RightUpLeg (ID: 783c7ecd-da5d-4988-bdf5-37bcd10c45e3)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d) as child of mixamorig:RightLeg (ID: 70c60ea0-07f3-474d-9550-5e61c1227ecb)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightToeBase (ID: 1d053d39-af80-4f88-9fa9-9821731385a5) as child of mixamorig:RightFoot (ID: 0f754088-6de0-4604-9e1e-2afb8b3de83d)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289) as child of mixamorig:Hips (ID: 4248f113-1d1a-48fe-8c79-336e97078c07)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63) as child of mixamorig:Spine (ID: d02efbeb-8045-4417-b285-8f3ee3afd289)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597) as child of mixamorig:Spine1 (ID: 3312ec60-3b71-4462-85ea-dfdad4437c63)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261) as child of mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a) as child of mixamorig:LeftShoulder (ID: fcde5a9a-740f-4400-bd66-a23968981261)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b) as child of mixamorig:LeftArm (ID: 685bd692-69f5-4d29-a8e5-42ff709fa10a)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9) as child of mixamorig:LeftForeArm (ID: 8e85d6b8-3d5c-4668-b14b-97304997e29b)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80) as child of mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1) as child of mixamorig:LeftHandIndex1 (ID: 6238ab89-4879-472e-8183-e496f0afee80)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex3 (ID: 2e90916e-ba40-43e5-b4f6-ccec18d302ff) as child of mixamorig:LeftHandIndex2 (ID: 8929ed00-50db-43dd-99d1-dbc20d8ee5b1)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6) as child of mixamorig:LeftHand (ID: f33fa062-4990-48e8-b8a5-f2345eff8af9)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d) as child of mixamorig:LeftHandThumb1 (ID: 337accb9-47f4-456d-b0dd-4248576e59f6)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb3 (ID: 5bff9d62-ec94-467f-b167-18fde0953904) as child of mixamorig:LeftHandThumb2 (ID: 7172a1b9-f816-46fe-ab1a-4e9fbda7591d)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9) as child of mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Head (ID: 267b3808-324a-436a-9677-744d04f1c743) as child of mixamorig:Neck (ID: 8bbe0e02-d260-4dae-bece-f10064b8a2b9)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858) as child of mixamorig:Spine2 (ID: 2d8a432a-13a4-4180-9925-92055d155597)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5) as child of mixamorig:RightShoulder (ID: dd367c2f-7dd9-4634-a6c6-ec85d91bb858)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be) as child of mixamorig:RightArm (ID: 3f811b0b-55a1-4dc0-ab39-bbca493ab7c5)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e) as child of mixamorig:RightForeArm (ID: 248c5436-c3f2-4260-b32b-b715deb8e5be)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b) as child of mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95) as child of mixamorig:RightHandIndex1 (ID: 393f8ee0-c159-4113-b4fd-0fb759ce8e8b)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex3 (ID: 5552ef86-33a3-4097-9384-11383811d997) as child of mixamorig:RightHandIndex2 (ID: 73ea4933-73d1-4f7b-b7d3-672bec11ca95)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b) as child of mixamorig:RightHand (ID: aff9b821-a64f-4f87-8580-75be2c40661e)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b) as child of mixamorig:RightHandThumb1 (ID: bd784ff6-04aa-407f-bddf-a80e78bacd2b)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb3 (ID: 5dd40fe8-a3bd-47e2-80db-075ba5f138d7) as child of mixamorig:RightHandThumb2 (ID: c1770117-64a6-49a1-a29f-01f2ac63a86b)
+16:54:42.842 [ℹ] [SceneLoader] Setting Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9) as child of Plane (ID: 598357d3-d454-4d07-a8bc-b2212929ebb6)
+16:54:42.842 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3) as child of MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+16:54:42.842 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c) as child of MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+16:54:42.842 [ℹ] [SceneLoader] Setting MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95) as child of MB_Urn_04_LOD0.002 (ID: f150bcef-4ced-44f2-b186-3ec3e9d1d23c)
+16:54:42.842 [ℹ] [SceneLoader] Setting tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: bee5d876-3bf5-4c81-9805-9f5c80a97fc2) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 9f618d5b-e708-4cf8-8e63-cbcc54854f47)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Hips (ID: c5a23efb-29cb-45a9-8c5a-f68d9a93adaa) as child of tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 9f618d5b-e708-4cf8-8e63-cbcc54854f47)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftUpLeg (ID: 03616c73-5417-4056-913f-d9d0ab26a92d) as child of mixamorig:Hips (ID: c5a23efb-29cb-45a9-8c5a-f68d9a93adaa)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftLeg (ID: 5dc79522-c891-4a11-892f-f33612829fbf) as child of mixamorig:LeftUpLeg (ID: 03616c73-5417-4056-913f-d9d0ab26a92d)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftFoot (ID: ec78982b-b5e8-463f-ad01-b1c285ba8345) as child of mixamorig:LeftLeg (ID: 5dc79522-c891-4a11-892f-f33612829fbf)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftToeBase (ID: 18cec1b1-045f-4a49-91ad-64be91f7f4f2) as child of mixamorig:LeftFoot (ID: ec78982b-b5e8-463f-ad01-b1c285ba8345)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightUpLeg (ID: fe3491ca-289f-4d1a-b57a-64751085cb1d) as child of mixamorig:Hips (ID: c5a23efb-29cb-45a9-8c5a-f68d9a93adaa)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightLeg (ID: 6dd7c9ad-fea0-4365-b059-e98230311ece) as child of mixamorig:RightUpLeg (ID: fe3491ca-289f-4d1a-b57a-64751085cb1d)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightFoot (ID: d81aa351-e77a-4901-bcec-4012c643ce27) as child of mixamorig:RightLeg (ID: 6dd7c9ad-fea0-4365-b059-e98230311ece)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightToeBase (ID: 14c4817d-828e-48c0-8ac8-66e4524e6ab9) as child of mixamorig:RightFoot (ID: d81aa351-e77a-4901-bcec-4012c643ce27)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Spine (ID: 1cf97b71-79e2-426c-8a61-a8bda440d8b6) as child of mixamorig:Hips (ID: c5a23efb-29cb-45a9-8c5a-f68d9a93adaa)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Spine1 (ID: 7b057c56-c8a5-4d8c-a226-a3f7c2110710) as child of mixamorig:Spine (ID: 1cf97b71-79e2-426c-8a61-a8bda440d8b6)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Spine2 (ID: 4a2ed6a9-98fb-4aea-97e8-801014f6ec62) as child of mixamorig:Spine1 (ID: 7b057c56-c8a5-4d8c-a226-a3f7c2110710)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftShoulder (ID: 8c42baec-ec13-4569-86b8-69870b1b44ff) as child of mixamorig:Spine2 (ID: 4a2ed6a9-98fb-4aea-97e8-801014f6ec62)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftArm (ID: 0288bfe3-112b-4014-8c4d-de17944b218b) as child of mixamorig:LeftShoulder (ID: 8c42baec-ec13-4569-86b8-69870b1b44ff)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftForeArm (ID: d8a5127e-63a0-4695-8ebb-967ece1f18bb) as child of mixamorig:LeftArm (ID: 0288bfe3-112b-4014-8c4d-de17944b218b)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHand (ID: 6e535d92-160a-4237-aea3-ef7ef9685e52) as child of mixamorig:LeftForeArm (ID: d8a5127e-63a0-4695-8ebb-967ece1f18bb)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex1 (ID: 3b169594-1e8d-4e5f-9cc7-ec8399006f5e) as child of mixamorig:LeftHand (ID: 6e535d92-160a-4237-aea3-ef7ef9685e52)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex2 (ID: 8bbd93da-d726-44fd-9333-28c6e3b3c21a) as child of mixamorig:LeftHandIndex1 (ID: 3b169594-1e8d-4e5f-9cc7-ec8399006f5e)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandIndex3 (ID: 5b201e2e-dfac-4c20-8e4b-1ecf3eddd0f2) as child of mixamorig:LeftHandIndex2 (ID: 8bbd93da-d726-44fd-9333-28c6e3b3c21a)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb1 (ID: 190c4e45-1e23-48bc-9fb6-939faa850817) as child of mixamorig:LeftHand (ID: 6e535d92-160a-4237-aea3-ef7ef9685e52)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb2 (ID: 7d3d171e-1892-43f8-823a-b4eb3acbb1e8) as child of mixamorig:LeftHandThumb1 (ID: 190c4e45-1e23-48bc-9fb6-939faa850817)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:LeftHandThumb3 (ID: 4b841c08-5657-49a7-aacb-bef1f92f9f52) as child of mixamorig:LeftHandThumb2 (ID: 7d3d171e-1892-43f8-823a-b4eb3acbb1e8)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Neck (ID: fa652a82-4b20-4d18-b5c1-32850da772b8) as child of mixamorig:Spine2 (ID: 4a2ed6a9-98fb-4aea-97e8-801014f6ec62)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:Head (ID: 7b0fab48-2e61-47ba-9ede-7adc3b33e77d) as child of mixamorig:Neck (ID: fa652a82-4b20-4d18-b5c1-32850da772b8)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightShoulder (ID: ac2ab980-6db9-44d5-87b1-b9abb112bade) as child of mixamorig:Spine2 (ID: 4a2ed6a9-98fb-4aea-97e8-801014f6ec62)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightArm (ID: 85e244e0-cb59-4647-8f3d-2a1997b94ddc) as child of mixamorig:RightShoulder (ID: ac2ab980-6db9-44d5-87b1-b9abb112bade)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightForeArm (ID: 9a4e12e4-5277-4189-a690-920c4fe4aa80) as child of mixamorig:RightArm (ID: 85e244e0-cb59-4647-8f3d-2a1997b94ddc)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHand (ID: 4631510a-0ca6-4cf3-bcb4-b7dc71988533) as child of mixamorig:RightForeArm (ID: 9a4e12e4-5277-4189-a690-920c4fe4aa80)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex1 (ID: 31c8cce6-aa45-460b-92e7-704387f88853) as child of mixamorig:RightHand (ID: 4631510a-0ca6-4cf3-bcb4-b7dc71988533)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex2 (ID: 37506a50-2caa-4223-ab06-4f8669c329ee) as child of mixamorig:RightHandIndex1 (ID: 31c8cce6-aa45-460b-92e7-704387f88853)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandIndex3 (ID: 190b824b-6456-4263-ae6d-f10d3a751fac) as child of mixamorig:RightHandIndex2 (ID: 37506a50-2caa-4223-ab06-4f8669c329ee)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb1 (ID: 9cc57cdf-1a85-438b-b3a0-734b4abae59a) as child of mixamorig:RightHand (ID: 4631510a-0ca6-4cf3-bcb4-b7dc71988533)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb2 (ID: 731b0634-6560-4eaa-9725-494cc6b47440) as child of mixamorig:RightHandThumb1 (ID: 9cc57cdf-1a85-438b-b3a0-734b4abae59a)
+16:54:42.842 [ℹ] [SceneLoader] Setting mixamorig:RightHandThumb3 (ID: f91d3f35-9644-435d-8158-f0b2e39d987d) as child of mixamorig:RightHandThumb2 (ID: 731b0634-6560-4eaa-9725-494cc6b47440)
+16:54:42.950 [ℹ] [SceneLoader] Initializing 80 objects post-load
+16:54:42.950 [ℹ] [SceneLoader] Reinitializing renderer for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (Sync/Async)
+16:54:42.951 [ℹ] [ModelRenderer] Post-scene-load init for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+16:54:42.952 [ℹ] [ModelRenderer] Reloading mesh data only for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.952 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\Player.fbx
+16:54:42.953 [ℹ] [SceneLoader] Reinitializing renderer for Plane (Sync/Async)
+16:54:42.954 [ℹ] [ModelRenderer] Post-scene-load init for Plane (ID: 450a0f04-b384-46e4-ad99-6cd89d1368f9)
+16:54:42.956 [ℹ] [ModelRenderer] Reloading mesh data only for Plane
+16:54:42.956 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Teste\Terrain.obj
+16:54:42.956 [ℹ] [SceneLoader] Reinitializing renderer for MB_Urn_04_LOD0.002 (Sync/Async)
+16:54:42.956 [ℹ] [ModelRenderer] Post-scene-load init for MB_Urn_04_LOD0.002 (ID: 3013431f-fc83-40e0-89d5-14c08abfd3a3)
+16:54:42.956 [ℹ] [ModelRenderer] Reloading mesh data only for MB_Urn_04_LOD0.002
+16:54:42.956 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\MB_Urn_04.fbx
+16:54:42.956 [ℹ] [SceneLoader] Reinitializing renderer for MB_Urn_04_LOD1.004 (Sync/Async)
+16:54:42.956 [ℹ] [ModelRenderer] Post-scene-load init for MB_Urn_04_LOD1.004 (ID: da911e6c-e7da-476e-b738-a7ef0f091c2c)
+16:54:42.956 [ℹ] [ModelRenderer] Reloading mesh data only for MB_Urn_04_LOD1.004
+16:54:42.956 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\MB_Urn_04.fbx
+16:54:42.956 [ℹ] [SceneLoader] Reinitializing renderer for MB_Urn_04_LOD2.002 (Sync/Async)
+16:54:42.956 [ℹ] [ModelRenderer] Post-scene-load init for MB_Urn_04_LOD2.002 (ID: 2dae219c-2e44-4a57-b476-ccb64b36be95)
+16:54:42.956 [ℹ] [ModelRenderer] Reloading mesh data only for MB_Urn_04_LOD2.002
+16:54:42.956 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\MB_Urn_04.fbx
+16:54:42.957 [ℹ] [SceneLoader] Reinitializing renderer for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (Sync/Async)
+16:54:42.957 [ℹ] [ModelRenderer] Post-scene-load init for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: bee5d876-3bf5-4c81-9805-9f5c80a97fc2)
+16:54:42.957 [ℹ] [ModelRenderer] Reloading mesh data only for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:54:42.957 [ℹ] [ModelRenderer] Loading model from: D:\ProjetosMono\Teste3\Assets\Agora sim\Player@Idle.fbx
+16:54:42.957 [ℹ] [SceneLoader] Resolving 0 object references
+16:54:42.974 [ℹ] Scene Loaded: D:\ProjetosMono\Teste3\Assets\Scenes\NewScene.world
+16:54:42.979 [ℹ] Project Opened: D:\ProjetosMono\Teste3
+16:54:42.981 [ℹ] [ShaderCompiler] Compiling: NewShader.fx
+16:54:43.275 [ℹ] [MaterialAssets] Found 29 materials in project
+16:54:43.548 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=791136. Total devices: 1
+16:54:43.572 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+16:54:43.574 [ℹ] [ToneMapRenderer] Shader loaded successfully via ContentManager.
+16:54:43.575 [ℹ] [MonoGameControl] Resized RenderTarget: 200x100 (MSAA: 8x)
+16:54:43.793 [ℹ] [ShaderCompiler] ❌ Exception: An error occurred trying to start process 'mgfxc' with working directory 'D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows'. O sistema não pode encontrar o arquivo especificado.
+16:54:43.796 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 6
+16:54:43.797 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.798 [ℹ] [ModelRenderer] Loaded model with 3 meshes and 0 bones
+16:54:43.798 [ℹ] [ModelRenderer] Mesh data reloaded for 'MB_Urn_04_LOD0.002'
+16:54:43.798 [ℹ] [ModelRenderer] Loaded model with 3 meshes and 0 bones
+16:54:43.798 [ℹ] [ModelRenderer] Mesh data reloaded for 'MB_Urn_04_LOD2.002'
+16:54:43.798 [ℹ] [ModelRenderer] Loaded model with 3 meshes and 0 bones
+16:54:43.798 [ℹ] [ModelRenderer] Mesh data reloaded for 'MB_Urn_04_LOD1.004'
+16:54:43.798 [ℹ] [ModelRenderer] Loaded model with 1 meshes and 0 bones
+16:54:43.798 [ℹ] [ModelRenderer] Mesh data reloaded for 'Plane'
+16:54:43.815 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.841 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.842 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.873 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.890 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.906 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.921 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.936 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:43.952 [ℹ] [AnimatorComponent] Update SKIPPED! IsPlaying=False, Paused=False, Anim=NULL
+16:54:47.231 [ℹ] [ModelRenderer] Loaded model with 1 meshes and 35 bones
+16:54:47.231 [ℹ] [ModelRenderer] Mesh data reloaded for 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:54:47.231 [ℹ] [ModelRenderer] Attempting to reconnect bones for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: 66ca95ba-a014-4087-a392-fed1d7696103)
+16:54:47.231 [ℹ] [ModelRenderer] GameObject position: {X:0 Y:0 Z:0}
+16:54:47.231 [ℹ] [ModelRenderer] Searching in 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' which has 2 children
+16:54:47.232 [ℹ] [ModelRenderer] WARNING: Bone 'RootNode' not found in hierarchy!
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:Hips at local pos {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine at local pos {X:0 Y:0,0556635 Z:-0,0014606453}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine1 at local pos {X:0 Y:0,06496308 Z:-4,524171E-12}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine2 at local pos {X:0 Y:0,07424357 Z:-1,3589962E-12}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:Neck at local pos {X:0 Y:0,08352399 Z:-2,1309339E-09}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:Head at local pos {X:0 Y:0,040507227 Z:0,015411837}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftShoulder at local pos {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftArm at local pos {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftForeArm at local pos {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHand at local pos {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb1 at local pos {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb2 at local pos {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb3 at local pos {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex1 at local pos {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex2 at local pos {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex3 at local pos {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightShoulder at local pos {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightArm at local pos {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightForeArm at local pos {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHand at local pos {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb1 at local pos {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb2 at local pos {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb3 at local pos {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+16:54:47.232 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex1 at local pos {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex2 at local pos {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex3 at local pos {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftUpLeg at local pos {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftLeg at local pos {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftFoot at local pos {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftToeBase at local pos {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:RightUpLeg at local pos {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:RightLeg at local pos {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:RightFoot at local pos {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+16:54:47.233 [ℹ] [ModelRenderer] Found bone: mixamorig:RightToeBase at local pos {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+16:54:47.233 [ℹ] [ModelRenderer] Reconnecting 34 bones for skinned mesh
+16:54:47.234 [ℹ] [SkinnedRenderer] Set 34 bones with bind pose captured
+16:54:47.653 [ℹ] [ModelRenderer] Loaded model with 1 meshes and 35 bones
+16:54:47.654 [ℹ] [ModelRenderer] Mesh data reloaded for 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:54:47.654 [ℹ] [ModelRenderer] Attempting to reconnect bones for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh (ID: bee5d876-3bf5-4c81-9805-9f5c80a97fc2)
+16:54:47.654 [ℹ] [ModelRenderer] GameObject position: {X:0 Y:0 Z:0}
+16:54:47.654 [ℹ] [ModelRenderer] Searching in 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' which has 2 children
+16:54:47.654 [ℹ] [ModelRenderer] WARNING: Bone 'RootNode' not found in hierarchy!
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:Hips at local pos {X:0,0004406463 Y:0,48361933 Z:0,00092021155}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine at local pos {X:0 Y:0,0556635 Z:-0,0014606453}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine1 at local pos {X:0 Y:0,06496308 Z:-4,524171E-12}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:Spine2 at local pos {X:0 Y:0,07424357 Z:-1,3589962E-12}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:Neck at local pos {X:0 Y:0,08352399 Z:-2,1309339E-09}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:Head at local pos {X:0 Y:0,040507227 Z:0,015411838}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftShoulder at local pos {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftArm at local pos {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftForeArm at local pos {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHand at local pos {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb1 at local pos {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+16:54:47.654 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb2 at local pos {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandThumb3 at local pos {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex1 at local pos {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex2 at local pos {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftHandIndex3 at local pos {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightShoulder at local pos {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightArm at local pos {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightForeArm at local pos {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHand at local pos {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb1 at local pos {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb2 at local pos {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandThumb3 at local pos {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex1 at local pos {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex2 at local pos {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightHandIndex3 at local pos {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftUpLeg at local pos {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftLeg at local pos {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftFoot at local pos {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:LeftToeBase at local pos {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightUpLeg at local pos {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightLeg at local pos {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightFoot at local pos {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Found bone: mixamorig:RightToeBase at local pos {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+16:54:47.655 [ℹ] [ModelRenderer] Reconnecting 34 bones for skinned mesh
+16:54:47.655 [ℹ] [SkinnedRenderer] Set 34 bones with bind pose captured
+16:54:47.993 [ℹ] [MonoGameControl] Resized RenderTarget: 790x374 (MSAA: 8x)
+16:54:48.139 [ℹ] [ModelRenderer] CreateResourcesForDevice for Plane
+16:54:48.139 [ℹ] [ModelRenderer] Attempting PBR shader load...
+16:54:48.140 [ℹ] [ModelRenderer] ✅ Using PBR Effect for Plane
+16:54:48.140 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD0.002
+16:54:48.140 [ℹ] [ModelRenderer] Attempting PBR shader load...
+16:54:48.140 [ℹ] [ModelRenderer] ✅ Using PBR Effect for MB_Urn_04_LOD0.002
+16:54:48.276 [ℹ] [ShaderLoader] Loaded shader via isolated ContentManager: Shaders/PBREffect
+16:54:48.276 [ℹ] [ShaderAsset] Discovering properties from effect with 27 parameters
+16:54:48.277 [ℹ] [ShaderAsset] Param: World, Class: Matrix, Type: Single
+16:54:48.277 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.277 [ℹ] [ShaderAsset] Param: View, Class: Matrix, Type: Single
+16:54:48.277 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.277 [ℹ] [ShaderAsset] Param: Projection, Class: Matrix, Type: Single
+16:54:48.277 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.277 [ℹ] [ShaderAsset] Param: CameraPosition, Class: Vector, Type: Single
+16:54:48.277 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.277 [ℹ] [ShaderAsset] Param: LightDirection, Class: Vector, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Vector3 (Default: {X:-0,5773 Y:-0,5773 Z:-0,5773})
+16:54:48.278 [ℹ] [ShaderAsset] Param: LightColor, Class: Vector, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Vector3 (Default: {X:1 Y:1 Z:1})
+16:54:48.278 [ℹ] [ShaderAsset] Param: LightIntensity, Class: Scalar, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Float (Default: 1)
+16:54:48.278 [ℹ] [ShaderAsset] Param: AlbedoColor, Class: Vector, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Color (Default: {X:1 Y:1 Z:1 W:1})
+16:54:48.278 [ℹ] [ShaderAsset] Param: Metallic, Class: Scalar, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+16:54:48.278 [ℹ] [ShaderAsset] Param: Roughness, Class: Scalar, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0,5)
+16:54:48.278 [ℹ] [ShaderAsset] Param: AO, Class: Scalar, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Float (Default: 1)
+16:54:48.278 [ℹ] [ShaderAsset] Param: LightViewProjection, Class: Matrix, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Matrix (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Param: UseShadows, Class: Scalar, Type: Bool
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.278 [ℹ] [ShaderAsset] Param: ShadowQuality, Class: Scalar, Type: Int32
+16:54:48.278 [ℹ] [ShaderAsset]   -> Skipped (unsupported type)
+16:54:48.278 [ℹ] [ShaderAsset] Param: ShadowStrength, Class: Scalar, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+16:54:48.278 [ℹ] [ShaderAsset] Param: ShadowBias, Class: Scalar, Type: Single
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+16:54:48.278 [ℹ] [ShaderAsset] Param: UseAlbedoMap, Class: Scalar, Type: Bool
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.278 [ℹ] [ShaderAsset] Param: UseNormalMap, Class: Scalar, Type: Bool
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.278 [ℹ] [ShaderAsset] Param: UseMetallicMap, Class: Scalar, Type: Bool
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.278 [ℹ] [ShaderAsset] Param: UseRoughnessMap, Class: Scalar, Type: Bool
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.278 [ℹ] [ShaderAsset] Param: UseAOMap, Class: Scalar, Type: Bool
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.278 [ℹ] [ShaderAsset] Param: AlbedoTexture, Class: Object, Type: Texture2D
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Param: NormalTexture, Class: Object, Type: Texture2D
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Param: MetallicTexture, Class: Object, Type: Texture2D
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Param: RoughnessTexture, Class: Object, Type: Texture2D
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Param: AOTexture, Class: Object, Type: Texture2D
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Param: ShadowMap, Class: Object, Type: Texture2D
+16:54:48.278 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.278 [ℹ] [ShaderAsset] Discovered 22 properties
+16:54:48.364 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD1.004
+16:54:48.364 [ℹ] [ModelRenderer] Attempting PBR shader load...
+16:54:48.364 [ℹ] [ModelRenderer] ✅ Using PBR Effect for MB_Urn_04_LOD1.004
+16:54:48.365 [ℹ] [ModelRenderer] CreateResourcesForDevice for MB_Urn_04_LOD2.002
+16:54:48.365 [ℹ] [ModelRenderer] Attempting PBR shader load...
+16:54:48.365 [ℹ] [ModelRenderer] ✅ Using PBR Effect for MB_Urn_04_LOD2.002
+16:54:48.365 [ℹ] [ShaderLoader] Loaded shader via isolated ContentManager: Shaders/PBREffect
+16:54:48.365 [ℹ] [ShaderAsset] Discovering properties from effect with 27 parameters
+16:54:48.365 [ℹ] [ShaderAsset] Param: World, Class: Matrix, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.365 [ℹ] [ShaderAsset] Param: View, Class: Matrix, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.365 [ℹ] [ShaderAsset] Param: Projection, Class: Matrix, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.365 [ℹ] [ShaderAsset] Param: CameraPosition, Class: Vector, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Skipped (system parameter)
+16:54:48.365 [ℹ] [ShaderAsset] Param: LightDirection, Class: Vector, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Vector3 (Default: {X:-0,5773 Y:-0,5773 Z:-0,5773})
+16:54:48.365 [ℹ] [ShaderAsset] Param: LightColor, Class: Vector, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Vector3 (Default: {X:1 Y:1 Z:1})
+16:54:48.365 [ℹ] [ShaderAsset] Param: LightIntensity, Class: Scalar, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Float (Default: 1)
+16:54:48.365 [ℹ] [ShaderAsset] Param: AlbedoColor, Class: Vector, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Color (Default: {X:1 Y:1 Z:1 W:1})
+16:54:48.365 [ℹ] [ShaderAsset] Param: Metallic, Class: Scalar, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+16:54:48.365 [ℹ] [ShaderAsset] Param: Roughness, Class: Scalar, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0,5)
+16:54:48.365 [ℹ] [ShaderAsset] Param: AO, Class: Scalar, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Float (Default: 1)
+16:54:48.365 [ℹ] [ShaderAsset] Param: LightViewProjection, Class: Matrix, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Matrix (Default: )
+16:54:48.365 [ℹ] [ShaderAsset] Param: UseShadows, Class: Scalar, Type: Bool
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.365 [ℹ] [ShaderAsset] Param: ShadowQuality, Class: Scalar, Type: Int32
+16:54:48.365 [ℹ] [ShaderAsset]   -> Skipped (unsupported type)
+16:54:48.365 [ℹ] [ShaderAsset] Param: ShadowStrength, Class: Scalar, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+16:54:48.365 [ℹ] [ShaderAsset] Param: ShadowBias, Class: Scalar, Type: Single
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Float (Default: 0)
+16:54:48.365 [ℹ] [ShaderAsset] Param: UseAlbedoMap, Class: Scalar, Type: Bool
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.365 [ℹ] [ShaderAsset] Param: UseNormalMap, Class: Scalar, Type: Bool
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.365 [ℹ] [ShaderAsset] Param: UseMetallicMap, Class: Scalar, Type: Bool
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.365 [ℹ] [ShaderAsset] Param: UseRoughnessMap, Class: Scalar, Type: Bool
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.365 [ℹ] [ShaderAsset] Param: UseAOMap, Class: Scalar, Type: Bool
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Bool (Default: False)
+16:54:48.365 [ℹ] [ShaderAsset] Param: AlbedoTexture, Class: Object, Type: Texture2D
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.365 [ℹ] [ShaderAsset] Param: NormalTexture, Class: Object, Type: Texture2D
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.365 [ℹ] [ShaderAsset] Param: MetallicTexture, Class: Object, Type: Texture2D
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.365 [ℹ] [ShaderAsset] Param: RoughnessTexture, Class: Object, Type: Texture2D
+16:54:48.365 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.366 [ℹ] [ShaderAsset] Param: AOTexture, Class: Object, Type: Texture2D
+16:54:48.366 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.366 [ℹ] [ShaderAsset] Param: ShadowMap, Class: Object, Type: Texture2D
+16:54:48.366 [ℹ] [ShaderAsset]   -> Added as Texture2D (Default: )
+16:54:48.366 [ℹ] [ShaderAsset] Discovered 22 properties
+16:54:50.010 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 6
+16:54:50.010 [ℹ] [MonoGameControl] Updating Animator on 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:54:51.032 [ℹ] [MonoGameControl] Resized RenderTarget: 1360x654 (MSAA: 8x)
+16:55:00.013 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 4
+16:55:00.569 [ℹ] SetMeshData called for mesh 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' from 'D:\ProjetosMono\Teste3\Assets\Agora sim\Player@idlepunch.fbx'
+16:55:00.570 [ℹ] [MonoGameControl] Model 'Player@idlepunch' has 35 bones
+16:55:00.572 [ℹ] [MonoGameControl] Bone: RootNode at {X:0 Y:0 Z:0}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:Hips at {X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:Spine at {X:0 Y:0,0556635 Z:-0,0014606453}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:Spine1 at {X:0 Y:0,06496308 Z:-4,524171E-12}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:Spine2 at {X:0 Y:0,07424357 Z:-1,3589962E-12}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:Neck at {X:0 Y:0,08352399 Z:-2,1309339E-09}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:Head at {X:0 Y:0,040507227 Z:0,015411837}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftShoulder at {X:0,037708238 Y:0,070419066 Z:-0,00016501882}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftArm at {X:2,3994699E-11 Y:0,080452956 Z:-6,940999E-10}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftForeArm at {X:1,6636241E-12 Y:0,1204502 Z:6,699474E-11}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHand at {X:-5,591394E-10 Y:0,15241043 Z:2,4756336E-11}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandThumb1 at {X:-0,01570887 Y:0,023206465 Z:4,7649307E-10}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandThumb2 at {X:-0,0007479326 Y:0,022406211 Z:2,0807375E-10}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandThumb3 at {X:-0,0011859738 Y:0,029475402 Z:-1,7229113E-09}
+16:55:00.572 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandIndex1 at {X:1,0620567E-09 Y:0,039217256 Z:0,0023539325}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandIndex2 at {X:0,0020783772 Y:0,033376683 Z:-6,700353E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:LeftHandIndex3 at {X:-0,0011328706 Y:0,026332337 Z:-1,4413648E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightShoulder at {X:-0,037708238 Y:0,070428446 Z:-0,0005225013}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightArm at {X:-1,0201962E-10 Y:0,080452956 Z:2,9776617E-09}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightForeArm at {X:-1,6177577E-11 Y:0,1204516 Z:4,95701E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHand at {X:-7,757605E-10 Y:0,15241246 Z:-4,964995E-11}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandThumb1 at {X:0,014268075 Y:0,026320333 Z:2,4743899E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandThumb2 at {X:0,00064168125 Y:0,023942532 Z:7,3240464E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandThumb3 at {X:0,00060559035 Y:0,028822869 Z:-9,1659075E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandIndex1 at {X:-2,1701896E-10 Y:0,039480053 Z:0,0024767974}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandIndex2 at {X:-0,003842427 Y:0,03343977 Z:3,4651831E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightHandIndex3 at {X:0,0023777871 Y:0,028382568 Z:2,8907904E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:LeftUpLeg at {X:0,062570825 Y:-0,030949144 Z:0,0055499123}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:LeftLeg at {X:4,2230114E-10 Y:0,20693786 Z:-1,1723453E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:LeftFoot at {X:1,0590527E-09 Y:0,19383614 Z:1,0124501E-09}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:LeftToeBase at {X:3,2197978E-10 Y:0,104309164 Z:6,1371314E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightUpLeg at {X:-0,062570825 Y:-0,030949144 Z:-0,0017915005}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightLeg at {X:-3,5308473E-10 Y:0,20689663 Z:1,0108386E-11}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightFoot at {X:1,1348765E-09 Y:0,19295678 Z:-7,2618256E-10}
+16:55:00.573 [ℹ] [MonoGameControl] Bone: mixamorig:RightToeBase at {X:5,932295E-10 Y:0,10404767 Z:-4,1812048E-10}
+16:55:00.573 [ℹ] [MonoGameControl] === Bone Hierarchy Built - Bind Pose Applied ===
+16:55:00.573 [ℹ] [MonoGameControl] Bone[0] 'RootNode': BindPose={X:0 Y:0 Z:0}
+16:55:00.573 [ℹ] [MonoGameControl] Bone[1] 'mixamorig:Hips': BindPose={X:-0,0092238495 Y:0,021475274 Z:-0,0010250012}
+16:55:00.573 [ℹ] [MonoGameControl] Bone[2] 'mixamorig:Spine': BindPose={X:0 Y:0,0556635 Z:-0,0014606453}
+16:55:00.573 [ℹ] [MonoGameControl] Created bone hierarchy with 35 bones
+16:55:00.574 [ℹ] [SkinnedRenderer] Set 35 bones with bind pose captured
+16:55:00.574 [ℹ] [MonoGameControl] Connected 35 bones to renderer
+16:55:00.574 [ℹ] ✨ [Animation] Found 1 animations in 'Player@idlepunch':
+16:55:00.574 [ℹ]    - 'mixamo.com' (3,62s, 33 channels)
+16:55:00.575 [ℹ] ✓ [Animation] AnimatorComponent adicionado ao GameObject 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:55:00.575 [ℹ] [Animator] Tocando animação 'mixamo.com' sem fade
+16:55:00.575 [ℹ] ▶ [Animation] Auto-tocando 'mixamo.com'
+16:55:00.576 [ℹ] [MonoGameControl] Successfully created 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh' with 1 mesh(es) and 35 bone(s)
+16:55:00.595 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,04, Bones: 35
+16:55:00.597 [ℹ] [AnimatorPoseBuilder] Model has 35 bones. animated keys: 33
+16:55:00.597 [ℹ] [AnimatorPoseBuilder] --- DUMPING ANIMATION KEYS ---
+16:55:00.597 [ℹ] Key: 'mixamorig:Head'
+16:55:00.597 [ℹ] Key: 'mixamorig:Hips'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftArm'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftFoot'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftForeArm'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHand'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHandIndex1'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHandIndex2'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHandIndex3'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHandThumb1'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHandThumb2'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftHandThumb3'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftLeg'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftShoulder'
+16:55:00.598 [ℹ] Key: 'mixamorig:LeftUpLeg'
+16:55:00.598 [ℹ] Key: 'mixamorig:Neck'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightArm'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightFoot'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightForeArm'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHand'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHandIndex1'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHandIndex2'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHandIndex3'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHandThumb1'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHandThumb2'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightHandThumb3'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightLeg'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightShoulder'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightToeBase'
+16:55:00.598 [ℹ] Key: 'mixamorig:RightUpLeg'
+16:55:00.598 [ℹ] Key: 'mixamorig:Spine'
+16:55:00.598 [ℹ] Key: 'mixamorig:Spine1'
+16:55:00.598 [ℹ] Key: 'mixamorig:Spine2'
+16:55:00.598 [ℹ] [AnimatorPoseBuilder] ------------------------------
+16:55:00.735 [ℹ] [ModelRenderer] Auto-created default material for tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh
+16:55:00.737 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,14, Bones: 35
+16:55:00.861 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,24, Bones: 35
+16:55:00.874 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,25, Bones: 35
+16:55:00.893 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,27, Bones: 35
+16:55:00.909 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,29, Bones: 35
+16:55:00.925 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,30, Bones: 35
+16:55:00.940 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,32, Bones: 35
+16:55:00.955 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,33, Bones: 35
+16:55:00.971 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,35, Bones: 35
+16:55:00.987 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,36, Bones: 35
+16:55:01.001 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,38, Bones: 35
+16:55:01.002 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,37814465 Y:-0,35794944 Z:0,21156263 W:0,8271155}
+16:55:01.017 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,40, Bones: 35
+16:55:01.017 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,38095352 Y:-0,3494476 Z:0,20388338 W:0,8313799}
+16:55:01.033 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,41, Bones: 35
+16:55:01.033 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,38091424 Y:-0,3408965 Z:0,19496502 W:0,83706784}
+16:55:01.048 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,43, Bones: 35
+16:55:01.048 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,37831208 Y:-0,33294642 Z:0,18524912 W:0,84362876}
+16:55:01.064 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,44, Bones: 35
+16:55:01.078 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,46, Bones: 35
+16:55:01.094 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,47, Bones: 35
+16:55:01.109 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,49, Bones: 35
+16:55:01.125 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,50, Bones: 35
+16:55:01.140 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,52, Bones: 35
+16:55:01.156 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,53, Bones: 35
+16:55:01.171 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,55, Bones: 35
+16:55:01.187 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,56, Bones: 35
+16:55:01.202 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,58, Bones: 35
+16:55:01.217 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,60, Bones: 35
+16:55:01.233 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,61, Bones: 35
+16:55:01.248 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,63, Bones: 35
+16:55:01.263 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,64, Bones: 35
+16:55:01.279 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,66, Bones: 35
+16:55:01.295 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,67, Bones: 35
+16:55:01.310 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,69, Bones: 35
+16:55:01.326 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,70, Bones: 35
+16:55:01.356 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,73, Bones: 35
+16:55:01.387 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,77, Bones: 35
+16:55:01.389 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,77, Bones: 35
+16:55:01.428 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,81, Bones: 35
+16:55:01.449 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,83, Bones: 35
+16:55:01.457 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,83, Bones: 35
+16:55:01.481 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,86, Bones: 35
+16:55:01.489 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,87, Bones: 35
+16:55:01.510 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,89, Bones: 35
+16:55:01.518 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,90, Bones: 35
+16:55:01.541 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,92, Bones: 35
+16:55:01.548 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,93, Bones: 35
+16:55:01.571 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,95, Bones: 35
+16:55:01.578 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,96, Bones: 35
+16:55:01.602 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,98, Bones: 35
+16:55:01.610 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 0,99, Bones: 35
+16:55:01.633 [ℹ] [AnimatorComponent] ApplyAnimationToBones called. Time: 1,01, Bones: 35
+16:55:02.004 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3659369 Y:-0,33457646 Z:0,13016002 W:0,8586076}
+16:55:02.019 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3594213 Y:-0,3351073 Z:0,11662031 W:0,863087}
+16:55:02.035 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3522839 Y:-0,33711582 Z:0,10334591 W:0,8669306}
+16:55:03.004 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,25801143 Y:-0,38164917 Z:0,03169535 W:0,88700026}
+16:55:03.019 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,2571013 Y:-0,39245406 Z:0,031782705 W:0,88253534}
+16:55:03.034 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,25752243 Y:-0,4041443 Z:0,03387819 W:0,8770415}
+16:55:04.004 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,33220935 Y:-0,4034689 Z:0,08415131 W:0,84839165}
+16:55:04.019 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,33157882 Y:-0,41209528 Z:0,10872225 W:0,8416724}
+16:55:04.034 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,33157748 Y:-0,41785872 Z:0,1322247 W:0,83544433}
+16:55:04.050 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3327456 Y:-0,42090532 Z:0,15486906 W:0,8295387}
+16:55:05.007 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 5
+16:55:05.007 [ℹ] [MonoGameControl] Updating Animator on 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:55:05.007 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,38165063 Y:-0,38854605 Z:0,19542137 W:0,8155889}
+16:55:05.023 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,39192137 Y:-0,3793975 Z:0,19814706 W:0,8143665}
+16:55:05.032 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3972199 Y:-0,3734141 Z:0,19817483 W:0,8145581}
+16:55:06.017 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,35029516 Y:-0,3652135 Z:0,0982404 W:0,8568903}
+16:55:06.042 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,33888748 Y:-0,36131567 Z:0,087521955 W:0,86426055}
+16:55:06.046 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3368748 Y:-0,36123735 Z:0,08556819 W:0,86527514}
+16:55:07.027 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,2545419 Y:-0,33284113 Z:0,16192004 W:0,89342433}
+16:55:07.042 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,24553028 Y:-0,33638713 Z:0,16411866 W:0,89421684}
+16:55:08.002 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,28885043 Y:-0,33298698 Z:0,09165721 W:0,89290774}
+16:55:08.018 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,28567725 Y:-0,34257087 Z:0,10335183 W:0,88901746}
+16:55:08.033 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,28291184 Y:-0,35233712 Z:0,11755112 W:0,88430834}
+16:55:08.049 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,28097427 Y:-0,36247274 Z:0,13466908 W:0,87836844}
+16:55:09.004 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34378076 Y:-0,39814776 Z:0,20373236 W:0,82570356}
+16:55:09.019 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34469813 Y:-0,4008284 Z:0,21448389 W:0,82128954}
+16:55:09.034 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34792614 Y:-0,40136334 Z:0,22266176 W:0,8174818}
+16:55:10.005 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 5
+16:55:10.005 [ℹ] [MonoGameControl] Updating Animator on 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:55:10.005 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,33508837 Y:-0,40572336 Z:0,14815928 W:0,83734894}
+16:55:10.021 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34064472 Y:-0,39573982 Z:0,14589699 W:0,84027684}
+16:55:10.029 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34245738 Y:-0,39044544 Z:0,14358425 W:0,84241253}
+16:55:11.007 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34008834 Y:-0,32278982 Z:0,20441696 W:0,8592789}
+16:55:11.022 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3401883 Y:-0,3163058 Z:0,18439095 W:0,86615396}
+16:55:11.029 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,33977246 Y:-0,313807 Z:0,17576016 W:0,8690156}
+16:55:12.007 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3275447 Y:-0,304372 Z:0,10422532 W:0,88837445}
+16:55:12.024 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,32181603 Y:-0,30694127 Z:0,0965226 W:0,8904521}
+16:55:12.032 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,31967488 Y:-0,30937943 Z:0,09374084 W:0,8906767}
+16:55:13.003 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,31709805 Y:-0,38866478 Z:0,060178958 W:0,8629987}
+16:55:13.014 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,31574032 Y:-0,39579743 Z:0,0635295 W:0,86000955}
+16:55:13.032 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,31449652 Y:-0,4065554 Z:0,071173355 W:0,8548328}
+16:55:14.012 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3238911 Y:-0,46923828 Z:0,10730365 W:0,8144912}
+16:55:14.014 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,32537884 Y:-0,46889123 Z:0,108059466 W:0,8139981}
+16:55:14.042 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,34882432 Y:-0,45676053 Z:0,11849796 W:0,809722}
+16:55:14.049 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,35306156 Y:-0,45245674 Z:0,120327 W:0,81003207}
+16:55:15.000 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,36266118 Y:-0,37468943 Z:0,19374043 W:0,830993}
+16:55:15.014 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 5
+16:55:15.015 [ℹ] [MonoGameControl] Updating Animator on 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:55:15.015 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,36303884 Y:-0,3619187 Z:0,1844861 W:0,83855987}
+16:55:15.031 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,36048782 Y:-0,34727556 Z:0,17178433 W:0,8484918}
+16:55:15.048 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,35525447 Y:-0,33325687 Z:0,15779501 W:0,8589732}
+16:55:16.003 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,41402543 Y:-0,31014246 Z:0,15041083 W:0,8424791}
+16:55:16.019 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,40704107 Y:-0,30738556 Z:0,1433376 W:0,8481073}
+16:55:16.034 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3989473 Y:-0,30626112 Z:0,13774928 W:0,8532704}
+16:55:16.049 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3902742 Y:-0,30696478 Z:0,13348141 W:0,85769546}
+16:55:17.008 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,28328797 Y:-0,39333284 Z:0,049089525 W:0,8732855}
+16:55:17.022 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,27902257 Y:-0,39954084 Z:0,050616417 W:0,8717521}
+16:55:17.033 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,27678993 Y:-0,40404955 Z:0,05310239 W:0,8702364}
+16:55:18.027 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,21596251 Y:-0,38251734 Z:0,25366122 W:0,8617985}
+16:55:18.043 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,21920271 Y:-0,38629854 Z:0,26647943 W:0,85540175}
+16:55:18.045 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,22002661 Y:-0,38679177 Z:0,2681792 W:0,8544357}
+16:55:19.005 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,32621372 Y:-0,39132312 Z:0,22551033 W:0,8304193}
+16:55:19.017 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3366652 Y:-0,38816765 Z:0,22695151 W:0,8273303}
+16:55:19.044 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,35725358 Y:-0,3785444 Z:0,22522965 W:0,82361746}
+16:55:20.014 [ℹ] [MonoGameControl] RenderTimer_Tick running. RootObjects: 5
+16:55:20.014 [ℹ] [MonoGameControl] Updating Animator on 'tripo_node_b024f46f-e3db-412b-974d-e03300a24c21mesh'
+16:55:20.014 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,38690045 Y:-0,3527856 Z:0,19450775 W:0,829468}
+16:55:20.030 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,3843924 Y:-0,34625888 Z:0,18209429 W:0,83617514}
+16:55:20.047 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,38018405 Y:-0,34072587 Z:0,16748235 W:0,84339535}
+16:55:21.004 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,29188928 Y:-0,34743324 Z:0,06528614 W:0,88872296}
+16:55:21.019 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,28234586 Y:-0,3493663 Z:0,055434253 W:0,89171255}
+16:55:21.034 [ℹ] [AnimatorPoseBuilder] Applying LeftArm: Pos=<0. 0. 0> Rot={X:0,27412555 Y:-0,35331166 Z:0,047056295 W:0,8932031}
+16:55:22.135 [ℹ] [GraphicsDeviceService] Created NEW device for Handle=594222. Total devices: 2
+16:55:22.140 [ℹ] [ShadowRenderer] ShadowDepth shader loaded with techniques: ShadowDepth, SkinnedShadowDepth
+16:55:22.141 [ℹ] [ToneMapRenderer] Shader loaded successfully via ContentManager.
+16:55:22.141 [ℹ] [MonoGameControl] Resized RenderTarget: 1360x654 (MSAA: 8x)
+16:55:22.143 [ℹ] [GraphicsDeviceService] RELEASING device for Handle=594222. Total devices before: 2
+16:55:22.149 [ℹ] [GraphicsDeviceService] Total devices after: 1

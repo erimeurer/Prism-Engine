@@ -1,0 +1,194 @@
+using Microsoft.Xna.Framework;
+using MonoGameEditor.Core;
+using MonoGameEditor.Core.Components;
+using MonoGameEditor.Core.Assets;
+
+namespace MyGame
+{
+    /// <summary>
+    /// Exemplo de Script para controlar animações de um personagem
+    /// </summary>
+    public class CharacterAnimationController
+    {
+        private GameObject character;
+        private AnimatorComponent animator;
+        
+        // Estados de animação
+        private enum AnimationState
+        {
+            Idle,
+            Walk,
+            Run,
+            Jump
+        }
+        
+        private AnimationState currentState = AnimationState.Idle;
+        
+        /// <summary>
+        /// Inicializa o controlador de animação
+        /// </summary>
+        public void Initialize(GameObject characterObject)
+        {
+            character = characterObject;
+            animator = character.GetComponent<AnimatorComponent>();
+            
+            if (animator == null)
+            {
+                Logger.LogError("[CharacterAnimationController] GameObject não tem AnimatorComponent!");
+                return;
+            }
+            
+            // Configurar duração do fade
+            animator.FadeDuration = 0.25f; // 250ms de transição suave
+            
+            // Tocar animação inicial
+            PlayAnimation(AnimationState.Idle, false);
+        }
+        
+        /// <summary>
+        /// Atualizar lógica de animação (chamar a cada frame)
+        /// </summary>
+        public void Update(GameTime gameTime)
+        {
+            if (animator == null)
+                return;
+                
+            // Atualizar o animator
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            animator.Update(deltaTime);
+            
+            // EXEMPLO: Você pode adicionar lógica para trocar animações baseado em estados
+            // UpdateAnimationState();
+        }
+        
+        /// <summary>
+        /// Exemplo de lógica para atualizar estado de animação
+        /// </summary>
+        private void UpdateAnimationState()
+        {
+            // Exemplo: detectar input e mudar animação
+            var input = Input.Instance;
+            
+            AnimationState newState = currentState;
+            
+            // Verificar se está pulando
+            if (input.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space))
+            {
+                newState = AnimationState.Jump;
+            }
+            // Verificar se está correndo
+            else if (input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) && IsMoving())
+            {
+                newState = AnimationState.Run;
+            }
+            // Verificar se está andando
+            else if (IsMoving())
+            {
+                newState = AnimationState.Walk;
+            }
+            // Caso contrário, idle
+            else
+            {
+                newState = AnimationState.Idle;
+            }
+            
+            // Mudar animação se mudou de estado
+            if (newState != currentState)
+            {
+                PlayAnimation(newState, fade: true);
+            }
+        }
+        
+        /// <summary>
+        /// Verifica se o personagem está se movendo
+        /// </summary>
+        private bool IsMoving()
+        {
+            var input = Input.Instance;
+            return input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) ||
+                   input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) ||
+                   input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.S) ||
+                   input.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D);
+        }
+        
+        /// <summary>
+        /// Toca uma animação por estado
+        /// </summary>
+        private void PlayAnimation(AnimationState state, bool fade = true)
+        {
+            if (animator == null)
+                return;
+                
+            currentState = state;
+            
+            // Mapear estado para nome de animação
+            // NOTA: Ajuste os nomes para corresponder às animações do seu modelo FBX
+            string animationName = state switch
+            {
+                AnimationState.Idle => "Idle",
+                AnimationState.Walk => "Walk",
+                AnimationState.Run => "Run",
+                AnimationState.Jump => "Jump",
+                _ => "Idle"
+            };
+            
+            // Tocar animação
+            animator.Play(animationName, fade);
+        }
+        
+        /// <summary>
+        /// Toca uma animação específica por nome
+        /// </summary>
+        public void PlayCustomAnimation(string animationName, bool fade = true)
+        {
+            if (animator == null)
+                return;
+                
+            animator.Play(animationName, fade);
+        }
+        
+        /// <summary>
+        /// Pausa a animação atual
+        /// </summary>
+        public void Pause()
+        {
+            animator?.Pause();
+        }
+        
+        /// <summary>
+        /// Retoma a animação pausada
+        /// </summary>
+        public void Resume()
+        {
+            animator?.Resume();
+        }
+        
+        /// <summary>
+        /// Para a animação
+        /// </summary>
+        public void Stop()
+        {
+            animator?.Stop();
+        }
+        
+        /// <summary>
+        /// Define a velocidade de reprodução da animação
+        /// </summary>
+        public void SetAnimationSpeed(float speed)
+        {
+            if (animator != null)
+                animator.AnimationSpeed = speed;
+        }
+        
+        /// <summary>
+        /// Obtém lista de todas as animações disponíveis
+        /// </summary>
+        public List<string> GetAvailableAnimations()
+        {
+            if (animator == null)
+                return new List<string>();
+                
+            return animator.AnimationNames;
+        }
+    }
+}

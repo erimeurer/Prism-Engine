@@ -17,6 +17,12 @@ namespace MonoGameEditor.Core.Components
     {
         public override string ComponentName => "Skinned Model Renderer";
 
+        // Reference to ModelData for AnimationPoseBuilder
+        public Assets.ModelData Model { get; set; }
+        
+        // Final bone matrices ready for GPU (computed by AnimationPoseBuilder)
+        public System.Numerics.Matrix4x4[] FinalBoneMatrices { get; set; }
+
         // Bone GameObjects (must match mesh bone order)
         public List<GameObject> Bones { get; set; } = new List<GameObject>();
         
@@ -130,14 +136,39 @@ namespace MonoGameEditor.Core.Components
 
         /// <summary>
         /// Calculates bone matrices for skinning.
-        /// Uses offset matrices from file (Inverse Bind Pose) * Current Bone World Matrix
-        /// This is the standard Matrix Palette Skinning formula.
+        /// Uses FinalBoneMatrices from AnimationPoseBuilder if available (animated),
+        /// otherwise falls back to Transform-based calculation (bind pose).
         /// </summary>
         private void CalculateBoneMatrices()
         {
             if (_offsetMatrices == null)
                 return;
             
+            // CRITICAL: If FinalBoneMatrices exists (from AnimationPoseBuilder), convert to world space
+            if (FinalBoneMatrices != null && FinalBoneMatrices.Length > 0)
+            {
+                // AnimationPoseBuilder computes matrices in MODEL SPACE (relative to the mesh origin)
+                // We MUST transform them to WORLD SPACE using the MESH's world matrix.
+                Matrix modelToWorld = GameObject?.Transform.WorldMatrix ?? Matrix.Identity;
+                
+                // Convert from System.Numerics to XNA and apply world transform
+                for (int i = 0; i < Math.Min(FinalBoneMatrices.Length, _boneMatrices.Length); i++)
+                {
+                    var m = FinalBoneMatrices[i];
+                    Matrix modelSpace = new Matrix(
+                        m.M11, m.M12, m.M13, m.M14,
+                        m.M21, m.M22, m.M23, m.M24,
+                        m.M31, m.M32, m.M33, m.M34,
+                        m.M41, m.M42, m.M43, m.M44
+                    );
+                    
+                    // Transform to world space: ModelSpace * meshWorld
+                    _boneMatrices[i] = modelSpace * modelToWorld;
+                }
+                return;
+            }
+            
+            // Fallback: Use Transform-based calculation (for non-animated models or bind pose)
             // DEBUG: Check if offset matrices changed
             int currentHash = 0;
             for (int i = 0; i < Math.Min(3, _offsetMatrices.Length); i++)
@@ -398,11 +429,63 @@ namespace MonoGameEditor.Core.Components
             base.ApplyCustomEffectParameters(effect, device);
         }
 
+        // DEBUG: Skeleton Visualization
+        public bool ShowSkeleton { get; set; } = true;
+
         public override void Draw(GraphicsDevice device, Matrix view, Matrix projection, Vector3 cameraPosition,
             Texture2D shadowMap = null, Matrix? lightViewProj = null)
         {
             CalculateBoneMatrices();
             base.Draw(device, view, projection, cameraPosition, shadowMap, lightViewProj);
+
+            if (ShowSkeleton)
+                DrawSkeleton(device, view, projection);
+        }
+
+        private void DrawSkeleton(GraphicsDevice device, Matrix view, Matrix projection)
+        {
+            if (Bones == null || Bones.Count == 0) return;
+
+            // Simple immediate mode drawing for debug
+            var vertices = new List<VertexPositionColor>();
+            
+            foreach (var bone in Bones)
+            {
+                if (bone == null) continue;
+
+                var parent = bone.Parent;
+                // Only draw if parent is also a bone (in the list) or at least valid
+                // We'll draw connection to parent regardless if it's in the list, as long as it's not null
+                if (parent != null)
+                {
+                    var start = parent.Transform.Position;
+                    var end = bone.Transform.Position;
+
+                    vertices.Add(new VertexPositionColor(new Vector3(start.X, start.Y, start.Z), Microsoft.Xna.Framework.Color.Lime));
+                    vertices.Add(new VertexPositionColor(new Vector3(end.X, end.Y, end.Z), Microsoft.Xna.Framework.Color.Lime));
+                }
+            }
+
+            if (vertices.Count > 0)
+            {
+                // CRITICAL: Draw ON TOP of everything (disable depth test)
+                var prevDepth = device.DepthStencilState;
+                device.DepthStencilState = DepthStencilState.None;
+                
+                var basicEffect = new BasicEffect(device);
+                basicEffect.World = Matrix.Identity;
+                basicEffect.View = view;
+                basicEffect.Projection = projection;
+                basicEffect.VertexColorEnabled = true;
+
+                foreach (var pass in basicEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    device.DrawUserPrimitives(PrimitiveType.LineList, vertices.ToArray(), 0, vertices.Count / 2);
+                }
+                
+                device.DepthStencilState = prevDepth;
+            }
         }
 
         /// <summary>

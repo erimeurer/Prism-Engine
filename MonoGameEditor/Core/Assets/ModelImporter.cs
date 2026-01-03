@@ -2,587 +2,304 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Assimp;
 using Assimp.Configs;
+using MonoGameEditor.Core.Assets;
+using MonoGameEditor.Core;
 
 namespace MonoGameEditor.Core.Assets
 {
     public static class ModelImporter
     {
-        // PERFORMANCE: Cache processed models for instant loading (like Unity!)
-        private static readonly Dictionary<string, ModelData> _modelCache = new Dictionary<string, ModelData>();
-        
-        /// <summary>
-        /// Clear model cache (call when assets are modified)
-        /// </summary>
-        public static void ClearCache() => _modelCache.Clear();
-        
-        public static Task<AssetMetadata> LoadMetadataAsync(string path)
+        private static Dictionary<string, ModelData> _cache = new Dictionary<string, ModelData>();
+
+        public static void ClearCache()
         {
-            return Task.Run(() =>
+            lock (_cache)
             {
-                if (!File.Exists(path)) return null;
-
-                try
-                {
-                    using (var context = new AssimpContext())
-                    {
-                        // Configure for fast loading (we only need geometry for preview)
-                        // PostProcessSteps.Triangulate is critical to ensure we have triangles
-                        var scene = context.ImportFile(path, PostProcessSteps.Triangulate | PostProcessSteps.GenerateNormals | PostProcessSteps.OptimizeMeshes);
-
-                        if (scene == null || !scene.HasMeshes) return null;
-
-                        var metadata = new AssetMetadata
-                        {
-                            Name = Path.GetFileName(path),
-                            Extension = Path.GetExtension(path),
-                            PreviewVertices = new List<System.Numerics.Vector3>(),
-                            PreviewIndices = new List<int>()
-                        };
-
-                        int indexOffset = 0;
-                        int totalVertices = 0;
-                        int totalIndices = 0;
-
-                        // Combine all meshes
-                        foreach (var mesh in scene.Meshes)
-                        {
-                            totalVertices += mesh.VertexCount;
-                            totalIndices += mesh.FaceCount * 3;
-
-                            foreach (var v in mesh.Vertices)
-                            {
-                                // Convert Assimp Vector3D to System.Numerics.Vector3
-                                metadata.PreviewVertices.Add(new System.Numerics.Vector3(v.X, v.Y, v.Z));
-                            }
-
-                            foreach (var face in mesh.Faces)
-                            {
-                                if (face.IndexCount == 3)
-                                {
-                                    metadata.PreviewIndices.Add(face.Indices[0] + indexOffset);
-                                    metadata.PreviewIndices.Add(face.Indices[1] + indexOffset);
-                                    metadata.PreviewIndices.Add(face.Indices[2] + indexOffset);
-                                }
-                            }
-                            indexOffset += mesh.VertexCount;
-                        }
-
-                        // Calculate bounds
-                        float minX = float.MaxValue, minY = float.MaxValue, minZ = float.MaxValue;
-                        float maxX = float.MinValue, maxY = float.MinValue, maxZ = float.MinValue;
-
-                        foreach (var v in metadata.PreviewVertices)
-                        {
-                            if (v.X < minX) minX = v.X;
-                            if (v.Y < minY) minY = v.Y;
-                            if (v.Z < minZ) minZ = v.Z;
-
-                            if (v.X > maxX) maxX = v.X;
-                            if (v.Y > maxY) maxY = v.Y;
-                            if (v.Z > maxZ) maxZ = v.Z;
-                        }
-
-                        metadata.Min = new System.Numerics.Vector3(minX, minY, minZ);
-                        metadata.Max = new System.Numerics.Vector3(maxX, maxY, maxZ);
-                        metadata.VertexCount = totalVertices;
-                        metadata.TriangleCount = totalIndices / 3;
-
-                        return metadata;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Log error?
-                    System.Diagnostics.Debug.WriteLine($"Error importing model {path}: {ex.Message}");
-                    return null;
-                }
-            });
+                _cache.Clear();
+            }
         }
 
-        /// <summary>
-        /// Loads a 3D model with hierarchical mesh structure (separate meshes)
-        /// </summary>
-        public static Task<ModelData> LoadModelDataAsync(string path)
+        public static async System.Threading.Tasks.Task<AssetMetadata> LoadMetadataAsync(string path)
         {
-            return Task.Run(() =>
+            var modelData = await LoadModelDataAsync(path);
+            if (modelData == null) return new AssetMetadata();
+
+            var metadata = new AssetMetadata
             {
-                if (!File.Exists(path)) return null;
-                
-                // CACHE DISABLED - Testing if cache causes corruption
-                if (false)
+                Name = modelData.Name,
+                Extension = Path.GetExtension(path),
+                VertexCount = modelData.TotalVertexCount,
+                TriangleCount = modelData.TotalTriangleCount,
+                MaterialCount = modelData.Meshes.Select(m => m.MaterialIndex).Distinct().Count(),
+                HasNormals = modelData.Meshes.All(m => m.Normals.Count > 0),
+                HasUVs = modelData.Meshes.All(m => m.TexCoords.Count > 0)
+            };
+
+            // Calculate bounding box for metadata
+            System.Numerics.Vector3 min = new System.Numerics.Vector3(float.MaxValue);
+            System.Numerics.Vector3 max = new System.Numerics.Vector3(float.MinValue);
+
+            foreach (var mesh in modelData.Meshes)
+            {
+                foreach (var v in mesh.Vertices)
                 {
-                    // CHECK CACHE FIRST - instant return if already processed!
-                    lock (_modelCache)
+                    min = System.Numerics.Vector3.Min(min, v);
+                    max = System.Numerics.Vector3.Max(max, v);
+                }
+            }
+
+            metadata.Min = min;
+            metadata.Max = max;
+
+            return metadata;
+        }
+
+        public static async System.Threading.Tasks.Task<ModelData> LoadModelDataAsync(string path)
+        {
+            if (string.IsNullOrEmpty(path)) return null!;
+
+            lock (_cache)
+            {
+                if (_cache.TryGetValue(path, out var data)) return data;
+            }
+
+            return await System.Threading.Tasks.Task.Run(() =>
+            {
+                string fullPath = path;
+                if (!Path.IsPathRooted(path))
+                {
+                    string[] possibleRoots = new[] { 
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content"),
+                        "D:\\git\\Prism-Engine\\MonoGameEditor\\Content"
+                    };
+
+                    foreach (var root in possibleRoots)
                     {
-                        if (_modelCache.TryGetValue(path, out ModelData cachedModel))
+                        string testPath = Path.Combine(root, path);
+                        if (File.Exists(testPath))
                         {
-                            // CRITICAL FIX: Check if cached data is complete
-                            // If this is an FBX with bones but cache has 0 bones, it was cached incompletely during tab switch
-                            bool isFbx = path.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase);
-                            bool hasMeshes = cachedModel != null && cachedModel.Meshes.Count > 0;
-                            bool hasSkinnedMesh = hasMeshes && cachedModel.Meshes.Any(m => m.BoneWeights != null && m.BoneWeights.Any());
-                            bool hasBones = cachedModel.Bones != null && cachedModel.Bones.Count > 0;
-                            
-                            if (isFbx && hasSkinnedMesh && !hasBones)
-                            {
-                                // Cached data is INCOMPLETE - invalidate cache!
-                                System.Diagnostics.Debug.WriteLine($"[ModelImporter] ⚠ Cache INVALID: {Path.GetFileName(path)} - has skinned mesh but no bones! Reloading...");
-                                _modelCache.Remove(path);
-                                // Fall through to reload
-                            }
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine($"[ModelImporter] ✓ Cache HIT: {Path.GetFileName(path)} - instant!");
-                                return cachedModel;
-                            }
+                            fullPath = testPath;
+                            break;
                         }
                     }
                 }
                 
-                System.Diagnostics.Debug.WriteLine($"[ModelImporter] Cache MISS: {Path.GetFileName(path)} - loading...");
+                if (!File.Exists(fullPath)) return null!;
 
                 try
                 {
                     using (var context = new AssimpContext())
                     {
-                        // CRITICAL for Mixamo FBX: Disable pivot preservation
-                        // Mixamo FBX files have pivot transforms that cause issues
-                        // This config resolves many Mixamo animation/transformation problems
-                        context.SetConfig(new Assimp.Configs.FBXPreservePivotsConfig(false));
+                        context.SetConfig(new FBXPreservePivotsConfig(false));
                         
-                        // Post-process flags optimized for skeletal animation (Mixamo/FBX)
-                        // - Triangulate: Convert all faces to triangles
-                        // - GenerateNormals: Generate smooth normals if missing
-                        // - LimitBoneWeights: Limit to max 4 bones per vertex (shader requirement)
-                        // - JoinIdenticalVertices: Optimize by joining duplicate vertices
                         var importFlags = PostProcessSteps.Triangulate 
                             | PostProcessSteps.GenerateNormals
                             | PostProcessSteps.LimitBoneWeights
                             | PostProcessSteps.JoinIdenticalVertices;
                         
-                        var scene = context.ImportFile(path, importFlags);
+                        var scene = context.ImportFile(fullPath, importFlags);
 
-                        if (scene == null || !scene.HasMeshes) return null;
+                        if (scene == null || !scene.HasMeshes) return null!;
 
                         var modelData = new ModelData
                         {
-                            Name = Path.GetFileNameWithoutExtension(path)
+                            Name = Path.GetFileNameWithoutExtension(fullPath)
                         };
 
-                        int totalVertices = 0;
-                        int totalTriangles = 0;
-                        
-                        // CRITICAL FIX: Extract bone hierarchy BEFORE processing meshes
-                        // Vertex bone indices reference the global bone palette (modelData.Bones)
+                        // 1. Extract bone hierarchy
                         ExtractBoneHierarchy(scene, modelData);
 
-                        // Extract each mesh separately
-                        for (int i = 0; i < scene.MeshCount; i++)
+                        // 2. Extract meshes
+                        foreach (var assimpMesh in scene.Meshes)
                         {
-                            var assimpMesh = scene.Meshes[i];
-                            
                             var meshData = new MeshData
                             {
-                                Name = string.IsNullOrEmpty(assimpMesh.Name) ? $"Mesh_{i}" : assimpMesh.Name,
+                                Name = string.IsNullOrEmpty(assimpMesh.Name) ? "Mesh" : assimpMesh.Name,
                                 MaterialIndex = assimpMesh.MaterialIndex
                             };
 
-                            // Copy vertices
                             foreach (var v in assimpMesh.Vertices)
-                            {
                                 meshData.Vertices.Add(new System.Numerics.Vector3(v.X, v.Y, v.Z));
-                            }
 
-                            // Copy normals
                             if (assimpMesh.HasNormals)
-                            {
                                 foreach (var n in assimpMesh.Normals)
-                                {
                                     meshData.Normals.Add(new System.Numerics.Vector3(n.X, n.Y, n.Z));
-                                }
-                            }
-                            else
-                            {
-                                // If no normals, fill with default (up)
-                                for (int j = 0; j < assimpMesh.VertexCount; j++)
-                                {
-                                    meshData.Normals.Add(new System.Numerics.Vector3(0, 1, 0));
-                                }
-                            } // Close else block
 
-                            // Copy Texture Coordinates
                             if (assimpMesh.HasTextureCoords(0))
-                            {
                                 foreach (var uv in assimpMesh.TextureCoordinateChannels[0])
-                                {
-                                    // Convert Assimp Vector3D to System.Numerics.Vector2
-                                    // Note: We might need to flip Y (1 - uv.Y) depending on model source, keeping raw for now
-                                    meshData.TexCoords.Add(new System.Numerics.Vector2(uv.X, 1.0f - uv.Y)); // Often required for OpenGL/MonoGame
-                                }
-                            }
-                            else
-                            {
-                                // If no UVs, fill with Zero
-                                for (int j = 0; j < assimpMesh.VertexCount; j++)
-                                {
-                                    meshData.TexCoords.Add(System.Numerics.Vector2.Zero);
-                                }
-                            }
+                                    meshData.TexCoords.Add(new System.Numerics.Vector2(uv.X, 1.0f - uv.Y));
 
-                            // Copy indices
                             foreach (var face in assimpMesh.Faces)
-                            {
                                 if (face.IndexCount == 3)
                                 {
                                     meshData.Indices.Add(face.Indices[0]);
                                     meshData.Indices.Add(face.Indices[1]);
                                     meshData.Indices.Add(face.Indices[2]);
                                 }
-                            }
 
-                            // Extract bone weights for skinning (if mesh has bones)
                             if (assimpMesh.HasBones)
-                            {
-                                ExtractBoneWeights(assimpMesh, meshData, scene, modelData);
-                            }
-                            else
-                            {
-                                // No bones - fill with defaults
-                                for (int j = 0; j < assimpMesh.VertexCount; j++)
-                                {
-                                    meshData.BoneIndices.Add(System.Numerics.Vector4.Zero);
-                                    meshData.BoneWeights.Add(new System.Numerics.Vector4(1, 0, 0, 0));
-                                }
-                            }
-
-                            // Calculate local bounding box from vertices
-                            if (meshData.Vertices.Count > 0)
-                            {
-                                float minX = float.MaxValue, minY = float.MaxValue, minZ = float.MaxValue;
-                                float maxX = float.MinValue, maxY = float.MinValue, maxZ = float.MinValue;
-                                
-                                foreach (var v in meshData.Vertices)
-                                {
-                                    if (v.X < minX) minX = v.X;
-                                    if (v.Y < minY) minY = v.Y;
-                                    if (v.Z < minZ) minZ = v.Z;
-                                    if (v.X > maxX) maxX = v.X;
-                                    if (v.Y > maxY) maxY = v.Y;
-                                    if (v.Z > maxZ) maxZ = v.Z;
-                                }
-                                
-                                meshData.LocalBounds = new Microsoft.Xna.Framework.BoundingBox(
-                                    new Microsoft.Xna.Framework.Vector3(minX, minY, minZ),
-                                    new Microsoft.Xna.Framework.Vector3(maxX, maxY, maxZ)
-                                );
-                            }
-
-                            totalVertices += meshData.Vertices.Count;
-                            totalTriangles += meshData.Indices.Count / 3;
+                                ExtractBoneWeights(assimpMesh, meshData, modelData);
 
                             modelData.Meshes.Add(meshData);
                         }
 
-                        modelData.TotalVertexCount = totalVertices;
-                        modelData.TotalTriangleCount = totalTriangles;
-                        
-                        // Extract bone hierarchy if present (Moved up)
-                        // ExtractBoneHierarchy(scene, modelData);
-                        
-                        // CACHE DISABLED - Testing if cache causes corruption
-                        if (false)
+                        // 3. Update stats
+                        modelData.TotalVertexCount = modelData.Meshes.Sum(m => m.Vertices.Count);
+                        modelData.TotalTriangleCount = modelData.Meshes.Sum(m => m.Indices.Count / 3);
+
+                        // 4. Extract animations
+                        if (scene.HasAnimations)
                         {
-                            // CACHE IT - next time will be instant!
-                            lock (_modelCache)
+                            modelData.Animations = new AnimationCollection();
+                            foreach (var anim in scene.Animations)
                             {
-                                _modelCache[path] = modelData;
+                                modelData.Animations.Animations.Add(ExtractAnimationClip(anim));
                             }
+                            
+                            // Build lookup
+                            for (int i = 0; i < modelData.Animations.Animations.Count; i++)
+                                modelData.Animations.AnimationNameToIndex[modelData.Animations.Animations[i].Name] = i;
                         }
 
+                        lock (_cache)
+                        {
+                            if (!_cache.ContainsKey(path)) _cache.Add(path, modelData);
+                        }
+                        
                         return modelData;
                     }
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error importing model {path}: {ex.Message}");
-                    return null;
+                    Logger.LogError($"[ModelImporter] Error: {ex.Message}");
+                    return null!;
                 }
             });
         }
-        
-        /// <summary>
-        /// Extracts bone weights for vertex skinning using global bone mapping
-        /// </summary>
-        private static void ExtractBoneWeights(Mesh assimpMesh, MeshData meshData, Scene scene, ModelData modelData)
-        {
-            // First, build a bone name to index mapping using the GLOBAL model palette
-            // Vertex bone indices in the shader MUST reference the global Bones[] array
-            
-            // Initialize arrays for each vertex (up to 4 bones per vertex)
-            var vertexBoneIndices = new List<List<int>>();
-            var vertexBoneWeights = new List<List<float>>();
-            
-            for (int i = 0; i < assimpMesh.VertexCount; i++)
-            {
-                vertexBoneIndices.Add(new List<int>());
-                vertexBoneWeights.Add(new List<float>());
-            }
-            
-            // Process each bone in the mesh
-            foreach (var bone in assimpMesh.Bones)
-            {
-                // Get bone index from our GLOBAL mapping
-                if (!modelData.BoneNameToIndex.TryGetValue(bone.Name, out int boneIndex))
-                {
-                    System.Diagnostics.Debug.WriteLine($"[ModelImporter] ❌ Global bone mapping failed for '{bone.Name}' in mesh '{meshData.Name}'");
-                    continue;
-                }
-                
-                // Process each vertex weight for this bone
-                foreach (var weight in bone.VertexWeights)
-                {
-                    int vertexId = weight.VertexID;
-                    if (vertexId >= 0 && vertexId < assimpMesh.VertexCount)
-                    {
-                        vertexBoneIndices[vertexId].Add(boneIndex);
-                        vertexBoneWeights[vertexId].Add(weight.Weight);
-                    }
-                }
-            }
-            
-            // Convert to Vector4 format (max 4 bones per vertex)
-            for (int i = 0; i < assimpMesh.VertexCount; i++)
-            {
-                var indices = vertexBoneIndices[i];
-                var weights = vertexBoneWeights[i];
-                
-                // Sort by weight (descending) and take top 4
-                if (indices.Count > 4)
-                {
-                    var combined = indices.Zip(weights, (idx, wgt) => new { Index = idx, Weight = wgt })
-                                         .OrderByDescending(x => x.Weight)
-                                         .Take(4)
-                                         .ToList();
-                    indices = combined.Select(x => x.Index).ToList();
-                    weights = combined.Select(x => x.Weight).ToList();
-                }
-                
-                // Normalize weights to sum to 1.0
-                float totalWeight = weights.Sum();
-                if (totalWeight > 0.001f)
-                {
-                    for (int j = 0; j < weights.Count; j++)
-                    {
-                        weights[j] /= totalWeight;
-                    }
-                }
-                
-                // Ensure we have exactly 4 entries (pad with zeros if needed)
-                while (indices.Count < 4)
-                {
-                    indices.Add(0);
-                    weights.Add(0f);
-                }
-                
-                // Create Vector4s
-                var boneIdx = new System.Numerics.Vector4(
-                    indices.Count > 0 ? indices[0] : 0,
-                    indices.Count > 1 ? indices[1] : 0,
-                    indices.Count > 2 ? indices[2] : 0,
-                    indices.Count > 3 ? indices[3] : 0
-                );
-                
-                var boneWgt = new System.Numerics.Vector4(
-                    weights.Count > 0 ? weights[0] : 0,
-                    weights.Count > 1 ? weights[1] : 0,
-                    weights.Count > 2 ? weights[2] : 0,
-                    weights.Count > 3 ? weights[3] : 0
-                );
-                
-                meshData.BoneIndices.Add(boneIdx);
-                meshData.BoneWeights.Add(boneWgt);
-            }
-            
-            System.Diagnostics.Debug.WriteLine($"[ModelImporter] Extracted bone weights for {assimpMesh.VertexCount} vertices ({assimpMesh.BoneCount} bones)");
-        }
-        
-        /// <summary>
-        /// Extracts bone hierarchy from Assimp scene
-        /// </summary>
+
         private static void ExtractBoneHierarchy(Scene scene, ModelData modelData)
         {
-            if (scene.RootNode == null) return;
-            
-            // First, collect all bones mentioned in meshes
             var boneNames = new HashSet<string>();
             foreach (var mesh in scene.Meshes)
-            {
-                if (mesh.HasBones)
-                {
-                    foreach (var bone in mesh.Bones)
-                    {
-                        boneNames.Add(bone.Name);
-                    }
-                }
-            }
-            
-            // If no bones found, return
+                foreach (var bone in mesh.Bones)
+                    boneNames.Add(bone.Name);
+
             if (boneNames.Count == 0) return;
-            
-            // CRITICAL FIX: Build bones in mesh.Bones[] order, NOT hierarchy order!
-            // Vertex bone indices reference mesh.Bones[], so we MUST match that order.
-            
-            // Step 1: Build ordered list from mesh.Bones[] (this is what vertex indices reference)
-            var boneOrderedList = new List<string>();
-            var boneOffsets = new Dictionary<string, System.Numerics.Matrix4x4>();
-            
-            foreach (var mesh in scene.Meshes)
-            {
-                if (mesh.HasBones)
-                {
-                    foreach (var bone in mesh.Bones)
-                    {
-                        if (!boneOrderedList.Contains(bone.Name))
-                        {
-                            boneOrderedList.Add(bone.Name);  // Preserve mesh.Bones[] order!
-                            boneOffsets[bone.Name] = ConvertMatrix(bone.OffsetMatrix);
-                        }
-                    }
-                }
-            }
-            
-            // Step 2: Build node map for fast lookup
-            var nodeMap = new Dictionary<string, Node>();
-            BuildNodeMap(scene.RootNode, nodeMap);
-            
-            // Step 3: Create bones in mesh.Bones[] order
-            for (int i = 0; i < boneOrderedList.Count; i++)
-            {
-                string boneName = boneOrderedList[i];
-                
-                if (nodeMap.TryGetValue(boneName, out Node node))
-                {
-                    // Find parent index (must search in boneOrderedList, not hierarchy)
-                    int parentIndex = -1;
-                    if (node.Parent != null)
-                    {
-                        parentIndex = boneOrderedList.IndexOf(node.Parent.Name);
-                        // If parent not in list, keep looking up the hierarchy
-                        Node ancestor = node.Parent;
-                        while (parentIndex < 0 && ancestor.Parent != null)
-                        {
-                            ancestor = ancestor.Parent;
-                            parentIndex = boneOrderedList.IndexOf(ancestor.Name);
-                        }
-                    }
-                    
-                    var boneData = new BoneData
-                    {
-                        Name = boneName,
-                        OffsetMatrix = boneOffsets[boneName],
-                        LocalTransform = ConvertMatrix(node.Transform),
-                        ParentIndex = parentIndex
-                    };
-                    
-                    modelData.Bones.Add(boneData);
-                    modelData.BoneNameToIndex[boneName] = i;
-                    
-                    System.Diagnostics.Debug.WriteLine($"[ModelImporter] Bone[{i}] '{boneName}' | ParentIdx: {parentIndex}");
-                }
-            }
-            
-            System.Diagnostics.Debug.WriteLine($"[ModelImporter] Created {modelData.Bones.Count} bones in mesh.Bones[] order");
+
+            TraverseNodeHierarchy(scene.RootNode, -1, modelData, boneNames, System.Numerics.Matrix4x4.Identity);
         }
-        
-        /// <summary>
-        /// Recursively build map of node names to nodes
-        /// </summary>
-        private static void BuildNodeMap(Node node, Dictionary<string, Node> map)
+
+        private static void TraverseNodeHierarchy(Node node, int parentIndex, ModelData modelData, HashSet<string> boneNames, System.Numerics.Matrix4x4 accumulated)
         {
-            map[node.Name] = node;
-            foreach (var child in node.Children)
-            {
-                BuildNodeMap(child, map);
-            }
-        }
-        
-        /// <summary>
-        /// Recursively traverses node hierarchy to build bone list
-        /// </summary>
-        private static void TraverseNodeHierarchy(Node node, Node parent, int parentIndex, 
-            HashSet<string> boneNames, ModelData modelData, Scene scene)
-        {
-            int currentIndex = -1;
+            var local = ConvertMatrix(node.Transform);
+            var world = local * accumulated;
             
-            // Check if this node is a bone
+            int currentIndex = parentIndex;
+            System.Numerics.Matrix4x4 nextAccumulated = world;
+
             if (boneNames.Contains(node.Name))
             {
                 currentIndex = modelData.Bones.Count;
+                modelData.BoneNameToIndex[node.Name] = currentIndex;
                 
-                // Get offset matrix from mesh bones
-                var offsetMatrix = System.Numerics.Matrix4x4.Identity;
-                foreach (var mesh in scene.Meshes)
+                modelData.Bones.Add(new BoneData
                 {
-                    if (mesh.HasBones)
+                    Name = node.Name,
+                    ParentIndex = parentIndex,
+                    LocalTransform = local,
+                    OffsetMatrix = System.Numerics.Matrix4x4.Identity
+                });
+
+                nextAccumulated = System.Numerics.Matrix4x4.Identity;
+            }
+
+            foreach (var child in node.Children)
+                TraverseNodeHierarchy(child, currentIndex, modelData, boneNames, nextAccumulated);
+        }
+
+        private static void ExtractBoneWeights(Mesh mesh, MeshData meshData, ModelData modelData)
+        {
+            var indices = new System.Numerics.Vector4[mesh.VertexCount];
+            var weights = new System.Numerics.Vector4[mesh.VertexCount];
+            var filled = new int[mesh.VertexCount];
+
+            foreach (var bone in mesh.Bones)
+            {
+                if (modelData.BoneNameToIndex.TryGetValue(bone.Name, out int index))
+                {
+                    // Update Offset Matrix from Assimp
+                    modelData.Bones[index].OffsetMatrix = ConvertMatrix(bone.OffsetMatrix);
+
+                    foreach (var weight in bone.VertexWeights)
                     {
-                        foreach (var bone in mesh.Bones)
+                        int vId = weight.VertexID;
+                        if (vId < mesh.VertexCount && filled[vId] < 4)
                         {
-                            if (bone.Name == node.Name)
-                            {
-                                // Convert Assimp Matrix4x4 to System.Numerics.Matrix4x4
-                                offsetMatrix = ConvertMatrix(bone.OffsetMatrix);
-                                break;
-                            }
+                            int slot = filled[vId];
+                            if (slot == 0) { indices[vId].X = index; weights[vId].X = weight.Weight; }
+                            else if (slot == 1) { indices[vId].Y = index; weights[vId].Y = weight.Weight; }
+                            else if (slot == 2) { indices[vId].Z = index; weights[vId].Z = weight.Weight; }
+                            else if (slot == 3) { indices[vId].W = index; weights[vId].W = weight.Weight; }
+                            filled[vId]++;
                         }
                     }
                 }
-                
-                var boneData = new BoneData
-                {
-                    Name = node.Name,
-                    OffsetMatrix = offsetMatrix,
-                    LocalTransform = ConvertMatrix(node.Transform),
-                    ParentIndex = parentIndex
-                };
-                
-                modelData.Bones.Add(boneData);
-                modelData.BoneNameToIndex[node.Name] = currentIndex;
-                
-                var t = node.Transform;
-                System.Diagnostics.Debug.WriteLine($"[ModelImporter] Found bone: {node.Name} | ParentIdx: {parentIndex} | LocalPos: {t.A4},{t.B4},{t.C4}");
             }
-            
-            // Recursively process children
-            // CRITICAL FIX: If current node is NOT a bone (currentIndex == -1), 
-            // pass through the parentIndex we received instead of -1.
-            // This ensures bone hierarchy is preserved even when there are non-bone
-            // intermediate nodes (common in Mixamo FBX files).
-            int parentForChildren = (currentIndex >= 0) ? currentIndex : parentIndex;
-            
-            foreach (var child in node.Children)
-            {
-                TraverseNodeHierarchy(child, node, parentForChildren, boneNames, modelData, scene);
-            }
+
+            meshData.BoneIndices.AddRange(indices);
+            meshData.BoneWeights.AddRange(weights);
         }
-        
-        /// <summary>
-        /// Converts Assimp Matrix4x4 to System.Numerics.Matrix4x4
-        /// IMPORTANT: Assimp uses ROW-major matrices, System.Numerics uses COLUMN-major
-        /// We need to TRANSPOSE the matrix (swap rows and columns)
-        /// </summary>
+
+        private static AnimationClip ExtractAnimationClip(Assimp.Animation anim)
+        {
+            var clip = new AnimationClip 
+            { 
+                Name = anim.Name, 
+                Duration = (float)(anim.DurationInTicks / anim.TicksPerSecond),
+                TicksPerSecond = (float)anim.TicksPerSecond
+            };
+
+            foreach (var channel in anim.NodeAnimationChannels)
+            {
+                var chan = new AnimationChannel { BoneName = channel.NodeName };
+                var timeMap = new SortedDictionary<double, AnimationKeyframe>();
+
+                foreach (var k in channel.PositionKeys) GetOrCreateKey(timeMap, k.Time).Position = new System.Numerics.Vector3(k.Value.X, k.Value.Y, k.Value.Z);
+                foreach (var k in channel.RotationKeys) GetOrCreateKey(timeMap, k.Time).Rotation = new System.Numerics.Quaternion(k.Value.X, k.Value.Y, k.Value.Z, k.Value.W);
+                foreach (var k in channel.ScalingKeys) GetOrCreateKey(timeMap, k.Time).Scale = new System.Numerics.Vector3(k.Value.X, k.Value.Y, k.Value.Z);
+
+                foreach (var pair in timeMap)
+                {
+                    pair.Value.Time = (float)(pair.Key / anim.TicksPerSecond);
+                    chan.Keyframes.Add(pair.Value);
+                }
+                
+                clip.Channels.Add(chan);
+            }
+
+            return clip;
+        }
+
+        private static AnimationKeyframe GetOrCreateKey(SortedDictionary<double, AnimationKeyframe> map, double time)
+        {
+            if (!map.TryGetValue(time, out var key))
+            {
+                key = new AnimationKeyframe { Position = System.Numerics.Vector3.Zero, Rotation = System.Numerics.Quaternion.Identity, Scale = System.Numerics.Vector3.One };
+                map[time] = key;
+            }
+            return key;
+        }
+
         private static System.Numerics.Matrix4x4 ConvertMatrix(Assimp.Matrix4x4 m)
         {
-            // Transpose: Assimp rows become System.Numerics columns
-            // This ensures translation components (A4, B4, C4) end up in M41, M42, M43
             return new System.Numerics.Matrix4x4(
-                m.A1, m.B1, m.C1, m.D1,  // Column 1 (was Row 1)
-                m.A2, m.B2, m.C2, m.D2,  // Column 2 (was Row 2)
-                m.A3, m.B3, m.C3, m.D3,  // Column 3 (was Row 3)
-                m.A4, m.B4, m.C4, m.D4   // Column 4 (was Row 4) - TRANSLATION
-            );
+                m.A1, m.B1, m.C1, m.D1,
+                m.A2, m.B2, m.C2, m.D2,
+                m.A3, m.B3, m.C3, m.D3,
+                m.A4, m.B4, m.C4, m.D4);
         }
     }
 }

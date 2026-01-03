@@ -358,6 +358,17 @@ namespace MonoGameEditor.Controls
                 }
 
                 UpdateLODGroups(SceneManager.Instance.RootObjects, lodCameraPos);
+                
+                // Update Animators (always, for preview in editor)
+                // DEBUG: Heartbeat check
+                if (_loggedMainRender == false || (DateTime.Now.Second % 5 == 0 && DateTime.Now.Millisecond < 20))
+                {
+                     // Use ConsoleViewModel to ensure it appears in Editor Console
+                     ConsoleViewModel.Log($"[MonoGameControl] RenderTimer_Tick running. RootObjects: {SceneManager.Instance.RootObjects.Count}");
+                     _loggedMainRender = true;
+                }
+                
+                UpdateAnimators(SceneManager.Instance.RootObjects, deltaTime);
             }
             
             Invalidate(); // Triggers OnPaint
@@ -371,6 +382,27 @@ namespace MonoGameEditor.Controls
                 var lodGroup = obj.GetComponent<LODGroupComponent>();
                 lodGroup?.UpdateLOD(cameraPos);
                 UpdateLODGroups(obj.Children, cameraPos);
+            }
+        }
+        
+        private void UpdateAnimators(System.Collections.ObjectModel.ObservableCollection<GameObject> objects, float deltaTime)
+        {
+            int count = 0;
+            foreach (var obj in objects)
+            {
+                if (!obj.IsActive) continue;
+                
+                count++;
+                var animator = obj.GetComponent<MonoGameEditor.Core.Components.AnimatorComponent>();
+                if (animator != null)
+                {
+                    // DEBUG: Log that we found one!
+                    if (DateTime.Now.Second % 5 == 0 && DateTime.Now.Millisecond < 20)
+                         ConsoleViewModel.Log($"[MonoGameControl] Updating Animator on '{obj.Name}'");
+                    
+                    animator.Update(deltaTime);
+                }
+                UpdateAnimators(obj.Children, deltaTime);
             }
         }
 
@@ -898,10 +930,58 @@ namespace MonoGameEditor.Controls
                         {
                             if (renderer is MonoGameEditor.Core.Components.SkinnedModelRendererComponent skinnedRenderer)
                             {
+                                skinnedRenderer.Model = modelData; // CRITICAL: Set Model for AnimationPoseBuilder
                                 skinnedRenderer.SetBones(boneObjects, modelData.Bones.Select(b => b.OffsetMatrix).ToList());
                                 ConsoleViewModel.Log($"[MonoGameControl] Connected {boneObjects.Count} bones to renderer");
                             }
                         }
+                    }
+
+                    // Check and handle animations
+                    if (modelData.Animations != null && modelData.Animations.Animations.Count > 0)
+                    {
+                        ConsoleViewModel.Log($"✨ [Animation] Found {modelData.Animations.Animations.Count} animations in '{modelData.Name}':");
+                        foreach (var anim in modelData.Animations.Animations)
+                        {
+                            ConsoleViewModel.Log($"   - '{anim.Name}' ({anim.Duration:F2}s, {anim.Channels.Count} channels)");
+                        }
+                        
+                        // Find GameObject with SkinnedModelRendererComponent
+                        MonoGameEditor.Core.GameObject targetGO = null;
+                        foreach (var renderer in meshRenderers)
+                        {
+                            if (renderer is MonoGameEditor.Core.Components.SkinnedModelRendererComponent)
+                            {
+                                targetGO = renderer.GameObject;
+                                break;
+                            }
+                        }
+                        
+                        if (targetGO != null)
+                        {
+                            // Automatically add AnimatorComponent to GameObject with SkinnedRenderer
+                            var animator = new MonoGameEditor.Core.Components.AnimatorComponent();
+                            animator.AnimationCollection = modelData.Animations;
+                            animator.FadeDuration = 0.3f; // 300ms fade por padrão
+                            targetGO.AddComponent(animator);
+                            
+                            ConsoleViewModel.Log($"✓ [Animation] AnimatorComponent adicionado ao GameObject '{targetGO.Name}'");
+                            
+                            // Auto-play primeira animação se houver
+                            if (modelData.Animations.Animations.Count > 0)
+                            {
+                                animator.Play(0, fade: false);
+                                ConsoleViewModel.Log($"▶ [Animation] Auto-tocando '{modelData.Animations.Animations[0].Name}'");
+                            }
+                        }
+                        else
+                        {
+                            ConsoleViewModel.LogWarning($"⚠ [Animation] Não foi possível encontrar GameObject com SkinnedRenderer!");
+                        }
+                    }
+                    else
+                    {
+                        ConsoleViewModel.Log($"⚠ [Animation] Nenhuma animação encontrada em '{modelData.Name}'");
                     }
 
                     Core.SceneManager.Instance.RootObjects.Add(rootGO);

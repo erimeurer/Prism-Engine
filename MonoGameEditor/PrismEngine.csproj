@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>prism_engine.ico</ApplicationIcon>
+    <MonoGamePlatform>Windows</MonoGamePlatform>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +27,7 @@
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2210.55" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,7 +43,7 @@
 
   <!-- Copy built-in editor shaders to output directory -->
   <ItemGroup>
-    <None Include="Content\bin\Windows\Shaders\*.xnb">
+    <None Include="Content\bin\Windows\Content\Shaders\*.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>Content\Shaders\%(Filename)%(Extension)</Link>
     </None>

@@ -418,6 +418,151 @@
                 </Border>
             </Expander>
         </DataTemplate>
+        
+        <!-- AnimatorComponent DataTemplate -->
+        <DataTemplate DataType="{x:Type components:AnimatorComponent}">
+            <Expander IsExpanded="{Binding IsUIExpanded, Mode=TwoWay}" Margin="0,0,0,4">
+                <Expander.Header>
+                    <Grid Background="Transparent" PreviewMouseLeftButtonDown="ComponentHeader_DragSource_PreviewMouseLeftButtonDown" MouseMove="ComponentHeader_DragSource_MouseMove">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Text="Animator" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="✕" FontSize="10" Width="18" Height="18"
+                                Background="Transparent" BorderThickness="0" Foreground="#888888"
+                                ToolTip="Remove Component" Click="RemoveComponent_Click" Tag="{Binding}"/>
+                    </Grid>
+                </Expander.Header>
+                <Border Background="#2D2D30" CornerRadius="0,0,3,3" Padding="8" Margin="0,4,0,0">
+                    <StackPanel>
+                        <!-- Current Animation -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Animation" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" ItemsSource="{Binding AnimationNames}" 
+                                      SelectedIndex="{Binding CurrentAnimationIndex}"
+                                      Background="#333337" Foreground="White" />
+                        </Grid>
+                        
+                        <!-- Playback Controls -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Status" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="▶ Playing" Foreground="#6BCB77" FontSize="11" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CurrentAnimationIndex, StringFormat='[{0}]'}" Foreground="#888888" FontSize="10" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <!-- Animation Speed -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Speed" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=AnimSpeedTb}"/>
+                            <Slider Grid.Column="1" Value="{Binding AnimationSpeed, Mode=TwoWay}" 
+                                    Minimum="0.1" Maximum="3" TickFrequency="0.1" IsSnapToTickEnabled="True"
+                                    VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBox x:Name="AnimSpeedTb" Grid.Column="2" Text="{Binding AnimationSpeed, StringFormat={}{0:F1}}" 
+                                     Style="{StaticResource NumericTextBox}"/>
+                        </Grid>
+                        
+                        <!-- Fade Duration -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Fade Duration" Style="{StaticResource NumericLabel}" Tag="{Binding ElementName=FadeDurTb}"/>
+                            <TextBox x:Name="FadeDurTb" Grid.Column="1" Text="{Binding FadeDuration, StringFormat={}{0:F2}}" 
+                                     Style="{StaticResource NumericTextBox}" Width="80"/>
+                        </Grid>
+
+                        <Separator Background="#3E3E3E" Margin="0,8"/>
+                        <TextBlock Text="Debug Offsets (Degrees)" Foreground="#CCCCCC" FontWeight="SemiBold" FontSize="11" Margin="0,0,0,5"/>
+
+                        <!-- Root Offset -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Root Offset" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=RootOffXTb}"/>
+                                <TextBox x:Name="RootOffXTb" Text="{Binding RootRotationX, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=RootOffYTb}"/>
+                                <TextBox x:Name="RootOffYTb" Text="{Binding RootRotationY, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=RootOffZTb}"/>
+                                <TextBox x:Name="RootOffZTb" Text="{Binding RootRotationZ, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Arm Offset -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Arm Offset" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=ArmOffXTb}"/>
+                                <TextBox x:Name="ArmOffXTb" Text="{Binding ArmRotationX, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=ArmOffYTb}"/>
+                                <TextBox x:Name="ArmOffYTb" Text="{Binding ArmRotationY, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=ArmOffZTb}"/>
+                                <TextBox x:Name="ArmOffZTb" Text="{Binding ArmRotationZ, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Leg Offset -->
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Leg Offset" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="X" Foreground="#FF6B6B" Style="{StaticResource AxisLabel}" Tag="{Binding ElementName=LegOffXTb}"/>
+                                <TextBox x:Name="LegOffXTb" Text="{Binding LegRotationX, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Y" Foreground="#6BCB77" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=LegOffYTb}"/>
+                                <TextBox x:Name="LegOffYTb" Text="{Binding LegRotationY, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                                <TextBlock Text="Z" Foreground="#4D96FF" Style="{StaticResource AxisLabel}" Margin="8,0,0,0" Tag="{Binding ElementName=LegOffZTb}"/>
+                                <TextBox x:Name="LegOffZTb" Text="{Binding LegRotationZ, StringFormat={}{0:F1}, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource NumericTextBox}"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <!-- Current Time (Read-only) -->
+                        <Grid Style="{StaticResource PropertyRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Time" Foreground="#AAAAAA" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding CurrentTime, StringFormat={}{0:F2}s}" 
+                                       Foreground="#888888" FontSize="11" VerticalAlignment="Center"/>
+                        </Grid>
+                        
+                        <!-- Info Text -->
+                        <TextBlock Text="💡 Animações tocam automaticamente" 
+                                   Foreground="#888888" FontSize="9" FontStyle="Italic" 
+                                   Margin="0,5,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
 
         <!-- BoxColliderComponent DataTemplate -->
         <DataTemplate DataType="{x:Type components:BoxColliderComponent}">

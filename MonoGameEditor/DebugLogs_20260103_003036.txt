@@ -1,0 +1,11 @@
+=== Prism Engine Debug Log Started: 03/01/2026 00:30:36 ===
+00:30:36.522 [ℹ] [ShaderCompiler] Starting automatic shader compilation service...
+00:30:36.525 [ℹ] [ShaderCompiler] Watching: D:\git\Prism-Engine\MonoGameEditor\bin\Debug\net8.0-windows\Content\Shaders
+00:30:36.525 [ℹ] [ShaderCompiler] Watching: D:\ProjetosMono\Teste3\Assets
+00:30:36.525 [ℹ] [ShaderCompiler] Found 1 shader(s) to compile
+00:30:36.527 [ℹ] [ScriptFixer] Found 2 script file(s)
+00:30:36.529 [ℹ] [ScriptFixer] PlayerTest.cs - already correct
+00:30:36.529 [ℹ] [ScriptFixer] TesteScript.cs - already correct
+00:30:36.529 [ℹ] [ScriptFixer] Fixed 0 script(s). Restart editor to recompile.
+00:30:36.530 [ℹ] [ScriptManager] Searching for scripts in: D:\ProjetosMono\Teste3\Assets\Scripts
+00:30:36.530 [ℹ] [ScriptManager] Found 2 script file(s).

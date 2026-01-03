@@ -46,5 +46,21 @@ namespace MonoGameEditor.Core.Assets
         // Skeletal animation support
         public List<BoneData> Bones { get; set; } = new List<BoneData>();
         public Dictionary<string, int> BoneNameToIndex { get; set; } = new Dictionary<string, int>();
+        
+        // Animation support
+        public AnimationCollection? Animations { get; set; }
+
+        public bool TryGetBindTransform(string boneName, out System.Numerics.Vector3 position, out System.Numerics.Quaternion rotation, out System.Numerics.Vector3 scale)
+        {
+            if (BoneNameToIndex.TryGetValue(boneName, out int index))
+            {
+                var local = Bones[index].LocalTransform;
+                return System.Numerics.Matrix4x4.Decompose(local, out scale, out rotation, out position);
+            }
+            position = System.Numerics.Vector3.Zero;
+            rotation = System.Numerics.Quaternion.Identity;
+            scale = System.Numerics.Vector3.One;
+            return false;
+        }
     }
 }
